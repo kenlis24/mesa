@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class agrupaciones extends Model
+class usu_inst extends Model
 {
     use HasFactory;
 
-    public function parroquia()
+    public function institucion()
     {
-        return $this->belongsTo(parroquias::class,  'par_mun_id');
+        return $this->belongsTo(instituciones::class,  'usui_inst_id');
     }
 }

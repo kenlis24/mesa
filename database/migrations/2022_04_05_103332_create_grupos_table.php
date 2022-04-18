@@ -18,7 +18,7 @@ class CreateGruposTable extends Migration
             $table->string('gpo_nombre', 100);
             $table->string('gpo_descripcion', 500);
             $table->string('gpo_estado', 1);
-            $table->string('gpo_observacion', 250);
+            $table->string('gpo_observacion', 250)->nullable();
             $table->timestamps();
         });
     }

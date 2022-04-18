@@ -19,7 +19,7 @@ class CreateConfProgsTable extends Migration
             $table->string('conp_tipo_comb', 1);
             $table->integer('conp_lts')->length(3);
             $table->string('conp_estado', 1);
-            $table->string('conp_observacion', 250);
+            $table->string('conp_observacion', 250)->nullable();
             $table->timestamps();
         });
     }

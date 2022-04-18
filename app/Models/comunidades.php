@@ -9,7 +9,7 @@ class comunidades extends Model
 {
     use HasFactory;
 
-    public function agrupaciones()
+    public function agrupacion()
     {
         return $this->belongsTo(agrupaciones::class,  'agr_par_id');
     }

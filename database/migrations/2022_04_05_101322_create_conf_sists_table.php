@@ -22,7 +22,7 @@ class CreateConfSistsTable extends Migration
             $table->string('confs_sitio_web', 100);
             $table->string('confs_correo', 100);
             $table->string('confs_estado', 1);
-            $table->string('confs_observacion', 250);
+            $table->string('confs_observacion', 250)->nullable();
             $table->timestamps();
         });
     }

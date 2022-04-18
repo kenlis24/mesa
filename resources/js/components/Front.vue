@@ -32,7 +32,7 @@
       </v-navigation-drawer>
       <v-app-bar app color="primary" dark>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-        <v-toolbar-title>Meda de Combustible</v-toolbar-title>
+        <v-toolbar-title>Mesa de Combustible</v-toolbar-title>
         <v-row v-if="$store.state.auth">
           <v-col class="text-right">
             {{ $store.state.user.name }}

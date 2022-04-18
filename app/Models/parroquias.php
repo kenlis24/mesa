@@ -9,8 +9,8 @@ class parroquias extends Model
 {
     use HasFactory;
 
-    public function municipios()
+    public function municipio()
     {
-        return $this->belongsTo(municipios::class,  'par_mun_id');
+        return $this->belongsTo(municipios::class, 'par_mun_id');
     }
 }
