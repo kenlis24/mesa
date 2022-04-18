@@ -18,6 +18,7 @@ class CreateProgrFlotasTable extends Migration
             $table->integer('pflo_litros'); 
             $table->string('pflo_condicion', 1); 
             $table->string('pflo_observacion', 250)->nullable(); 
+            $table->integer('var')->
 
             $table->unsignedBigInteger('pflo_prog_id');
             $table->foreign('pflo_prog_id')
