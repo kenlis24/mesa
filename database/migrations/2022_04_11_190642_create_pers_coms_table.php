@@ -20,8 +20,8 @@ class CreatePersComsTable extends Migration
             $table->string('pcom_estado', 1);
             $table->timestamps();
 
-            $table->unsignedBigInteger('pcom_com_id');
-            $table->foreign('pcom_com_id')
+            $table->unsignedBigInteger('pcom_agr_id');
+            $table->foreign('pcom_agr_id')
                 ->references('id')
                 ->on('comunidades')
                 ->onDelete('cascade');
