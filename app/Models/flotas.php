@@ -18,4 +18,9 @@ class flotas extends Model
     {
         return $this->belongsTo(vehiculos::class,  'flot_vehi_id');
     }
+
+    public function progr_flotas()
+    {
+        return $this->hasMany(progr_flotas::class, 'pflo_flot_id');
+    }
 }

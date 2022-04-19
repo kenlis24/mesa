@@ -13,4 +13,14 @@ class parroquias extends Model
     {
         return $this->belongsTo(municipios::class, 'par_mun_id');
     }
+
+    public function agrupaciones()
+    {
+        return $this->hasMany(agrupaciones::class, 'agr_par_id');
+    }
+
+    public function instituciones()
+    {
+        return $this->hasMany(instituciones::class, 'inst_par_id');
+    }
 }

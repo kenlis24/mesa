@@ -15,12 +15,12 @@ class CreateAsignacionesTable extends Migration
     {
         Schema::create('asignaciones', function (Blueprint $table) {
             $table->id();
-            $table->string('asig_tipo_comb', 1); 
-            $table->string('asig_tipo_vehi', 1); 
-            $table->integer('asig_litros'); 
-            $table->string('asig_frec_despacho', 1); 
-            $table->string('asig_estado', 1); 
-            $table->string('asig_observacion', 250)->nullable(); 
+            $table->string('asig_tipo_comb', 1);
+            $table->string('asig_tipo_vehi', 1);
+            $table->integer('asig_litros')->length(4);
+            $table->string('asig_frec_despacho', 1);
+            $table->string('asig_estado', 1);
+            $table->string('asig_observacion', 250)->nullable();
 
             $table->unsignedBigInteger('asig_inst_id');
             $table->foreign('asig_inst_id')

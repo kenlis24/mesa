@@ -15,14 +15,14 @@ class CreateConfSistsTable extends Migration
     {
         Schema::create('conf_sist', function (Blueprint $table) {
             $table->id();
-            $table->string('confs_nombre', 100);
-            $table->string('confs_rif', 12);
-            $table->string('confs_direccion', 100);
-            $table->string('confs_telefono', 14);
-            $table->string('confs_sitio_web', 100);
-            $table->string('confs_correo', 100);
-            $table->string('confs_estado', 1);
-            $table->string('confs_observacion', 250)->nullable();
+            $table->string('cnfs_nombre', 100);
+            $table->string('cnfs_rif', 12);
+            $table->string('cnfs_direccion', 100);
+            $table->string('cnfs_telefono', 14);
+            $table->string('cnfs_sitio_web', 100);
+            $table->string('cnfs_correo', 100);
+            $table->string('cnfs_estado', 1);
+            $table->string('cnfs_observacion', 250)->nullable();
             $table->timestamps();
         });
     }

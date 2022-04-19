@@ -15,12 +15,12 @@ class CreateTrabajadoresTable extends Migration
     {
         Schema::create('trabajadores', function (Blueprint $table) {
             $table->id();
-            $table->string('trab_tipo_trabajador',1); 
-            $table->string('trab_cargo', 100); 
-            $table->dateTime('trab_fecha_act'); 
-            $table->dateTime('trab_fecha_inac');             
-            $table->string('trab_estado', 1); 
-            $table->string('trab_observacion', 250)->nullable(); 
+            $table->string('trab_tipo_trabajador', 1);
+            $table->string('trab_cargo', 100);
+            $table->dateTime('trab_fecha_act');
+            $table->dateTime('trab_fecha_inac')->nullable();
+            $table->string('trab_estado', 1);
+            $table->string('trab_observacion', 250)->nullable();
 
             $table->unsignedBigInteger('trab_inst_id');
             $table->foreign('trab_inst_id')

@@ -9,9 +9,9 @@ class pers_com extends Model
 {
     use HasFactory;
 
-    public function agrupacion()
+    public function comunidad()
     {
-        return $this->belongsTo(agrupaciones::class,  'pcom_agr_id');
+        return $this->belongsTo(comunidades::class,  'pcom_com_id');
     }
 
     public function persona()

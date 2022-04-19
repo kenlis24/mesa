@@ -15,8 +15,8 @@ class CreateMarcaVehisTable extends Migration
     {
         Schema::create('marca_vehi', function (Blueprint $table) {
             $table->id();
-            $table->string('Nombre', 100);
-            $table->string('Estado', 1);
+            $table->string('mca_Nombre', 100);
+            $table->string('mca_Estado', 1);
             $table->timestamps();
         });
     }

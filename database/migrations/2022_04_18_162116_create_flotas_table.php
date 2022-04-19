@@ -15,10 +15,10 @@ class CreateFlotasTable extends Migration
     {
         Schema::create('flotas', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('flot_fecha_act'); 
-            $table->dateTime('flot_fecha_inac');             
-            $table->string('flot_estado', 1); 
-            $table->string('flot_observacion', 250)->nullable(); 
+            $table->dateTime('flot_fecha_act');
+            $table->dateTime('flot_fecha_inac')->nullable();
+            $table->string('flot_estado', 1);
+            $table->string('flot_observacion', 250)->nullable();
 
             $table->unsignedBigInteger('flot_trab_id');
             $table->foreign('flot_trab_id')

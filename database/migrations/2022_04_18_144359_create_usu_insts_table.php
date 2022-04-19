@@ -15,16 +15,21 @@ class CreateUsuInstsTable extends Migration
     {
         Schema::create('usu_insts', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('usui_fecha_act'); 
-            $table->dateTime('usui_fecha_inac'); 
-            $table->string('usui_estado', 1); 
-            $table->string('asig_estado', 1); 
-            $table->string('usui_observacion', 250)->nullable(); 
+            $table->dateTime('usui_fecha_act');
+            $table->dateTime('usui_fecha_inac')->nullable();
+            $table->string('usui_estado', 1);
+            $table->string('usui_observacion', 250)->nullable();
 
             $table->unsignedBigInteger('usui_inst_id');
             $table->foreign('usui_inst_id')
                 ->references('id')
                 ->on('instituciones')
+                ->onDelete('cascade');
+
+            $table->unsignedBigInteger('usui_usu_id');
+            $table->foreign('usui_usu_id')
+                ->references('id')
+                ->on('users')
                 ->onDelete('cascade');
 
             $table->timestamps();

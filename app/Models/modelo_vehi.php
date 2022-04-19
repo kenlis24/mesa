@@ -14,4 +14,9 @@ class modelo_vehi extends Model
     {
         return $this->belongsTo(marca_vehi::class,  'mod_mca_id');
     }
+
+    public function vehiculos()
+    {
+        return $this->hasMany(vehiculos::class, 'vehi_mod_id');
+    }
 }

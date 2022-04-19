@@ -18,4 +18,14 @@ class trabajadores extends Model
     {
         return $this->belongsTo(personas::class,  'trab_pers_id');
     }
+
+    public function instituciones()
+    {
+        return $this->hasMany(instituciones::class, 'inst_aser_id');
+    }
+
+    public function flotas()
+    {
+        return $this->hasMany(flotas::class, 'flot_trab_id');
+    }
 }

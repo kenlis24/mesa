@@ -17,12 +17,12 @@ class CreateAtencionesTable extends Migration
             $table->id();
 
             $table->dateTime('aten_fecha');
-            $table->string('aten_tipo_comb', 1); 
-            $table->integer('aten_lts_prog'); 
-            $table->integer('aten_lts_despacho'); 
-            $table->integer('aten_asistentes'); 
-            $table->integer('aten_ausentes'); 
-            $table->string('aten_observacion', 250)->nullable(); 
+            $table->string('aten_tipo_comb', 1);
+            $table->integer('aten_lts_prog')->length(6);
+            $table->integer('aten_lts_despacho')->length(6);
+            $table->integer('aten_asistentes')->length(6);
+            $table->integer('aten_ausentes')->length(6);
+            $table->string('aten_observacion', 250)->nullable();
 
             $table->unsignedBigInteger('aten_inst_id');
             $table->foreign('aten_inst_id')

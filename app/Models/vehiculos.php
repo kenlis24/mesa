@@ -16,6 +16,11 @@ class vehiculos extends Model
 
     public function modelo_vehi()
     {
-        return $this->belongsTo(modelo_vehis::class,  'vehi_mod_id');
+        return $this->belongsTo(modelo_vehi::class,  'vehi_mod_id');
+    }
+
+    public function flota()
+    {
+        return $this->hasMany(flotas::class, 'flot_vehi_id');
     }
 }

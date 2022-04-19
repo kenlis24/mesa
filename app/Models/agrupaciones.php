@@ -11,6 +11,11 @@ class agrupaciones extends Model
 
     public function parroquia()
     {
-        return $this->belongsTo(parroquias::class,  'par_mun_id');
+        return $this->belongsTo(parroquias::class,  'agr_par_id');
+    }
+
+    public function comunidades()
+    {
+        return $this->hasMany(comunidades::class, 'com_agr_id');
     }
 }

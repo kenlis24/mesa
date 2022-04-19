@@ -15,12 +15,11 @@ class CreateProgramacionesTable extends Migration
     {
         Schema::create('programaciones', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('prog_fecha'); 
-            $table->string('prog_tipo_comb', 1);   
-            $table->string('prog_lts', 1);    
-            $table->string('prog_tipo_comb',1);         
-            $table->string('prog_condicion', 1); 
-            $table->string('prog_observacion', 250)->nullable(); 
+            $table->dateTime('prog_fecha');
+            $table->string('prog_tipo_comb', 1);
+            $table->integer('prog_lts')->length(4);
+            $table->string('prog_condicion', 1);
+            $table->string('prog_observacion', 250)->nullable();
 
             $table->unsignedBigInteger('prog_inst_id');
             $table->foreign('prog_inst_id')

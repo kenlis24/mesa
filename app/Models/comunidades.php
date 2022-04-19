@@ -11,6 +11,11 @@ class comunidades extends Model
 
     public function agrupacion()
     {
-        return $this->belongsTo(agrupaciones::class,  'agr_par_id');
+        return $this->belongsTo(agrupaciones::class,  'com_agr_id');
+    }
+
+    public function pers_com()
+    {
+        return $this->hasMany(pers_coms::class, 'pcom_com_id');
     }
 }
