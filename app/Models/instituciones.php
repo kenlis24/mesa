@@ -41,7 +41,7 @@ class instituciones extends Model
 
     public function programaciones()
     {
-        return $this->hasMany(programaciones::class, 'prog_inst_id');
+        return $this->belongsToMany(programaciones::class)->withPivot('prog_inst_id', 'prog_inst_id_es');
     }
 
     public function trabajadores()

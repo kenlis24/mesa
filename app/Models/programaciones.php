@@ -11,7 +11,11 @@ class programaciones extends Model
 
     public function institucion()
     {
-        return $this->belongsTo(instituciones::class,  'prog_inst_id');
-        return $this->belongsTo(instituciones::class,  'prog_inst_id_es');
+        return $this->belongsToMany(instituciones::class,  'prog_inst_id', 'prog_inst_id_es');
+    }
+
+    public function progr_flotas()
+    {
+        return $this->hasMany(progr_flotas::class, 'pflo_prog_id');
     }
 }
