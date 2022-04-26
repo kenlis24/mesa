@@ -6,6 +6,7 @@ import usersedit from './components/admin/Edit';
 import roles from './components/admin/Role';
 import rolesregist from './components/admin/RegistrarRol';
 import rolesedit from './components/admin/EditRol';
+import regisprog from './components/usuario/Programar';
 
 Vue.use(Router);
 
@@ -41,6 +42,11 @@ const routes = [
         path: '/roles/:id',
         component: rolesedit,
         props: true
+    },
+    {
+        name: 'regisprog',
+        path: '/regisprog',
+        component: regisprog,
     },
 ]
 

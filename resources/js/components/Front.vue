@@ -143,6 +143,13 @@ export default {
           can: false,
         },
         {
+          title: "Programación",
+          icon: "mdi-account-details",
+          url: "regisprog",
+          permiso: "admin.role.index",
+          can: false,
+        },
+        {
           title: "About",
           icon: "mdi-forum",
           url: "#",
