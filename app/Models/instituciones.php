@@ -19,11 +19,6 @@ class instituciones extends Model
         return $this->belongsTo(area_serevicios::class,  'inst_aser_id');
     }
 
-    public function grupo()
-    {
-        return $this->belongsTo(grupos::class,  'inst_gpo_id');
-    }
-
     public function atenciones()
     {
         return $this->hasMany(atenciones::class, 'aten_inst_id');

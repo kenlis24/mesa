@@ -16,7 +16,7 @@ class CreateTrabajadoresTable extends Migration
         Schema::create('trabajadores', function (Blueprint $table) {
             $table->id();
             $table->string('trab_tipo_trabajador', 1);
-            $table->string('trab_cargo', 100);
+            $table->string('trab_cargo', 100)->nullable();
             $table->dateTime('trab_fecha_act');
             $table->dateTime('trab_fecha_inac')->nullable();
             $table->string('trab_estado', 1);

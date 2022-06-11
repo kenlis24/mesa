@@ -15,15 +15,17 @@ class CreateMunicipiosTable extends Migration
     {
         Schema::create('municipios', function (Blueprint $table) {
             $table->id();
+            $table->string('mun_codigo', 100)->unique();
             $table->string('mun_nombre', 250);
             $table->string('mun_estado', 1);
-            $table->timestamps();
 
             $table->unsignedBigInteger('mun_edo_id');
             $table->foreign('mun_edo_id')
                 ->references('id')
                 ->on('estados')
                 ->onDelete('cascade');
+
+            $table->timestamps();
         });
     }
 

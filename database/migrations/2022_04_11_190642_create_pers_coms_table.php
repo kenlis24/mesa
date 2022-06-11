@@ -16,9 +16,8 @@ class CreatePersComsTable extends Migration
         Schema::create('pers_coms', function (Blueprint $table) {
             $table->id();
             $table->dateTime('pcom_fecha_act');
-            $table->dateTime('pcom_fecha_inac');
+            $table->dateTime('pcom_fecha_inac')->nullable();
             $table->string('pcom_estado', 1);
-            $table->timestamps();
 
             $table->unsignedBigInteger('pcom_com_id');
             $table->foreign('pcom_com_id')
@@ -37,6 +36,8 @@ class CreatePersComsTable extends Migration
                 ->references('id')
                 ->on('cargos')
                 ->onDelete('cascade');
+
+            $table->timestamps();
         });
     }
 

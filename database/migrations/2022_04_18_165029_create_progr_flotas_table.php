@@ -15,20 +15,18 @@ class CreateProgrFlotasTable extends Migration
     {
         Schema::create('progr_flotas', function (Blueprint $table) {
             $table->id();
-            $table->integer('pflo_prog')->length(11);
-            $table->integer('pflo_flot')->length(11);
-            $table->unique(['pflo_prog', 'pflo_flot']);
             $table->integer('pflo_litros')->length(3);
             $table->string('pflo_condicion', 1);
             $table->string('pflo_observacion', 250)->nullable();
-
             $table->unsignedBigInteger('pflo_prog_id');
+            $table->unsignedBigInteger('pflo_flot_id');
+            $table->unique(['pflo_prog_id', 'pflo_flot_id']);
+
             $table->foreign('pflo_prog_id')
                 ->references('id')
                 ->on('programaciones')
                 ->onDelete('cascade');
 
-            $table->unsignedBigInteger('pflo_flot_id');
             $table->foreign('pflo_flot_id')
                 ->references('id')
                 ->on('flotas')

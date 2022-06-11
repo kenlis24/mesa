@@ -15,15 +15,17 @@ class CreateAgrupacionesTable extends Migration
     {
         Schema::create('agrupaciones', function (Blueprint $table) {
             $table->id();
+            $table->string('agr_codigo', 100)->unique();
             $table->string('agr_nombre', 250);
             $table->string('agr_estado', 1);
-            $table->timestamps();
 
             $table->unsignedBigInteger('agr_par_id');
             $table->foreign('agr_par_id')
                 ->references('id')
                 ->on('parroquias')
                 ->onDelete('cascade');
+
+            $table->timestamps();
         });
     }
 

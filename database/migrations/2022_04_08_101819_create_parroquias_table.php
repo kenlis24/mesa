@@ -15,15 +15,17 @@ class CreateParroquiasTable extends Migration
     {
         Schema::create('parroquias', function (Blueprint $table) {
             $table->id();
+            $table->string('par_codigo', 100)->unique();
             $table->string('par_nombre', 250);
             $table->string('par_estado', 1);
-            $table->timestamps();
 
             $table->unsignedBigInteger('par_mun_id');
             $table->foreign('par_mun_id')
                 ->references('id')
                 ->on('municipios')
                 ->onDelete('cascade');
+
+            $table->timestamps();
         });
     }
 

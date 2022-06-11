@@ -16,7 +16,7 @@ class CreateVehiculosTable extends Migration
         Schema::create('vehiculos', function (Blueprint $table) {
             $table->id();
             $table->string('vehi_placa', 20)->unique();
-            $table->string('vehi_tag', 12)->unique();
+            $table->string('vehi_tag', 12)->unique()->nullable();
             $table->string('vehi_tipo_vehi', 1);
             $table->string('vehi_tipo_comb', 1);
             $table->integer('vehi_capacidad_Lts')->length(4);

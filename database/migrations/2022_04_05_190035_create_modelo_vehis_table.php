@@ -17,13 +17,15 @@ class CreateModeloVehisTable extends Migration
             $table->id();
             $table->string('mod_nombre', 100);
             $table->string('mod_estado', 1);
-            $table->timestamps();
+
 
             $table->unsignedBigInteger('mod_mca_id');
             $table->foreign('mod_mca_id')
                 ->references('id')
                 ->on('marca_vehi')
                 ->onDelete('cascade');
+
+            $table->timestamps();
         });
     }
 
