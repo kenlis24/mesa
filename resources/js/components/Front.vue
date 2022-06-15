@@ -145,7 +145,7 @@ export default {
         {
           title: "Programación",
           icon: "mdi-account-details",
-          url: "regisprog",
+          url: "programar",
           permiso: "admin.role.index",
           can: false,
         },

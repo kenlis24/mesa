@@ -3,7 +3,7 @@
     <v-row align="center" justify="center">
       <v-card class="elevation-12" v-if="$store.state.auth">
         <v-toolbar color="primary" dark flat>
-          <v-toolbar-title>Registrar Programación</v-toolbar-title>
+          <v-toolbar-title>Registrar Programaciónes</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-toolbar>
         <v-card-text>
@@ -12,24 +12,28 @@
               v-model="insti"
               :items="institems"
               :rules="instiRules"
+              item-text="nombre"
+              item-value="id"
               outlined
               dense
               chips
               small-chips
               label="Institución"
-              multiple
+              return-object
             ></v-autocomplete>
 
             <v-autocomplete
               v-model="estaser"
               :items="estaseritems"
               :rules="estaserRules"
+              item-text="nombre"
+              item-value="id"
               outlined
               dense
               chips
               small-chips
               label="Estación de Servicio"
-              multiple
+              return-object
             ></v-autocomplete>
             <v-menu
               ref="fecha"
@@ -64,7 +68,10 @@
               v-model="tipo"
               :items="tipoitems"
               :rules="tipoRules"
+              item-text="nombre"
+              item-value="id"
               label="Tipo Combustible"
+              return-object
               required
             ></v-select>
             <v-text-field
@@ -80,21 +87,24 @@
               v-model="condi"
               :items="conditems"
               :rules="condiRules"
+              item-text="nombre"
+              item-value="id"
               label="Condición"
+              return-object
               required
             ></v-select>
             <v-textarea
               counter
               label="Observación"
               :rules="observRules"
-              :value="observ"
+              v-model="observ"
             ></v-textarea>
           </v-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            v-if="$store.state.auth"
+            v-if="registrar"
             :disabled="!valido"
             color="primary"
             class="mr-4"
@@ -122,42 +132,39 @@ export default {
   name: "regisprog",
   data() {
     return {
+      registrar: false,
       valido: false,
       snackbar: false,
       fecha: false,
       fechaDesde: new Date().toISOString().substr(0, 10),
       dateFormatted: "",
       fromDateVal: null,
-      minDate: "2020-01-05",
-      maxDate: "2019-08-30",
+      /*      minDate: "2020-01-05",
+      maxDate: "2019-08-30", */
       color: "",
       mensaje: "",
-      institems: ["Unet", "Iut", "alcaldia", "Gobernación"],
-      estaseritems: ["temporal"],
-      tipoitems: ["Gasolina", "Gasoil"],
-      conditems: ["Programado", "Aprobado", "Negado"],
-      insti: [],
-      estaser: [],
+      institems: [],
+      estaseritems: [{ id: "1", nombre: "Por programar" }],
+      tipoitems: [
+        { id: "1", nombre: "Gasolina" },
+        { id: "2", nombre: "Gasoil" },
+      ],
+      conditems: [
+        { id: "1", nombre: "Creado" },
+        { id: "2", nombre: "Programado" },
+        { id: "3", nombre: "Aprobado" },
+        { id: "4", nombre: "Negado" },
+      ],
+      insti: "",
+      estaser: "",
       tipo: "",
       litros: "",
       condi: "",
       observ: "",
-      instiRules: [
-        (v) => !!v || "Seleccione una institución",
-        (v) => v.length >= 1 || "Seleccione una institución",
-      ],
-      estaserRules: [
-        (v) => !!v || "Seleccione una estación",
-        (v) => v.length >= 1 || "Seleccione una estación",
-      ],
-      tipoRules: [
-        (v) => !!v || "Seleccione un combustible",
-        (v) => v.length >= 1 || "Seleccione un combustible",
-      ],
-      condiRules: [
-        (v) => !!v || "Seleccione una condición",
-        (v) => v.length >= 1 || "Seleccione una condición",
-      ],
+      instiRules: [(v) => !!v || "Seleccione una institución"],
+      estaserRules: [(v) => !!v || "Seleccione una estación"],
+      tipoRules: [(v) => !!v || "Seleccione un combustible"],
+      condiRules: [(v) => !!v || "Seleccione una condición"],
       observRules: [(v) => v.length <= 250 || "Maximo 250 caracteres"],
       litrosRules: [
         (v) => !!v || "Seleccione cantidad de litros",
@@ -173,6 +180,28 @@ export default {
       this.dateFormatted = this.formatDate(this.fechaDesde);
     },
   },
+  mounted() {
+    axios
+      .get("./institu")
+      .then((res) => {
+        const crear = res.data.permisosuser.find(
+          (el) => el.name === "admin.user.create"
+        );
+        if (crear) this.registrar = true;
+        this.institems = res.data.insti.map((inst) => {
+          return {
+            id: inst.id,
+            nombre: inst.inst_nombre,
+          };
+        });
+        //window.location.reload();
+      })
+      .catch((er) => {
+        this.color = "red accent-2";
+        this.mensaje = er;
+        this.snackbar = true;
+      });
+  },
   methods: {
     changeLocale() {
       this.$vuetify.lang.current = "es";
@@ -181,7 +210,7 @@ export default {
       if (!date) return null;
 
       const [year, month, day] = date.split("-");
-      return `${day}/${month}/${year}`;
+      return `${year}-${month}-${day}`;
     },
     parseDate(date) {
       if (!date) return null;
@@ -190,7 +219,38 @@ export default {
       return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
     },
     validar() {
-      this.$refs.form.validate();
+      var datos = {
+        prog_fecha: this.dateFormatted,
+        prog_tipo_comb: this.tipo.id,
+        prog_lts: this.litros,
+        prog_condicion: this.condi.id,
+        prog_observacion: this.observ,
+        prog_inst_id: this.insti.id.toString(),
+        prog_inst_id_es: this.estaser.id,
+      };
+
+      //alert(JSON.stringify(datos));
+      axios
+        .post("./programaregist", datos)
+        .then((res) => {
+          this.color = "success";
+          this.mensaje = res.data.mensaje;
+          this.snackbar = true;
+          this.dateFormatted = "";
+          this.tipo = "";
+          this.litros = "";
+          this.condi = "";
+          this.observ = "";
+          this.insti = "";
+          this.estaser = "";
+          this.$refs.form.resetValidation();
+          //window.location.reload();
+        })
+        .catch((er) => {
+          this.mensaje = er;
+          this.color = "red accent-2";
+          this.snackbar = true;
+        });
     },
   },
 };
