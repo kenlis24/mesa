@@ -37,7 +37,7 @@ class ProgramacionController extends Controller
      */
     public function store(Request $request)
     {
-        $progra = programaciones::insert($request->post());
+        $progra = programaciones::create($request->post());
         //$progra = $request->post();
         return response()->json([
             'mensaje' => 'Se inserto la programación',
