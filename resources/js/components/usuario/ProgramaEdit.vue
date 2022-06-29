@@ -3,7 +3,7 @@
     <v-row align="center" justify="center">
       <v-card class="elevation-12" v-if="$store.state.auth">
         <v-toolbar color="primary" dark flat>
-          <v-toolbar-title>Registrar Programaciónes</v-toolbar-title>
+          <v-toolbar-title>Editar Programación</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-toolbar>
         <v-card-text>
@@ -35,7 +35,6 @@
               label="Estación de Servicio"
               return-object
             ></v-autocomplete>
-
             <input type="date" v-model="dateFormatted" />
             <v-select
               v-model="tipo"
@@ -77,13 +76,12 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            v-if="registrar"
             :disabled="!valido"
             color="primary"
             class="mr-4"
             @click="validar"
           >
-            Registrar
+            Actualizar
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -102,17 +100,19 @@
 </template>
 <script>
 export default {
-  name: "regisprog",
+  name: "editprograma",
+  props: ["id"],
   data() {
     return {
-      registrar: false,
+      datos: "",
       valido: false,
       snackbar: false,
-      dateFormatted: new Date().toISOString().substr(0, 10),
+      dateFormatted: "",
       color: "",
       mensaje: "",
       institems: [],
-      estaseritems: [{ id: "1", nombre: "Por actualizar" }],
+      //estaseritems: [{ id: "1", nombre: "Por actualizar" }],
+      estaseritems: [],
       tipoitems: [
         { id: "1", nombre: "Gasolina" },
         { id: "2", nombre: "Gasoil" },
@@ -136,7 +136,6 @@ export default {
       observRules: [(v) => v.length <= 250 || "Maximo 250 caracteres"],
       litrosRules: [
         (v) => !!v || "Seleccione cantidad de litros",
-        (v) => v.length > 0 || "Seleccione cantidad de litros",
         (v) => v <= 9999 || "cantidad maxima 9999",
         (v) => v > 0 || "cantidad de litros debe ser mayor a cero",
       ],
@@ -144,29 +143,72 @@ export default {
   },
   mounted() {
     axios
-      .get("./institu")
+      .get(`./programa/${this.id}/edit`)
       .then((res) => {
-        const crear = res.data.permisosuser.find(
-          (el) => el.name === "admin.user.create"
-        );
-        if (crear) this.registrar = true;
+        this.datos = res.data;
         this.institems = res.data.insti.map((inst) => {
           return {
             id: inst.id,
             nombre: inst.inst_nombre,
           };
         });
-        //window.location.reload();
+        this.estaseritems = res.data.estacion.map((inst) => {
+          return {
+            id: inst.id,
+            nombre: inst.inst_nombre,
+          };
+        });
+
+        this.programa = res.data.progra.map((prog) => {
+          this.insti = res.data.insti.find((el) => {
+            if (el.id === prog.prog_inst_id) {
+              return {
+                id: el.id,
+                name: el.inst_nombre,
+              };
+            }
+          });
+
+          this.estaser = res.data.estacion.find((el) => {
+            if (el.id === prog.prog_inst_id_es) {
+              return {
+                id: el.id,
+                name: el.inst_nombre,
+              };
+            }
+          });
+
+          var quetipo = "";
+          if (prog.prog_condicion == 1)
+            quetipo = { id: prog.prog_condicion, nombre: "Creado" };
+          if (prog.prog_condicion == 2)
+            quetipo = { id: prog.prog_condicion, nombre: "Programado" };
+          if (prog.prog_condicion == 3)
+            quetipo = { id: prog.prog_condicion, nombre: "Aprobado" };
+          if (prog.prog_condicion == 4)
+            quetipo = { id: prog.prog_condicion, nombre: "Negado" };
+
+          this.dateFormatted = prog.prog_fecha.slice(0, 10);
+          this.fecha = this.dateFormatted;
+          this.tipo =
+            prog.prog_tipo_comb == 1
+              ? { id: prog.prog_tipo_comb, nombre: "Gasolina" }
+              : { id: prog.prog_tipo_comb, nombre: "Gasoil" };
+          this.litros = parseInt(prog.prog_lts);
+          this.condi = quetipo;
+          this.observ = prog.prog_observacion;
+        });
       })
       .catch((er) => {
-        this.color = "red accent-2";
-        this.mensaje = er;
-        this.snackbar = true;
+        this.datos = er;
       });
   },
   methods: {
+    regresar() {
+      setTimeout(() => this.$router.push({ name: "indexprogra" }), 2800);
+    },
     validar() {
-      var datos = {
+      var actualiza = {
         prog_fecha: this.dateFormatted,
         prog_tipo_comb: this.tipo.id,
         prog_lts: this.litros,
@@ -175,29 +217,20 @@ export default {
         prog_inst_id: this.insti.id.toString(),
         prog_inst_id_es: this.estaser.id,
       };
-
-      //alert(JSON.stringify(datos));
       axios
-        .post("./programaregist", datos)
+        .put(`./programa/${this.id}`, actualiza)
         .then((res) => {
           this.color = "success";
-          this.mensaje = res.data.mensaje;
+          this.mensaje = "Se acctualizó la programación";
           this.snackbar = true;
-          this.dateFormatted = "";
-          this.tipo = "";
-          this.litros = "";
-          this.condi = "";
-          this.observ = "";
-          this.insti = "";
-          this.estaser = "";
-          this.$refs.form.resetValidation();
-          //window.location.reload();
+          this.regresar();
         })
         .catch((er) => {
-          this.mensaje = er;
           this.color = "red accent-2";
+          this.mensaje = er;
           this.snackbar = true;
         });
+      //this.$router.push("users");
     },
   },
 };

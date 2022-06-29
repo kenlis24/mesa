@@ -6,7 +6,9 @@ import usersedit from './components/admin/Edit';
 import roles from './components/admin/Role';
 import rolesregist from './components/admin/RegistrarRol';
 import rolesedit from './components/admin/EditRol';
+import indexprogra from './components/usuario/indexProgra';
 import programar from './components/usuario/Programar';
+import programaedit from './components/usuario/programaedit';
 
 Vue.use(Router);
 
@@ -44,9 +46,20 @@ const routes = [
         props: true
     },
     {
+        name: 'indexprogra',
+        path: '/indexprogra',
+        component: indexprogra,
+    },
+    {
         name: 'programar',
         path: '/programar',
         component: programar,
+    },
+    {
+        name: 'programaedit',
+        path: '/programaedit/:id',
+        component: programaedit,
+        props: true
     },
 ]
 
