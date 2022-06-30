@@ -102,6 +102,16 @@ export default {
         //this.datos = res.data;
 
         this.datos = res.data.progra.map((prog) => {
+          var condi = "";
+          if (prog.prog_condicion == 1) condi = "Creado";
+          if (prog.prog_condicion == 2) condi = "Programado";
+          if (prog.prog_condicion == 3) condi = "Aprobado";
+          if (prog.prog_condicion == 4) condi = "Negado";
+
+          var tipocom = "";
+          if (prog.prog_tipo_comb == 1) tipocom = "Gasolina";
+          if (prog.prog_tipo_comb == 2) tipocom = "Gasoil";
+
           const edit = res.data.permisosuser.find(
             (el) => el.name === "admin.user.edit"
           );
@@ -115,9 +125,9 @@ export default {
           return {
             id: prog.id,
             prog_fecha: prog.prog_fecha.slice(0, 10),
-            prog_tipo_comb: prog.prog_tipo_comb,
+            prog_tipo_comb: tipocom,
             prog_lts: prog.prog_lts,
-            prog_condicion: prog.prog_condicion,
+            prog_condicion: condi,
             prog_inst_id: prog.institu,
             prog_inst_id_es: prog.estacion,
             editar: edit ? true : false,
