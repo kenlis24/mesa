@@ -13,6 +13,12 @@ const mix = require("laravel-mix");
 
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 		var webpackConfig = {
+			resolve: {
+				extensions: ['.js','.vue','.json']
+			},
+			output: {
+				chunkFilename: '[name].js?h=[chunkhash]'
+			},
             plugins: [
                 new VuetifyLoaderPlugin()
         			// other plugins ...

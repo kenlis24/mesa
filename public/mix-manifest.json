@@ -1,4 +1,14 @@
 {
     "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css"
+    "/js/compiled/registrar.js?h=c565b7c56429d617": "/js/compiled/registrar.js?h=c565b7c56429d617",
+    "/js/compiled/users.js?h=b270549c39f2ed05": "/js/compiled/users.js?h=b270549c39f2ed05",
+    "/js/compiled/usersedit.js?h=aa437d997fb47bb8": "/js/compiled/usersedit.js?h=aa437d997fb47bb8",
+    "/js/compiled/roles.js?h=59bac55dc2344908": "/js/compiled/roles.js?h=59bac55dc2344908",
+    "/js/compiled/rolesregist.js?h=1032706612609e97": "/js/compiled/rolesregist.js?h=1032706612609e97",
+    "/js/compiled/rolesedit.js?h=26f64743b2ee285b": "/js/compiled/rolesedit.js?h=26f64743b2ee285b",
+    "/js/compiled/indexprogra.js?h=a00ef8c0dcada14f": "/js/compiled/indexprogra.js?h=a00ef8c0dcada14f",
+    "/js/compiled/programar.js?h=0f5a2d6154df9340": "/js/compiled/programar.js?h=0f5a2d6154df9340",
+    "/js/compiled/programaedit.js?h=849fc968cb78faa0": "/js/compiled/programaedit.js?h=849fc968cb78faa0",
+    "/css/app.css": "/css/app.css",
+    "/js/compiled/indexprogra.js?h=442f6458e9632a47": "/js/compiled/indexprogra.js?h=442f6458e9632a47"
 }

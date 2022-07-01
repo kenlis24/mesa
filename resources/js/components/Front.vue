@@ -77,7 +77,7 @@
                 class="mr-4"
                 @click="validar"
               >
-                Inicar
+                Iniciar
               </v-btn>
             </v-card-actions>
           </v-card>

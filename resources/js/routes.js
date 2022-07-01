@@ -1,14 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router';
-import registrar from './components/Registrar';
-import users from './components/admin/Index';
-import usersedit from './components/admin/Edit';
-import roles from './components/admin/Role';
-import rolesregist from './components/admin/RegistrarRol';
-import rolesedit from './components/admin/EditRol';
-import indexprogra from './components/usuario/indexProgra';
-import programar from './components/usuario/Programar';
-import programaedit from './components/usuario/programaedit';
 
 Vue.use(Router);
 
@@ -16,55 +7,73 @@ const routes = [
     {
         name: 'registrar',
         path: '/registrar',
-        component: registrar
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/registrar' */ './components/Registrar'
+        ),
     },
     {
         name: 'users',
         path: '/users',
-        component: users
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/users' */ './components/admin/Index'
+        ),
     },
     {
         name: 'usersedit',
         path: '/users/:id',
-        component: usersedit,
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/usersedit' */ './components/admin/Edit'
+        ),
         props: true
     },
     {
         name: 'roles',
         path: '/roles',
-        component: roles
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/roles' */ './components/admin/Role'
+        ),
     },
     {
         name: 'rolesregist',
         path: '/rolesregist',
-        component: rolesregist
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/rolesregist' */ './components/admin/RegistrarRol'
+        ),
     },
     {
         name: 'rolesedit',
         path: '/roles/:id',
-        component: rolesedit,
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/rolesedit' */ './components/admin/EditRol'
+        ),
         props: true
     },
     {
         name: 'indexprogra',
         path: '/indexprogra',
-        component: indexprogra,
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/indexprogra' */ './components/usuario/IndexProgra'
+        ),
     },
     {
         name: 'programar',
         path: '/programar',
-        component: programar,
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/programar' */ './components/usuario/Programar'
+        ),
     },
     {
         name: 'programaedit',
         path: '/programaedit/:id',
-        component: programaedit,
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/programaedit' */ './components/usuario/ProgramaEdit'
+        ),
         props: true
     },
 ]
 
 export default new Router({
     mode: 'abstract',
-    base: 'auth/public',
+    base: 'mesa/public',
     routes
 });
