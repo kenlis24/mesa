@@ -16,7 +16,14 @@
           class="elevation-1"
         >
           <template v-slot:item="row">
-            <tr>
+            <tr
+              :class="activo(row.item)"
+              :title="
+                activo(row.item) != ''
+                  ? 'La Institución o Estacion esta inactiva'
+                  : ''
+              "
+            >
               <td>{{ row.item.id }}</td>
               <td>{{ row.item.prog_fecha }}</td>
               <td>{{ row.item.prog_tipo_comb }}</td>
@@ -144,6 +151,8 @@ export default {
             prog_condicion: condi,
             prog_inst_id: prog.institu,
             prog_inst_id_es: prog.estacion,
+            inst_estado: prog.inst_estado,
+            esta_estado: prog.esta_estado,
             editar: edit ? true : false,
             eliminar: eliminar ? true : false,
           };
@@ -159,6 +168,11 @@ export default {
   methods: {
     editar(id) {
       this.$router.push({ name: "programaedit", params: { id: id } });
+    },
+    activo(valor) {
+      if (valor.inst_estado == "A" && valor.esta_estado == "A") {
+        return "";
+      } else return "warning";
     },
     eliminar(id) {
       this.id = id;

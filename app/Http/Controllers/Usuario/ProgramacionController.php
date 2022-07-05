@@ -32,7 +32,7 @@ class ProgramacionController extends Controller
             ->select('programaciones.*', 'instituciones.inst_nombre', 'instituciones.inst_tipo')
             ->get(); */
 
-        $progra = DB::select("select prog.*, insti.inst_nombre as institu, esta.inst_nombre as estacion from programaciones as prog,
+        $progra = DB::select("select prog.*, insti.inst_nombre as institu,insti.inst_estado, esta.inst_nombre as estacion,esta.inst_estado as esta_estado from programaciones as prog,
         ( select * from instituciones where inst_tipo = '1') as insti,
         (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id ");
 
@@ -93,8 +93,8 @@ class ProgramacionController extends Controller
         $user = User::find(auth()->id());
         $permisosuser = $user->getPermissionsViaRoles();
 
-        $insti = instituciones::where("inst_tipo", "=", "1")->get();
-        $estacion = instituciones::where("inst_tipo", "=", "2")->get();
+        $insti = instituciones::where("inst_tipo", "=", "1")->where("inst_estado", "=", "A")->get();
+        $estacion = instituciones::where("inst_tipo", "=", "2")->where("inst_estado", "=", "A")->get();
 
         $progra = programaciones::where("id", "=", $id)->get();
 
@@ -102,7 +102,7 @@ class ProgramacionController extends Controller
             'permisos' => $permisosuser,
             'insti' => $insti,
             'estacion' => $estacion,
-            'progra' => $progra
+            'progra' => $progra,
 
         ], 200);
     }
@@ -125,7 +125,7 @@ class ProgramacionController extends Controller
         $progra->prog_inst_id_es = $request->prog_inst_id_es;
         $mensaje = $progra->save();
         return response()->json([
-            'mensaje' => $mensaje,
+            'mensaje' => 'Se actualizó la programación',
         ], 200);
     }
 

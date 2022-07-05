@@ -20,7 +20,7 @@ class InstitucionController extends Controller
      */
     public function index()
     {
-        $insti = instituciones::where("inst_tipo", "=", "1")->get();
+        $insti = instituciones::where("inst_tipo", "=", "1")->where("inst_estado", "=", "A")->get();
         $institodas = instituciones::all();
         $user = User::find(auth()->id());
         $permisosuser = $user->getPermissionsViaRoles();

@@ -221,7 +221,7 @@ export default {
         .put(`./programa/${this.id}`, actualiza)
         .then((res) => {
           this.color = "success";
-          this.mensaje = "Se acctualizó la programación";
+          this.mensaje = res.data.mensaje;
           this.snackbar = true;
           this.regresar();
         })
