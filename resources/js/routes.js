@@ -70,6 +70,27 @@ const routes = [
         ),
         props: true
     },
+    {
+        name: 'indexinsti',
+        path: '/indexinsti',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/indexinsti' */ './components/usuario/IndexInsti'
+        ),
+    },
+    {
+        name: 'institucion',
+        path: '/institucion',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/institucion' */ './components/usuario/Institucion'
+        ),
+    },
+    {
+        name: 'instiedit',
+        path: '/instiedit',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/instiedit' */ './components/usuario/InstiEdit'
+        ),
+    },
 ]
 
 export default new Router({

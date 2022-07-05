@@ -150,6 +150,13 @@ export default {
           can: false,
         },
         {
+          title: "Instituciones",
+          icon: "mdi-account-details",
+          url: "indexinsti",
+          permiso: "admin.role.index",
+          can: false,
+        },
+        {
           title: "About",
           icon: "mdi-forum",
           url: "#",

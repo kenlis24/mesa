@@ -87,9 +87,9 @@
       </v-card>
     </v-row>
     <v-snackbar
+      bottom
       :timeout="2500"
       v-model="snackbar"
-      absolute
       :color="color"
       rounded="pill"
       right

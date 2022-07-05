@@ -16,14 +16,14 @@
           class="elevation-1"
         >
           <template v-slot:item="row">
-            <tr>
+            <tr class="text-xs-body-2">
               <td>{{ row.item.id }}</td>
-              <td>{{ row.item.prog_fecha }}</td>
-              <td>{{ row.item.prog_tipo_comb }}</td>
-              <td>{{ row.item.prog_lts }}</td>
-              <td>{{ row.item.prog_condicion }}</td>
-              <td>{{ row.item.prog_inst_id }}</td>
-              <td>{{ row.item.prog_inst_id_es }}</td>
+              <td>{{ row.item.inst_rif }}</td>
+              <td>{{ row.item.inst_nombre }}</td>
+              <td>{{ row.item.inst_tipo }}</td>
+              <td>{{ row.item.inst_telefono }}</td>
+              <td>{{ row.item.inst_dependencia }}</td>
+              <td>{{ row.item.inst_sector }}</td>
               <td>
                 <v-tooltip v-if="row.item.editar" top>
                   <template v-slot:activator="{ on, attrs }">
@@ -38,6 +38,23 @@
                   <span>Editar</span>
                 </v-tooltip>
                 <v-tooltip v-if="row.item.editar" top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="desactivar(row.item.id, row.item.inst_estado)"
+                      small
+                      :color="row.item.inst_estado == 'A' ? 'blue' : 'red'"
+                      >mdi-cancel</v-icon
+                    >
+                  </template>
+                  <span
+                    v-text="
+                      row.item.inst_estado == 'A' ? 'Desactivar' : 'Activar'
+                    "
+                  ></span>
+                </v-tooltip>
+                <v-tooltip v-if="row.item.eliminar" top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon
                       v-bind="attrs"
@@ -64,13 +81,17 @@
           {{ this.mensaje }}
         </v-snackbar>
       </v-card>
+
       <v-dialog v-model="dialog" persistent max-width="290">
         <v-card>
-          <v-card-title class="text-h5"> Eliminar programación </v-card-title>
-          <v-card-text>Desea eliminar la programación?</v-card-text>
+          <v-card-title class="text-h5"> Eliminar institución </v-card-title>
+          <v-card-text
+            >Desea eliminar la institución? borrará las programaciones
+            dependientes</v-card-text
+          >
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text @click="eliminarprograma()">
+            <v-btn color="green darken-1" text @click="eliminarinstitu()">
               Si
             </v-btn>
             <v-btn color="green darken-2" text @click="dialog = false">
@@ -84,9 +105,10 @@
 </template>
 <script>
 export default {
-  name: "indexprogra",
+  name: "indexinsti",
   data: () => ({
     snackbar: false,
+    show: false,
     mensaje: "",
     id: "",
     color: "",
@@ -100,31 +122,31 @@ export default {
         sortable: false,
         value: "id",
       },
-      { text: "Fecha programación", value: "prog_fecha" },
-      { text: "Tipo combustible", value: "prog_tipo_comb" },
-      { text: "Litros", value: "prog_lts" },
-      { text: "Condicion", value: "prog_condicion" },
-      { text: "Institución", value: "prog_inst_id" },
-      { text: "Estación", value: "prog_inst_id_es" },
+      { text: "Rif", value: "inst_rif" },
+      { text: "Nombre", value: "inst_nombre" },
+      { text: "Tipo", value: "inst_tipo" },
+      { text: "Teléfono", value: "inst_telefono" },
+      { text: "Dependencia", value: "inst_dependencia" },
+      { text: "Sector", value: "inst_sector" },
       { text: "Acciones", value: "" },
     ],
   }),
   mounted() {
     axios
-      .get("./programa")
+      .get("./institu")
       .then((res) => {
         //this.datos = res.data;
 
-        this.datos = res.data.progra.map((prog) => {
+        this.datos = res.data.institodas.map((insti) => {
           var condi = "";
-          if (prog.prog_condicion == 1) condi = "Creado";
-          if (prog.prog_condicion == 2) condi = "Programado";
-          if (prog.prog_condicion == 3) condi = "Aprobado";
-          if (prog.prog_condicion == 4) condi = "Negado";
+          if (insti.inst_dependencia == 1) condi = "Nacional";
+          if (insti.inst_dependencia == 2) condi = "Regional";
+          if (insti.inst_dependencia == 3) condi = "Estadal";
+          if (insti.inst_dependencia == 4) condi = "Municipal";
 
-          var tipocom = "";
-          if (prog.prog_tipo_comb == 1) tipocom = "Gasolina";
-          if (prog.prog_tipo_comb == 2) tipocom = "Gasoil";
+          var tipoinst = "";
+          if (insti.inst_tipo == 1) tipoinst = "Organismo";
+          if (insti.inst_tipo == 2) tipoinst = "Estación de Servicio";
 
           const edit = res.data.permisosuser.find(
             (el) => el.name === "admin.user.edit"
@@ -137,13 +159,14 @@ export default {
           );
           if (crear) this.create = true;
           return {
-            id: prog.id,
-            prog_fecha: prog.prog_fecha.slice(0, 10),
-            prog_tipo_comb: tipocom,
-            prog_lts: prog.prog_lts,
-            prog_condicion: condi,
-            prog_inst_id: prog.institu,
-            prog_inst_id_es: prog.estacion,
+            id: insti.id,
+            inst_rif: insti.inst_rif,
+            inst_nombre: insti.inst_nombre,
+            inst_tipo: tipoinst,
+            inst_telefono: insti.inst_telefono,
+            inst_dependencia: insti.inst_dependencia,
+            inst_sector: insti.inst_sector,
+            inst_estado: insti.inst_estado,
             editar: edit ? true : false,
             eliminar: eliminar ? true : false,
           };
@@ -158,15 +181,33 @@ export default {
   },
   methods: {
     editar(id) {
-      this.$router.push({ name: "programaedit", params: { id: id } });
+      this.$router.push({ name: "instiedit", params: { id: id } });
     },
     eliminar(id) {
       this.id = id;
       this.dialog = true;
     },
-    eliminarprograma() {
+    desactivar(id, acti) {
+      var actualiza = {
+        prog_fecha: "hhh",
+      };
       axios
-        .delete(`./programa/${this.id}`)
+        .put(`./institu/${id}/${acti}`)
+        .then((res) => {
+          this.color = "success";
+          this.mensaje = res.data.mensaje;
+          this.snackbar = true;
+          this.cargar();
+        })
+        .catch((er) => {
+          this.color = "red accent-2";
+          this.mensaje = er;
+          this.snackbar = true;
+        });
+    },
+    eliminarinstitu() {
+      axios
+        .delete(`./institu/${this.id}`)
         .then((res) => {
           this.color = "success";
           this.mensaje = res.data.mensaje;
@@ -181,23 +222,23 @@ export default {
         });
     },
     registrar() {
-      this.$router.push({ name: "programar" });
+      this.$router.push({ name: "institucion" });
     },
     cargar() {
       axios
-        .get("./programa")
+        .get("./institu")
         .then((res) => {
           //this.datos = res.data;
-          this.datos = res.data.progra.map((prog) => {
+          this.datos = res.data.institodas.map((insti) => {
             var condi = "";
-            if (prog.prog_condicion == 1) condi = "Creado";
-            if (prog.prog_condicion == 2) condi = "Programado";
-            if (prog.prog_condicion == 3) condi = "Aprobado";
-            if (prog.prog_condicion == 4) condi = "Negado";
+            if (insti.inst_dependencia == 1) condi = "Nacional";
+            if (insti.inst_dependencia == 2) condi = "Regional";
+            if (insti.inst_dependencia == 3) condi = "Estadal";
+            if (insti.inst_dependencia == 4) condi = "Municipal";
 
-            var tipocom = "";
-            if (prog.prog_tipo_comb == 1) tipocom = "Gasolina";
-            if (prog.prog_tipo_comb == 2) tipocom = "Gasoil";
+            var tipoinst = "";
+            if (insti.inst_tipo == 1) tipoinst = "Organismo";
+            if (insti.inst_tipo == 2) tipoinst = "Estación de Servicio";
 
             const edit = res.data.permisosuser.find(
               (el) => el.name === "admin.user.edit"
@@ -210,13 +251,14 @@ export default {
             );
             if (crear) this.create = true;
             return {
-              id: prog.id,
-              prog_fecha: prog.prog_fecha.slice(0, 10),
-              prog_tipo_comb: tipocom,
-              prog_lts: prog.prog_lts,
-              prog_condicion: condi,
-              prog_inst_id: prog.institu,
-              prog_inst_id_es: prog.estacion,
+              id: insti.id,
+              inst_rif: insti.inst_rif,
+              inst_nombre: insti.inst_nombre,
+              inst_tipo: tipoinst,
+              inst_telefono: insti.inst_telefono,
+              inst_dependencia: insti.inst_dependencia,
+              inst_sector: insti.inst_sector,
+              inst_estado: insti.inst_estado,
               editar: edit ? true : false,
               eliminar: eliminar ? true : false,
             };
