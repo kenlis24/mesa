@@ -9,6 +9,9 @@ class instituciones extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['inst_rif', 'inst_nombre', 'inst_tipo', 'inst_direccion', 'inst_telefono', 'inst_correo', 'inst_dependencia', 'inst_sector', 'inst_estado', 'inst_observacion', 'inst_par_id', 'inst_aser_id'];
+
+
     public function parroquia()
     {
         return $this->belongsTo(parroquias::class,  'inst_par_id');

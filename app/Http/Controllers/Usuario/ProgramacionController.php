@@ -68,7 +68,7 @@ class ProgramacionController extends Controller
         //$progra = $request->post();
         return response()->json([
             'mensaje' => 'Se inserto la programación',
-        ]);
+        ], 200);
     }
 
     /**

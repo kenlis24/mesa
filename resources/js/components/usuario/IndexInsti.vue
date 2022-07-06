@@ -8,10 +8,20 @@
             Registrar
           </v-btn>
         </div>
+        <v-card-title>
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Buscar"
+            single-line
+            hide-details
+          ></v-text-field>
+        </v-card-title>
         <v-data-table
           dense
           :headers="headers"
           :items="datos"
+          :search="search"
           item-key="name"
           class="elevation-1"
         >
@@ -110,6 +120,7 @@ export default {
     snackbar: false,
     show: false,
     mensaje: "",
+    search: "",
     id: "",
     color: "",
     dialog: false,
