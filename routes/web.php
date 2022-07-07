@@ -32,7 +32,7 @@ Route::put('/roles/{role}', 'App\Http\Controllers\Admin\RoleController@update')-
 Route::get('/institu', 'App\Http\Controllers\Usuario\InstitucionController@index')->middleware('can:admin.role.index');
 Route::post('/instituregist', 'App\Http\Controllers\Usuario\InstitucionController@store')->middleware('can:admin.role.create');
 Route::delete('/institu/{id}', 'App\Http\Controllers\Usuario\InstitucionController@destroy')->middleware('can:admin.role.destroy');
-//Route::get('/institu/{id}/edit', 'App\Http\Controllers\Usuario\InstitucionController@edit')->middleware('can:admin.role.edit');
+Route::get('/institu/{id}/edit', 'App\Http\Controllers\Usuario\InstitucionController@edit')->middleware('can:admin.role.edit');
 Route::put('/institu/{id}/{acti?}', 'App\Http\Controllers\Usuario\InstitucionController@update')->middleware('can:admin.role.edit');
 
 Route::get('/programa', 'App\Http\Controllers\Usuario\ProgramacionController@index')->middleware('can:admin.role.index');

@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\instituciones;
 
 use Illuminate\Support\Facades\Validator;
+use App\Models\area_servicios;
+use App\Models\parroquias;
 
 use Spatie\Permission\Models\Permission;
 
@@ -90,7 +92,22 @@ class InstitucionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find(auth()->id());
+        $permisosuser = $user->getPermissionsViaRoles();
+
+        $parroq = parroquias::where("par_estado", "=", "A")->get();
+        $areaser = area_servicios::where("aser_estado", "=", "A")->get();
+
+        $insti = instituciones::where("id", "=", $id)->get();
+
+
+        return response()->json([
+            'permisos' => $permisosuser,
+            'insti' => $insti,
+            'parroq' => $parroq,
+            'areaser' => $areaser,
+
+        ], 200);
     }
 
     /**
@@ -103,9 +120,22 @@ class InstitucionController extends Controller
     public function update(Request $request, $id, $acti = null)
     {
         if ($acti) {
-
             $insti = instituciones::find($id);
             $insti->inst_estado = $acti == 'A' ? 'I' : 'A';
+            $insti->save();
+        } else {
+            $insti = instituciones::find($id);
+            $insti->inst_rif = $request->inst_rif;
+            $insti->inst_nombre = $request->inst_nombre;
+            $insti->inst_direccion = $request->inst_direccion;
+            $insti->inst_telefono = $request->inst_telefono;
+            $insti->inst_correo = $request->inst_correo;
+            $insti->inst_dependencia = $request->inst_dependencia;
+            $insti->inst_sector = $request->inst_sector;
+            $insti->inst_estado = $request->inst_estado;
+            $insti->inst_observacion = $request->inst_observacion;
+            $insti->inst_par_id = $request->inst_par_id;
+            $insti->inst_aser_id = $request->inst_aser_id;
             $insti->save();
         }
         return response()->json([

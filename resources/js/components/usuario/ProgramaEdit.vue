@@ -200,7 +200,9 @@ export default {
         });
       })
       .catch((er) => {
-        this.datos = er;
+        this.color = "red accent-2";
+        this.mensaje = "Error al cargar los datos";
+        this.snackbar = true;
       });
   },
   methods: {

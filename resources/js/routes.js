@@ -90,6 +90,7 @@ const routes = [
         component: () => import(
             /* webpackChunkName: 'js/compiled/instiedit' */ './components/usuario/InstiEdit'
         ),
+        props: true,
     },
 ]
 
