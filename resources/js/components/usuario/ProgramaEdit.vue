@@ -149,7 +149,7 @@ export default {
       condi: "",
       observ: "",
       instiRules: [(v) => !!v || "Seleccione una institución"],
-      estaserRules: [(v) => !!v || "Seleccione una estación"],
+      estaserRules: [(v) => v.id != 1 || "Seleccione una estación"],
       fechaRules: [
         (v) => !!v || "Seleccione una fecha",
         (v) => v.length > 0 || "Seleccione una fecha2",
@@ -252,7 +252,7 @@ export default {
           prog_fecha: this.dateFormatted,
           prog_tipo_comb: this.datos.progra[0].prog_tipo_comb,
           prog_lts: this.datos.progra[0].prog_lts,
-          prog_condicion: this.datos.progra[0].prog_condicion,
+          prog_condicion: "3",
           prog_observacion: this.observ,
           prog_inst_id: this.datos.progra[0].prog_inst_id,
           prog_inst_id_es: this.estaser.id,
