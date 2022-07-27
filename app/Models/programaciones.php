@@ -9,7 +9,7 @@ class programaciones extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['prog_fecha', 'prog_tipo_comb', 'prog_lts', 'prog_condicion', 'prog_observacion', 'prog_inst_id', 'prog_inst_id_es'];
+    protected $fillable = ['prog_fecha', 'prog_tipo_comb', 'prog_lts', 'prog_condicion', 'prog_observacion', 'prog_estado', 'prog_inst_id', 'prog_inst_id_es'];
 
     public function institucion()
     {

@@ -36,7 +36,6 @@
             >
               <td>{{ row.item.id }}</td>
               <td>{{ row.item.prog_fecha }}</td>
-              <td>{{ row.item.prog_tipo_comb }}</td>
               <td>{{ row.item.prog_lts }}</td>
               <td>{{ row.item.prog_condicion }}</td>
               <td>{{ row.item.prog_inst_id }}</td>
@@ -45,16 +44,9 @@
                 <v-tooltip v-if="row.item.editar" top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon
-                      v-if="row.item.prog_condicion != 'Aprobado'"
                       v-bind="attrs"
                       v-on="on"
                       @click="editar(row.item.id)"
-                      small
-                      >mdi-lead-pencil</v-icon
-                    >
-                    <v-icon
-                      v-if="row.item.prog_condicion == 'Aprobado'"
-                      disabled
                       small
                       >mdi-lead-pencil</v-icon
                     >
@@ -66,17 +58,12 @@
                     <v-icon
                       v-bind="attrs"
                       v-on="on"
-                      @click="desactivar(row.item.id, row.item.prog_estado)"
+                      @click="eliminar(row.item.id)"
                       small
-                      :color="row.item.prog_estado == 'A' ? 'blue' : 'red'"
-                      >mdi-cancel</v-icon
+                      >mdi-delete</v-icon
                     >
                   </template>
-                  <span
-                    v-text="
-                      row.item.prog_estado == 'A' ? 'Desactivar' : 'Activar'
-                    "
-                  ></span>
+                  <span>Eliminar</span>
                 </v-tooltip>
               </td>
             </tr>
@@ -93,6 +80,21 @@
           {{ this.mensaje }}
         </v-snackbar>
       </v-card>
+      <v-dialog v-model="dialog" persistent max-width="290">
+        <v-card>
+          <v-card-title class="text-h5"> Eliminar programación </v-card-title>
+          <v-card-text>Desea eliminar la programación?</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text @click="eliminarprograma()">
+              Si
+            </v-btn>
+            <v-btn color="green darken-2" text @click="dialog = false">
+              No
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-row>
   </v-container>
 </template>
@@ -105,6 +107,7 @@ export default {
     search: "",
     id: "",
     color: "",
+    dialog: false,
     datos: [],
     create: false,
     headers: [
@@ -115,7 +118,6 @@ export default {
         value: "id",
       },
       { text: "Fecha programación", value: "prog_fecha" },
-      { text: "Tipo combustible", value: "prog_tipo_comb" },
       { text: "Litros", value: "prog_lts" },
       { text: "Condicion", value: "prog_condicion" },
       { text: "Institución", value: "prog_inst_id" },
@@ -134,13 +136,13 @@ export default {
           if (prog.prog_condicion == 1) condi = "Creado";
           if (prog.prog_condicion == 2) condi = "Programado";
           if (prog.prog_condicion == 3) condi = "Aprobado";
-
-          var tipocom = "";
-          if (prog.prog_tipo_comb == 1) tipocom = "Gasolina";
-          if (prog.prog_tipo_comb == 2) tipocom = "Gasoil";
+          if (prog.prog_condicion == 4) condi = "Negado";
 
           const edit = res.data.permisosuser.find(
             (el) => el.name === "admin.user.edit"
+          );
+          const eliminar = res.data.permisosuser.find(
+            (el) => el.name === "admin.user.destroy"
           );
           const crear = res.data.permisosuser.find(
             (el) => el.name === "admin.user.create"
@@ -149,15 +151,14 @@ export default {
           return {
             id: prog.id,
             prog_fecha: prog.prog_fecha.slice(0, 10),
-            prog_tipo_comb: tipocom,
             prog_lts: prog.prog_lts,
             prog_condicion: condi,
             prog_inst_id: prog.institu,
             prog_inst_id_es: prog.estacion,
-            prog_estado: prog.prog_estado,
             inst_estado: prog.inst_estado,
             esta_estado: prog.esta_estado,
             editar: edit ? true : false,
+            eliminar: eliminar ? true : false,
           };
         });
         //window.location.reload();
@@ -177,13 +178,18 @@ export default {
         return "";
       } else return "warning";
     },
-    desactivar(id, acti) {
+    eliminar(id) {
+      this.id = id;
+      this.dialog = true;
+    },
+    eliminarprograma() {
       axios
-        .put(`./programa/${id}/${acti}`)
+        .delete(`./programa/${this.id}`)
         .then((res) => {
           this.color = "success";
           this.mensaje = res.data.mensaje;
           this.snackbar = true;
+          this.dialog = false;
           this.cargar();
         })
         .catch((er) => {
@@ -205,13 +211,13 @@ export default {
             if (prog.prog_condicion == 1) condi = "Creado";
             if (prog.prog_condicion == 2) condi = "Programado";
             if (prog.prog_condicion == 3) condi = "Aprobado";
-
-            var tipocom = "";
-            if (prog.prog_tipo_comb == 1) tipocom = "Gasolina";
-            if (prog.prog_tipo_comb == 2) tipocom = "Gasoil";
+            if (prog.prog_condicion == 4) condi = "Negado";
 
             const edit = res.data.permisosuser.find(
               (el) => el.name === "admin.user.edit"
+            );
+            const eliminar = res.data.permisosuser.find(
+              (el) => el.name === "admin.user.destroy"
             );
             const crear = res.data.permisosuser.find(
               (el) => el.name === "admin.user.create"
@@ -220,15 +226,12 @@ export default {
             return {
               id: prog.id,
               prog_fecha: prog.prog_fecha.slice(0, 10),
-              prog_tipo_comb: tipocom,
               prog_lts: prog.prog_lts,
               prog_condicion: condi,
               prog_inst_id: prog.institu,
               prog_inst_id_es: prog.estacion,
-              prog_estado: prog.prog_estado,
-              inst_estado: prog.inst_estado,
-              esta_estado: prog.esta_estado,
               editar: edit ? true : false,
+              eliminar: eliminar ? true : false,
             };
           });
           //window.location.reload();

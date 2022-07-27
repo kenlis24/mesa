@@ -36,7 +36,14 @@
               return-object
             ></v-autocomplete>
 
-            <input type="date" v-model="dateFormatted" />
+            <v-text-field
+              type="datetime-local"
+              v-model="dateFormatted"
+              label="Fcha"
+              :rules="fechaRules"
+              required
+            ></v-text-field>
+
             <v-select
               v-model="tipo"
               :items="tipoitems"
@@ -56,16 +63,10 @@
               label="Litros"
               required
             ></v-text-field>
-            <v-select
-              v-model="condi"
-              :items="conditems"
-              :rules="condiRules"
-              item-text="nombre"
-              item-value="id"
-              label="Condición"
-              return-object
-              required
-            ></v-select>
+            <template>
+              <div>Condición</div>
+              <div>&nbsp;<strong>Creado</strong></div>
+            </template>
             <v-textarea
               counter
               label="Observación"
@@ -108,7 +109,8 @@ export default {
       registrar: false,
       valido: false,
       snackbar: false,
-      dateFormatted: new Date().toISOString().substr(0, 10),
+      dateFormatted: "",
+      dateFormatted2: "",
       color: "",
       mensaje: "",
       institems: [],
@@ -117,20 +119,18 @@ export default {
         { id: "1", nombre: "Gasolina" },
         { id: "2", nombre: "Gasoil" },
       ],
-      conditems: [
-        { id: "1", nombre: "Creado" },
-        { id: "2", nombre: "Programado" },
-        { id: "3", nombre: "Aprobado" },
-        { id: "4", nombre: "Negado" },
-      ],
       insti: "",
       estaser: "",
       tipo: "",
       litros: "",
-      condi: "",
+      condi: "1",
       observ: "",
       instiRules: [(v) => !!v || "Seleccione una institución"],
       estaserRules: [(v) => !!v || "Seleccione una estación"],
+      fechaRules: [
+        (v) => !!v || "Seleccione una fecha",
+        (v) => v.length > 0 || "Seleccione una fecha2",
+      ],
       tipoRules: [(v) => !!v || "Seleccione un combustible"],
       condiRules: [(v) => !!v || "Seleccione una condición"],
       observRules: [(v) => v.length <= 250 || "Maximo 250 caracteres"],
@@ -164,14 +164,20 @@ export default {
         this.snackbar = true;
       });
   },
+  watch: {
+    dateFormatted: function (val) {
+      this.dateFormatted = val.slice(0, 10) + " " + val.slice(11, 16) + ":00";
+    },
+  },
   methods: {
     validar() {
       var datos = {
         prog_fecha: this.dateFormatted,
         prog_tipo_comb: this.tipo.id,
         prog_lts: this.litros,
-        prog_condicion: this.condi.id,
+        prog_condicion: this.condi,
         prog_observacion: this.observ,
+        prog_estado: "A",
         prog_inst_id: this.insti.id.toString(),
         prog_inst_id_es: this.estaser.id,
       };
@@ -186,7 +192,6 @@ export default {
           this.dateFormatted = "";
           this.tipo = "";
           this.litros = "";
-          this.condi = "";
           this.observ = "";
           this.insti = "";
           this.estaser = "";

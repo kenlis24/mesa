@@ -20,6 +20,7 @@ class CreateProgramacionesTable extends Migration
             $table->integer('prog_lts')->length(4);
             $table->string('prog_condicion', 1);
             $table->string('prog_observacion', 250)->nullable();
+            $table->string('prog_estado', 1)->nullable();
 
             $table->unsignedBigInteger('prog_inst_id');
             $table->foreign('prog_inst_id')

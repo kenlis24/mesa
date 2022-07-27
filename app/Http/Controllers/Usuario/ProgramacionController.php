@@ -114,18 +114,24 @@ class ProgramacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, programaciones $progra)
+    public function update(Request $request, programaciones $progra, $acti = null)
     {
-        $progra->prog_fecha = $request->prog_fecha;
-        $progra->prog_tipo_comb = $request->prog_tipo_comb;
-        $progra->prog_lts = $request->prog_lts;
-        $progra->prog_condicion = $request->prog_condicion;
-        $progra->prog_observacion = $request->prog_observacion;
-        $progra->prog_inst_id = $request->prog_inst_id;
-        $progra->prog_inst_id_es = $request->prog_inst_id_es;
-        $mensaje = $progra->save();
+        if ($acti) {
+            $progra->prog_estado = $acti == 'A' ? 'I' : 'A';
+            $progra->save();
+        } else {
+            $progra->prog_fecha = $request->prog_fecha;
+            $progra->prog_tipo_comb = $request->prog_tipo_comb;
+            $progra->prog_lts = $request->prog_lts;
+            $progra->prog_condicion = $request->prog_condicion;
+            $progra->prog_observacion = $request->prog_observacion;
+            $progra->prog_inst_id = $request->prog_inst_id;
+            $progra->prog_inst_id_es = $request->prog_inst_id_es;
+            $mensaje = $progra->save();
+        }
+
         return response()->json([
-            'mensaje' => 'Se actualizó la programación',
+            'mensaje' => $acti != NULL ? 'Se cambió el estado' : 'Se actualizó la programación',
         ], 200);
     }
 
@@ -137,10 +143,10 @@ class ProgramacionController extends Controller
      */
     public function destroy($id)
     {
-        $prog = programaciones::find($id);
+        /*       $prog = programaciones::find($id);
         $prog->delete();
         return response()->json([
             'mensaje' => 'Se borro la programación',
-        ], 200);
+        ], 200); */
     }
 }

@@ -37,9 +37,9 @@ Route::put('/institu/{id}/{acti?}', 'App\Http\Controllers\Usuario\InstitucionCon
 
 Route::get('/programa', 'App\Http\Controllers\Usuario\ProgramacionController@index')->middleware('can:admin.role.index');
 Route::post('/programaregist', 'App\Http\Controllers\Usuario\ProgramacionController@store')->middleware('can:admin.role.create');
-Route::delete('/programa/{id}', 'App\Http\Controllers\Usuario\ProgramacionController@destroy')->middleware('can:admin.role.destroy');
+//Route::delete('/programa/{id}', 'App\Http\Controllers\Usuario\ProgramacionController@destroy')->middleware('can:admin.role.destroy');
 Route::get('/programa/{id}/edit', 'App\Http\Controllers\Usuario\ProgramacionController@edit')->middleware('can:admin.role.edit');
-Route::put('/programa/{progra}', 'App\Http\Controllers\Usuario\ProgramacionController@update')->middleware('can:admin.role.edit');
+Route::put('/programa/{progra}/{acti?}', 'App\Http\Controllers\Usuario\ProgramacionController@update')->middleware('can:admin.role.edit');
 
 Route::get('/areaser', 'App\Http\Controllers\Usuario\AreaServicioController@index')->middleware('can:admin.role.index');
 //Route::post('/areaserregist', 'App\Http\Controllers\Usuario\AreaServicioController@store')->middleware('can:admin.role.create');

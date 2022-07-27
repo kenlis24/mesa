@@ -151,10 +151,10 @@ class InstitucionController extends Controller
      */
     public function destroy($id)
     {
-        $insti = instituciones::find($id);
+        /* $insti = instituciones::find($id);
         $insti->delete();
         return response()->json([
             'mensaje' => 'Se borro la institución',
-        ], 200);
+        ], 200); */
     }
 }

@@ -7,7 +7,7 @@
           <v-spacer></v-spacer>
         </v-toolbar>
         <v-card-text>
-          <v-form ref="form" v-model="valido">
+          <v-form v-if="datos" ref="form" v-model="valido">
             <v-autocomplete
               v-model="insti"
               :items="institems"
@@ -19,6 +19,10 @@
               chips
               small-chips
               label="Institución"
+              :disabled="
+                this.datos.progra[0].prog_condicion == 2 ||
+                this.datos.progra[0].prog_condicion == 3
+              "
               return-object
             ></v-autocomplete>
 
@@ -33,9 +37,20 @@
               chips
               small-chips
               label="Estación de Servicio"
+              :disabled="
+                this.datos.progra[0].prog_condicion == 1 ||
+                this.datos.progra[0].prog_condicion == 3
+              "
               return-object
             ></v-autocomplete>
-            <input type="date" v-model="dateFormatted" />
+            <v-text-field
+              type="datetime-local"
+              v-model="dateFormatted"
+              label="Fcha"
+              :rules="fechaRules"
+              :disabled="this.datos.progra[0].prog_condicion == 3"
+              required
+            ></v-text-field>
             <v-select
               v-model="tipo"
               :items="tipoitems"
@@ -43,6 +58,10 @@
               item-text="nombre"
               item-value="id"
               label="Tipo Combustible"
+              :disabled="
+                this.datos.progra[0].prog_condicion == 2 ||
+                this.datos.progra[0].prog_condicion == 3
+              "
               return-object
               required
             ></v-select>
@@ -50,25 +69,26 @@
               v-model="litros"
               :counter="4"
               :rules="litrosRules"
+              :disabled="
+                this.datos.progra[0].prog_condicion == 2 ||
+                this.datos.progra[0].prog_condicion == 3
+              "
               max="9999"
               type="number"
               label="Litros"
               required
             ></v-text-field>
-            <v-select
-              v-model="condi"
-              :items="conditems"
-              :rules="condiRules"
-              item-text="nombre"
-              item-value="id"
-              label="Condición"
-              return-object
-              required
-            ></v-select>
+            <template>
+              <div>Condición</div>
+              <div>
+                &nbsp;<strong>{{ condi.nombre }}</strong>
+              </div>
+            </template>
             <v-textarea
               counter
               label="Observación"
               :rules="observRules"
+              :disabled="this.datos.progra[0].prog_condicion == 3"
               v-model="observ"
             ></v-textarea>
           </v-form>
@@ -121,7 +141,6 @@ export default {
         { id: "1", nombre: "Creado" },
         { id: "2", nombre: "Programado" },
         { id: "3", nombre: "Aprobado" },
-        { id: "4", nombre: "Negado" },
       ],
       insti: "",
       estaser: "",
@@ -131,6 +150,10 @@ export default {
       observ: "",
       instiRules: [(v) => !!v || "Seleccione una institución"],
       estaserRules: [(v) => !!v || "Seleccione una estación"],
+      fechaRules: [
+        (v) => !!v || "Seleccione una fecha",
+        (v) => v.length > 0 || "Seleccione una fecha2",
+      ],
       tipoRules: [(v) => !!v || "Seleccione un combustible"],
       condiRules: [(v) => !!v || "Seleccione una condición"],
       observRules: [(v) => v.length <= 250 || "Maximo 250 caracteres"],
@@ -185,10 +208,8 @@ export default {
             quetipo = { id: prog.prog_condicion, nombre: "Programado" };
           if (prog.prog_condicion == 3)
             quetipo = { id: prog.prog_condicion, nombre: "Aprobado" };
-          if (prog.prog_condicion == 4)
-            quetipo = { id: prog.prog_condicion, nombre: "Negado" };
 
-          this.dateFormatted = prog.prog_fecha.slice(0, 10);
+          this.dateFormatted = prog.prog_fecha;
           this.fecha = this.dateFormatted;
           this.tipo =
             prog.prog_tipo_comb == 1
@@ -205,20 +226,38 @@ export default {
         this.snackbar = true;
       });
   },
+  watch: {
+    dateFormatted: function (val) {
+      this.dateFormatted = val.slice(0, 10) + " " + val.slice(11, 16) + ":00";
+    },
+  },
   methods: {
     regresar() {
       setTimeout(() => this.$router.push({ name: "indexprogra" }), 2800);
     },
     validar() {
-      var actualiza = {
-        prog_fecha: this.dateFormatted,
-        prog_tipo_comb: this.tipo.id,
-        prog_lts: this.litros,
-        prog_condicion: this.condi.id,
-        prog_observacion: this.observ,
-        prog_inst_id: this.insti.id.toString(),
-        prog_inst_id_es: this.estaser.id,
-      };
+      if (this.datos.progra[0].prog_condicion == "1") {
+        var actualiza = {
+          prog_fecha: this.dateFormatted,
+          prog_tipo_comb: this.tipo.id,
+          prog_lts: this.litros,
+          prog_condicion: this.condi.id,
+          prog_observacion: this.observ,
+          prog_inst_id: this.insti.id.toString(),
+          prog_inst_id_es: this.estaser.id,
+        };
+      }
+      if (this.datos.progra[0].prog_condicion == "2") {
+        var actualiza = {
+          prog_fecha: this.dateFormatted,
+          prog_tipo_comb: this.datos.progra[0].prog_tipo_comb,
+          prog_lts: this.datos.progra[0].prog_lts,
+          prog_condicion: this.datos.progra[0].prog_condicion,
+          prog_observacion: this.observ,
+          prog_inst_id: this.datos.progra[0].prog_inst_id,
+          prog_inst_id_es: this.estaser.id,
+        };
+      }
       axios
         .put(`./programa/${this.id}`, actualiza)
         .then((res) => {
@@ -232,7 +271,6 @@ export default {
           this.mensaje = er;
           this.snackbar = true;
         });
-      //this.$router.push("users");
     },
   },
 };

@@ -64,18 +64,6 @@
                     "
                   ></span>
                 </v-tooltip>
-                <v-tooltip v-if="row.item.eliminar" top>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-icon
-                      v-bind="attrs"
-                      v-on="on"
-                      @click="eliminar(row.item.id)"
-                      small
-                      >mdi-delete</v-icon
-                    >
-                  </template>
-                  <span>Eliminar</span>
-                </v-tooltip>
               </td>
             </tr>
           </template>
@@ -91,25 +79,6 @@
           {{ this.mensaje }}
         </v-snackbar>
       </v-card>
-
-      <v-dialog v-model="dialog" persistent max-width="290">
-        <v-card>
-          <v-card-title class="text-h5"> Eliminar institución </v-card-title>
-          <v-card-text
-            >Desea eliminar la institución? borrará las programaciones
-            dependientes</v-card-text
-          >
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text @click="eliminarinstitu()">
-              Si
-            </v-btn>
-            <v-btn color="green darken-2" text @click="dialog = false">
-              No
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
     </v-row>
   </v-container>
 </template>
@@ -123,7 +92,6 @@ export default {
     search: "",
     id: "",
     color: "",
-    dialog: false,
     datos: [],
     create: false,
     headers: [
@@ -162,9 +130,6 @@ export default {
           const edit = res.data.permisosuser.find(
             (el) => el.name === "admin.user.edit"
           );
-          const eliminar = res.data.permisosuser.find(
-            (el) => el.name === "admin.user.destroy"
-          );
           const crear = res.data.permisosuser.find(
             (el) => el.name === "admin.user.create"
           );
@@ -179,7 +144,6 @@ export default {
             inst_sector: insti.inst_sector,
             inst_estado: insti.inst_estado,
             editar: edit ? true : false,
-            eliminar: eliminar ? true : false,
           };
         });
         //window.location.reload();
@@ -194,10 +158,6 @@ export default {
     editar(id) {
       this.$router.push({ name: "instiedit", params: { id: id } });
     },
-    eliminar(id) {
-      this.id = id;
-      this.dialog = true;
-    },
     desactivar(id, acti) {
       var actualiza = {
         prog_fecha: "hhh",
@@ -208,22 +168,6 @@ export default {
           this.color = "success";
           this.mensaje = res.data.mensaje;
           this.snackbar = true;
-          this.cargar();
-        })
-        .catch((er) => {
-          this.color = "red accent-2";
-          this.mensaje = er;
-          this.snackbar = true;
-        });
-    },
-    eliminarinstitu() {
-      axios
-        .delete(`./institu/${this.id}`)
-        .then((res) => {
-          this.color = "success";
-          this.mensaje = res.data.mensaje;
-          this.snackbar = true;
-          this.dialog = false;
           this.cargar();
         })
         .catch((er) => {
@@ -254,9 +198,6 @@ export default {
             const edit = res.data.permisosuser.find(
               (el) => el.name === "admin.user.edit"
             );
-            const eliminar = res.data.permisosuser.find(
-              (el) => el.name === "admin.user.destroy"
-            );
             const crear = res.data.permisosuser.find(
               (el) => el.name === "admin.user.create"
             );
@@ -271,7 +212,6 @@ export default {
               inst_sector: insti.inst_sector,
               inst_estado: insti.inst_estado,
               editar: edit ? true : false,
-              eliminar: eliminar ? true : false,
             };
           });
           //window.location.reload();

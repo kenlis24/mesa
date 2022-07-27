@@ -150,6 +150,13 @@ export default {
           can: false,
         },
         {
+          title: "Programación Flota",
+          icon: "mdi-account-details",
+          url: "indexproflota",
+          permiso: "admin.role.index",
+          can: false,
+        },
+        {
           title: "Instituciones",
           icon: "mdi-account-details",
           url: "indexinsti",

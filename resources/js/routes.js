@@ -71,6 +71,13 @@ const routes = [
         props: true
     },
     {
+        name: 'indexproflota',
+        path: '/indexproflota',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/indexproflota' */ './components/usuario/IndexProFlota'
+        ),
+    },
+    {
         name: 'indexinsti',
         path: '/indexinsti',
         component: () => import(
