@@ -29,7 +29,9 @@
             <v-autocomplete
               v-model="estaser"
               :items="estaseritems"
-              :rules="estaserRules"
+              :rules="
+                this.datos.progra[0].prog_condicion == 2 ? estaserRules : []
+              "
               item-text="nombre"
               item-value="id"
               outlined
@@ -58,6 +60,20 @@
               item-text="nombre"
               item-value="id"
               label="Tipo Combustible"
+              :disabled="
+                this.datos.progra[0].prog_condicion == 2 ||
+                this.datos.progra[0].prog_condicion == 3
+              "
+              return-object
+              required
+            ></v-select>
+            <v-select
+              v-model="tipovehi"
+              :items="vehiitems"
+              :rules="vehiRules"
+              item-text="nombre"
+              item-value="id"
+              label="Tipo Vehículo"
               :disabled="
                 this.datos.progra[0].prog_condicion == 2 ||
                 this.datos.progra[0].prog_condicion == 3
@@ -96,7 +112,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            :disabled="!valido"
+            :disabled="!valido || condi.id == 3"
             color="primary"
             class="mr-4"
             @click="validar"
@@ -137,6 +153,10 @@ export default {
         { id: "1", nombre: "Gasolina" },
         { id: "2", nombre: "Gasoil" },
       ],
+      vehiitems: [
+        { id: "1", nombre: "Automóvil" },
+        { id: "2", nombre: "Motocicleta" },
+      ],
       conditems: [
         { id: "1", nombre: "Creado" },
         { id: "2", nombre: "Programado" },
@@ -145,6 +165,7 @@ export default {
       insti: "",
       estaser: "",
       tipo: "",
+      tipovehi: "",
       litros: "",
       condi: "",
       observ: "",
@@ -155,6 +176,7 @@ export default {
         (v) => v.length > 0 || "Seleccione una fecha2",
       ],
       tipoRules: [(v) => !!v || "Seleccione un combustible"],
+      vehiRules: [(v) => !!v || "Seleccione un tipo de vehículo"],
       condiRules: [(v) => !!v || "Seleccione una condición"],
       observRules: [(v) => v.length <= 250 || "Maximo 250 caracteres"],
       litrosRules: [
@@ -215,6 +237,10 @@ export default {
             prog.prog_tipo_comb == 1
               ? { id: prog.prog_tipo_comb, nombre: "Gasolina" }
               : { id: prog.prog_tipo_comb, nombre: "Gasoil" };
+          this.tipovehi =
+            prog.prog_tipo_vehi == 1
+              ? { id: prog.prog_tipo_vehi, nombre: "Automóvil" }
+              : { id: prog.prog_tipo_vehi, nombre: "Motocicleta" };
           this.litros = parseInt(prog.prog_lts);
           this.condi = quetipo;
           this.observ = prog.prog_observacion;
@@ -242,6 +268,7 @@ export default {
           prog_tipo_comb: this.tipo.id,
           prog_lts: this.litros,
           prog_condicion: this.condi.id,
+          prog_tipo_vehi: this.tipovehi.id,
           prog_observacion: this.observ,
           prog_inst_id: this.insti.id.toString(),
           prog_inst_id_es: this.estaser.id,
@@ -253,6 +280,7 @@ export default {
           prog_tipo_comb: this.datos.progra[0].prog_tipo_comb,
           prog_lts: this.datos.progra[0].prog_lts,
           prog_condicion: "3",
+          prog_tipo_vehi: this.datos.progra[0].prog_tipo_vehi,
           prog_observacion: this.observ,
           prog_inst_id: this.datos.progra[0].prog_inst_id,
           prog_inst_id_es: this.estaser.id,

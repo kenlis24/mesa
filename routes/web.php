@@ -31,13 +31,14 @@ Route::put('/roles/{role}', 'App\Http\Controllers\Admin\RoleController@update')-
 
 Route::get('/institu', 'App\Http\Controllers\Usuario\InstitucionController@index')->middleware('can:admin.role.index');
 Route::post('/instituregist', 'App\Http\Controllers\Usuario\InstitucionController@store')->middleware('can:admin.role.create');
-Route::delete('/institu/{id}', 'App\Http\Controllers\Usuario\InstitucionController@destroy')->middleware('can:admin.role.destroy');
+//Route::delete('/institu/{id}', 'App\Http\Controllers\Usuario\InstitucionController@destroy')->middleware('can:admin.role.destroy');
 Route::get('/institu/{id}/edit', 'App\Http\Controllers\Usuario\InstitucionController@edit')->middleware('can:admin.role.edit');
 Route::put('/institu/{id}/{acti?}', 'App\Http\Controllers\Usuario\InstitucionController@update')->middleware('can:admin.role.edit');
 
 Route::get('/programa', 'App\Http\Controllers\Usuario\ProgramacionController@index')->middleware('can:admin.role.index');
 Route::post('/programaregist', 'App\Http\Controllers\Usuario\ProgramacionController@store')->middleware('can:admin.role.create');
 //Route::delete('/programa/{id}', 'App\Http\Controllers\Usuario\ProgramacionController@destroy')->middleware('can:admin.role.destroy');
+Route::get('/programa/{flo?}/', 'App\Http\Controllers\Usuario\ProgramacionController@index')->middleware('can:admin.role.edit');
 Route::get('/programa/{id}/edit', 'App\Http\Controllers\Usuario\ProgramacionController@edit')->middleware('can:admin.role.edit');
 Route::put('/programa/{progra}/{acti?}', 'App\Http\Controllers\Usuario\ProgramacionController@update')->middleware('can:admin.role.edit');
 

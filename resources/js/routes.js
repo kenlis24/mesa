@@ -78,6 +78,14 @@ const routes = [
         ),
     },
     {
+        name: 'progfloasig',
+        path: '/progfloasig/:id',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/progfloasig' */ './components/usuario/ProgFloAsig'
+        ),
+        props: true
+    },
+    {
         name: 'indexinsti',
         path: '/indexinsti',
         component: () => import(

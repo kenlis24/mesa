@@ -54,6 +54,16 @@
               return-object
               required
             ></v-select>
+            <v-select
+              v-model="tipovehi"
+              :items="vehiitems"
+              :rules="vehiRules"
+              item-text="nombre"
+              item-value="id"
+              label="Tipo Vehículo"
+              return-object
+              required
+            ></v-select>
             <v-text-field
               v-model="litros"
               :counter="4"
@@ -119,9 +129,14 @@ export default {
         { id: "1", nombre: "Gasolina" },
         { id: "2", nombre: "Gasoil" },
       ],
+      vehiitems: [
+        { id: "1", nombre: "Automóvil" },
+        { id: "2", nombre: "Motocicleta" },
+      ],
       insti: "",
       estaser: "",
       tipo: "",
+      tipovehi: "",
       litros: "",
       condi: "1",
       observ: "",
@@ -132,6 +147,7 @@ export default {
         (v) => v.length > 0 || "Seleccione una fecha2",
       ],
       tipoRules: [(v) => !!v || "Seleccione un combustible"],
+      vehiRules: [(v) => !!v || "Seleccione un tipo de vehículo"],
       condiRules: [(v) => !!v || "Seleccione una condición"],
       observRules: [(v) => v.length <= 250 || "Maximo 250 caracteres"],
       litrosRules: [
@@ -176,6 +192,7 @@ export default {
         prog_tipo_comb: this.tipo.id,
         prog_lts: this.litros,
         prog_condicion: this.condi,
+        prog_tipo_vehi: this.tipovehi.id,
         prog_observacion: this.observ,
         prog_estado: "A",
         prog_inst_id: this.insti.id.toString(),

@@ -22,7 +22,7 @@ class ProgramacionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($flo = null)
     {
         $user = User::find(auth()->id());
         $permisosuser = $user->getPermissionsViaRoles();
@@ -31,10 +31,17 @@ class ProgramacionController extends Controller
             ->join('instituciones', 'programaciones.prog_inst_id', '=', 'instituciones.id')
             ->select('programaciones.*', 'instituciones.inst_nombre', 'instituciones.inst_tipo')
             ->get(); */
-
-        $progra = DB::select("select prog.*, insti.inst_nombre as institu,insti.inst_estado, esta.inst_nombre as estacion,esta.inst_estado as esta_estado from programaciones as prog,
-        ( select * from instituciones where inst_tipo = '1') as insti,
-        (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id ");
+        if ($flo) {
+            $progra = DB::select("select prog.*, insti.inst_nombre as institu,insti.inst_estado, esta.inst_nombre as estacion,esta.inst_estado as esta_estado 
+            from programaciones as prog,
+            ( select * from instituciones where inst_tipo = '1') as insti,
+            (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id and prog_condicion in(1,2)");
+        } else {
+            $progra = DB::select("select prog.*, insti.inst_nombre as institu,insti.inst_estado, esta.inst_nombre as estacion,esta.inst_estado as esta_estado 
+            from programaciones as prog,
+            ( select * from instituciones where inst_tipo = '1') as insti,
+            (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id ");
+        }
 
 
         $roles = Role::all();
@@ -124,6 +131,7 @@ class ProgramacionController extends Controller
             $progra->prog_tipo_comb = $request->prog_tipo_comb;
             $progra->prog_lts = $request->prog_lts;
             $progra->prog_condicion = $request->prog_condicion;
+            $progra->prog_tipo_vehi = $request->prog_tipo_vehi;
             $progra->prog_observacion = $request->prog_observacion;
             $progra->prog_inst_id = $request->prog_inst_id;
             $progra->prog_inst_id_es = $request->prog_inst_id_es;

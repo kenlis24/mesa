@@ -37,6 +37,7 @@
               <td>{{ row.item.id }}</td>
               <td>{{ row.item.prog_fecha }}</td>
               <td>{{ row.item.prog_tipo_comb }}</td>
+              <td>{{ row.item.prog_tipo_vehi }}</td>
               <td>{{ row.item.prog_lts }}</td>
               <td>{{ row.item.prog_condicion }}</td>
               <td>{{ row.item.prog_inst_id }}</td>
@@ -45,16 +46,13 @@
                 <v-tooltip v-if="row.item.editar" top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon
-                      v-if="row.item.prog_condicion != 'Aprobado'"
                       v-bind="attrs"
                       v-on="on"
-                      @click="editar(row.item.id)"
-                      small
-                      >mdi-lead-pencil</v-icon
-                    >
-                    <v-icon
-                      v-if="row.item.prog_condicion == 'Aprobado'"
-                      disabled
+                      @click="
+                        row.item.prog_condicion != 'Aprobado'
+                          ? editar(row.item.id)
+                          : editar(row.item.id)
+                      "
                       small
                       >mdi-lead-pencil</v-icon
                     >
@@ -116,6 +114,7 @@ export default {
       },
       { text: "Fecha programación", value: "prog_fecha" },
       { text: "Tipo combustible", value: "prog_tipo_comb" },
+      { text: "Tipo vehículo", value: "prog_tipo_vehi" },
       { text: "Litros", value: "prog_lts" },
       { text: "Condicion", value: "prog_condicion" },
       { text: "Institución", value: "prog_inst_id" },
@@ -139,6 +138,10 @@ export default {
           if (prog.prog_tipo_comb == 1) tipocom = "Gasolina";
           if (prog.prog_tipo_comb == 2) tipocom = "Gasoil";
 
+          var tipovehi = "";
+          if (prog.prog_tipo_vehi == 1) tipovehi = "Automóvil";
+          if (prog.prog_tipo_vehi == 2) tipovehi = "Motocicleta";
+
           const edit = res.data.permisosuser.find(
             (el) => el.name === "admin.user.edit"
           );
@@ -150,6 +153,7 @@ export default {
             id: prog.id,
             prog_fecha: prog.prog_fecha.slice(0, 10),
             prog_tipo_comb: tipocom,
+            prog_tipo_vehi: tipovehi,
             prog_lts: prog.prog_lts,
             prog_condicion: condi,
             prog_inst_id: prog.institu,
@@ -210,6 +214,10 @@ export default {
             if (prog.prog_tipo_comb == 1) tipocom = "Gasolina";
             if (prog.prog_tipo_comb == 2) tipocom = "Gasoil";
 
+            var tipovehi = "";
+            if (prog.prog_tipo_vehi == 1) tipovehi = "Automóvil";
+            if (prog.prog_tipo_vehi == 2) tipovehi = "Motocicleta";
+
             const edit = res.data.permisosuser.find(
               (el) => el.name === "admin.user.edit"
             );
@@ -221,6 +229,7 @@ export default {
               id: prog.id,
               prog_fecha: prog.prog_fecha.slice(0, 10),
               prog_tipo_comb: tipocom,
+              prog_tipo_vehi: tipovehi,
               prog_lts: prog.prog_lts,
               prog_condicion: condi,
               prog_inst_id: prog.institu,
