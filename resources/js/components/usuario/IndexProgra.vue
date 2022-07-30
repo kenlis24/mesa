@@ -51,9 +51,10 @@
                       @click="
                         row.item.prog_condicion != 'Aprobado'
                           ? editar(row.item.id)
-                          : editar(row.item.id)
+                          : ''
                       "
                       small
+                      :disabled="row.item.prog_condicion == 'Aprobado'"
                       >mdi-lead-pencil</v-icon
                     >
                   </template>
