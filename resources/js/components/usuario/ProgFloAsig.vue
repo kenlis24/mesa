@@ -1,63 +1,202 @@
 <template>
   <v-container class="fill-height" fluid v-if="$store.state.auth">
-    Mantenimiento{{ id }}
+    <v-row align="center" justify="center">
+      <v-card class="mt-12 mx-auto">
+        <v-card-title>{{ institucion }}</v-card-title>
+        <v-card-title>
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Buscar"
+            single-line
+            hide-details
+          ></v-text-field>
+        </v-card-title>
+        <v-data-table
+          dense
+          :headers="headers"
+          :items="datos"
+          :search="search"
+          item-key="name"
+          class="elevation-1"
+        >
+          <template v-slot:item="row">
+            <tr>
+              <td>{{ row.item.flo_id }}</td>
+              <td>{{ row.item.pers_cedula }}</td>
+              <td>{{ row.item.pers_nombres }}</td>
+              <td>{{ row.item.pers_apellidos }}</td>
+              <td>{{ row.item.mca_nombre }}</td>
+              <td>{{ row.item.mod_nombre }}</td>
+              <td>{{ row.item.vehi_placa }}</td>
+              <td>{{ row.item.conp_lts }}</td>
+              <td>
+                <v-tooltip v-if="row.item.asignar" top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="asignar(row.item.flo_id)"
+                      small
+                      >mdi-car</v-icon
+                    >
+                  </template>
+                  <span>Asignar</span>
+                </v-tooltip>
+              </td>
+            </tr>
+          </template>
+        </v-data-table>
+        <v-card-title v-if="datosasig != ''"> Asignados </v-card-title>
+        <v-col cols="12" sm="4">
+          <v-textarea
+            v-if="datosasig != ''"
+            rows="2"
+            prepend-icon="mdi-comment"
+            class="mx-2"
+            counter
+            label="Observación"
+            v-model="observ"
+          ></v-textarea>
+        </v-col>
+
+        <v-card-title v-if="datosasig != ''">
+          <v-text-field
+            v-model="searchasig"
+            append-icon="mdi-magnify"
+            label="Buscar"
+            single-line
+            hide-details
+          ></v-text-field>
+        </v-card-title>
+        <v-data-table
+          v-if="datosasig != ''"
+          dense
+          :headers="headers"
+          :items="datosasig"
+          :search="searchasig"
+          item-key="name"
+          class="elevation-1"
+        >
+          <template v-slot:item="row">
+            <tr>
+              <td>{{ row.item.flo_id }}</td>
+              <td>{{ row.item.pers_cedula }}</td>
+              <td>{{ row.item.pers_nombres }}</td>
+              <td>{{ row.item.pers_apellidos }}</td>
+              <td>{{ row.item.mca_nombre }}</td>
+              <td>{{ row.item.mod_nombre }}</td>
+              <td>{{ row.item.vehi_placa }}</td>
+              <td>{{ row.item.conp_lts }}</td>
+              <td>
+                <v-tooltip v-if="row.item.asignar" top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="eliminar(row.item.flo_id)"
+                      small
+                      >mdi-car-off</v-icon
+                    >
+                  </template>
+                  <span>Eliminar</span>
+                </v-tooltip>
+              </td>
+            </tr>
+          </template>
+        </v-data-table>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            :disabled="datosasig.length == 0"
+            color="primary"
+            class="mr-4"
+            @click="programar"
+          >
+            Programar
+          </v-btn>
+        </v-card-actions>
+        <v-snackbar
+          bottom
+          :timeout="2500"
+          v-model="snackbar"
+          :color="color"
+          rounded="pill"
+          right
+        >
+          {{ this.mensaje }}
+        </v-snackbar>
+      </v-card>
+    </v-row>
   </v-container>
 </template>
 <script>
 export default {
   name: "progfloasig",
-  props: ["id"],
+  props: ["prog", "insti", "tipo"],
   data: () => ({
     snackbar: false,
     mensaje: "",
     search: "",
+    searchasig: "",
     color: "",
+    litrosasig: 0,
+    litros: 0,
+    institucion: "",
     datos: [],
+    observ: "",
+    datosasig: [],
+    tipov: {},
+    tipoitems: [
+      { id: "1", nombre: "Automóvil" },
+      { id: "2", nombre: "Motos" },
+    ],
     create: false,
     headers: [
-      {
-        text: "ID",
-        align: "start",
-        sortable: false,
-        value: "id",
-      },
-      { text: "Fecha programación", value: "prog_fecha" },
-      { text: "Litros", value: "prog_lts" },
-      { text: "Condicion", value: "prog_condicion" },
-      { text: "Institución", value: "prog_inst_id" },
-      { text: "Estación", value: "prog_inst_id_es" },
+      { text: "Id flota", value: "flo_id" },
+      { text: "Cédula", value: "pers_cedula" },
+      { text: "Nombres", value: "pers_nombres" },
+      { text: "Apellidos", value: "pers_apellidos" },
+      { text: "Marca", value: "mca_nombre" },
+      { text: "Modelo", value: "mod_nombre" },
+      { text: "Placa", value: "vehi_placa" },
+      { text: "Litros", value: "conp_lts" },
       { text: "Acciones", value: "" },
     ],
   }),
   mounted() {
-    /* axios
-      .get("./programa/flo")
+    axios
+      .get(`./programa/${this.prog}/edit`)
+      .then((res) => {
+        res.data.progra.map((prog) => {
+          this.litrosasig = parseInt(prog.prog_lts);
+        });
+      })
+      .catch((er) => {
+        this.color = "red accent-2";
+        this.mensaje = "Error al cargar los datos programación";
+        this.snackbar = true;
+      });
+    axios
+      .get(`./progrflota/${this.prog}/${this.insti}/${this.tipo}`)
       .then((res) => {
         //this.datos = res.data;
-
-        this.datos = res.data.progra.map((prog) => {
-          var condi = "";
-          if (prog.prog_condicion == 1) condi = "Creado";
-          if (prog.prog_condicion == 2) condi = "Programado";
-          if (prog.prog_condicion == 3) condi = "Aprobado";
-
-          const edit = res.data.permisosuser.find(
-            (el) => el.name === "admin.user.edit"
-          );
+        this.institucion = res.data.progflot[0].inst_nombre;
+        this.datos = res.data.progflot.map((prog) => {
           const crear = res.data.permisosuser.find(
             (el) => el.name === "admin.user.create"
           );
           if (crear) this.create = true;
           return {
-            id: prog.id,
-            prog_fecha: prog.prog_fecha.slice(0, 10),
-            prog_lts: prog.prog_lts,
-            prog_condicion: condi,
-            prog_inst_id: prog.institu,
-            prog_inst_id_es: prog.estacion,
-            inst_estado: prog.inst_estado,
-            esta_estado: prog.esta_estado,
-            editar: edit ? true : false,
+            flo_id: prog.flo_id,
+            inst_nombre: prog.inst_nombre,
+            pers_cedula: prog.pers_cedula,
+            pers_nombres: prog.pers_nombres,
+            pers_apellidos: prog.pers_apellidos,
+            mca_nombre: prog.mca_nombre,
+            mod_nombre: prog.mod_nombre,
+            vehi_placa: prog.vehi_placa,
+            conp_lts: prog.conp_lts,
             asignar: crear ? true : false,
           };
         });
@@ -67,19 +206,59 @@ export default {
         this.color = "red accent-2";
         this.mensaje = er;
         this.snackbar = true;
-      }); */
+      });
   },
   methods: {
+    regresar() {
+      setTimeout(() => this.$router.push({ name: "indexproflota" }), 2800);
+    },
     editar(id) {
       this.$router.push({ name: "programaedit", params: { id: id } });
     },
-    activo(valor) {
-      if (valor.inst_estado == "A" && valor.esta_estado == "A") {
-        return "";
-      } else return "warning";
+    asignar(id) {
+      var tempo = this.datos.find((element) => element.flo_id == id);
+      var litrostemp = this.litros;
+      litrostemp += tempo.conp_lts;
+      if (litrostemp <= this.litrosasig) {
+        this.litros += tempo.conp_lts;
+        this.datosasig.push(this.datos.find((element) => element.flo_id == id));
+        this.datos = this.datos.filter((item) => item.flo_id !== id);
+      } else {
+        this.color = "red accent-2";
+        this.mensaje =
+          "No puedes pasar de los litros asignados a la programación";
+        this.snackbar = true;
+      }
     },
-    asignar() {
-      this.$router.push({ name: "progfloasig", params: { id: id } });
+    eliminar(id) {
+      var tempo = this.datosasig.find((element) => element.flo_id == id);
+      this.litros -= tempo.conp_lts;
+      this.datos.push(this.datosasig.find((element) => element.flo_id == id));
+      this.datosasig = this.datosasig.filter((item) => item.flo_id !== id);
+    },
+    programar() {
+      const progra = this.prog;
+      const obs = this.observ;
+      this.datosasig = this.datosasig.map((dat) => {
+        return { ...dat, progra, obs };
+      });
+      const envio = {
+        datos: this.datosasig,
+        prog: this.prog,
+      };
+      axios
+        .post("./progrflotaregist", envio)
+        .then((res) => {
+          this.color = "success";
+          this.mensaje = res.data.mensaje;
+          this.snackbar = true;
+          this.regresar();
+        })
+        .catch((er) => {
+          this.mensaje = er;
+          this.color = "red accent-2";
+          this.snackbar = true;
+        });
     },
   },
 };

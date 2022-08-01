@@ -79,7 +79,7 @@ const routes = [
     },
     {
         name: 'progfloasig',
-        path: '/progfloasig/:id',
+        path: '/progfloasig/:prog/:insti/:tipo',
         component: () => import(
             /* webpackChunkName: 'js/compiled/progfloasig' */ './components/usuario/ProgFloAsig'
         ),

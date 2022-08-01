@@ -9,6 +9,8 @@ class progr_flotas extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['pflo_litros', 'pflo_condicion', 'pflo_observacion', 'pflo_prog_id', 'pflo_flot_id'];
+
     protected $primaryKey = null;
 
     public $incrementing = false;

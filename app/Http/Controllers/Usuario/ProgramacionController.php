@@ -32,7 +32,7 @@ class ProgramacionController extends Controller
             ->select('programaciones.*', 'instituciones.inst_nombre', 'instituciones.inst_tipo')
             ->get(); */
         if ($flo) {
-            $progra = DB::select("select prog.*, insti.inst_nombre as institu,insti.inst_estado, esta.inst_nombre as estacion,esta.inst_estado as esta_estado 
+            $progra = DB::select("select prog.id as id_prog ,prog.*, insti.id ,insti.id as insti_id ,insti.inst_nombre as institu,insti.inst_estado, esta.inst_nombre as estacion,esta.inst_estado as esta_estado 
             from programaciones as prog,
             ( select * from instituciones where inst_tipo = '1') as insti,
             (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id and prog_condicion in(1,2)");

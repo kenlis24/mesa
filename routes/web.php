@@ -42,6 +42,13 @@ Route::get('/programa/{flo?}/', 'App\Http\Controllers\Usuario\ProgramacionContro
 Route::get('/programa/{id}/edit', 'App\Http\Controllers\Usuario\ProgramacionController@edit')->middleware('can:admin.role.edit');
 Route::put('/programa/{progra}/{acti?}', 'App\Http\Controllers\Usuario\ProgramacionController@update')->middleware('can:admin.role.edit');
 
+Route::get('/progrflota/{insti}/{prog}/{tipo}', 'App\Http\Controllers\Usuario\ProgrFlotaController@index')->middleware('can:admin.role.index');
+Route::post('/progrflotaregist', 'App\Http\Controllers\Usuario\ProgrFlotaController@store')->middleware('can:admin.role.create');
+//Route::delete('/programa/{id}', 'App\Http\Controllers\Usuario\ProgrFlotaController@destroy')->middleware('can:admin.role.destroy');
+//Route::get('/progrflota/{flo?}/', 'App\Http\Controllers\Usuario\ProgrFlotaController@index')->middleware('can:admin.role.edit');
+//Route::get('/progrflota/{id}/edit', 'App\Http\Controllers\Usuario\ProgrFlotaController@edit')->middleware('can:admin.role.edit');
+//Route::put('/progrflota/{progra}/{acti?}', 'App\Http\Controllers\Usuario\ProgrFlotaController@update')->middleware('can:admin.role.edit');
+
 Route::get('/areaser', 'App\Http\Controllers\Usuario\AreaServicioController@index')->middleware('can:admin.role.index');
 //Route::post('/areaserregist', 'App\Http\Controllers\Usuario\AreaServicioController@store')->middleware('can:admin.role.create');
 //Route::delete('/areaser/{id}', 'App\Http\Controllers\Usuario\AreaServicioController@destroy')->middleware('can:admin.role.destroy');

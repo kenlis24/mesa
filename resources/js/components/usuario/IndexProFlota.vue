@@ -42,6 +42,7 @@
                       v-on="on"
                       @click="editar(row.item.id)"
                       small
+                      disabled
                       >mdi-lead-pencil</v-icon
                     >
                   </template>
@@ -52,7 +53,18 @@
                     <v-icon
                       v-bind="attrs"
                       v-on="on"
-                      @click="asignar(row.item.id)"
+                      @click="
+                        (row.item.esta_estado || row.item.inst_estado) != 'A'
+                          ? ''
+                          : asignar(
+                              row.item.id,
+                              row.item.insti_id,
+                              row.item.prog_tipo_vehi
+                            )
+                      "
+                      :disabled="
+                        (row.item.esta_estado || row.item.inst_estado) != 'A'
+                      "
                       small
                       >mdi-car</v-icon
                     >
@@ -79,7 +91,7 @@
 </template>
 <script>
 export default {
-  name: "indexprogra",
+  name: "indexprograflota",
   data: () => ({
     snackbar: false,
     mensaje: "",
@@ -123,11 +135,13 @@ export default {
           );
           if (crear) this.create = true;
           return {
-            id: prog.id,
+            id: prog.id_prog,
             prog_fecha: prog.prog_fecha.slice(0, 10),
             prog_lts: prog.prog_lts,
             prog_condicion: condi,
+            insti_id: prog.insti_id,
             prog_inst_id: prog.institu,
+            prog_tipo_vehi: prog.prog_tipo_vehi,
             prog_inst_id_es: prog.estacion,
             inst_estado: prog.inst_estado,
             esta_estado: prog.esta_estado,
@@ -152,8 +166,11 @@ export default {
         return "";
       } else return "warning";
     },
-    asignar(id) {
-      //this.$router.push({ name: "progfloasig", params: { id: id } });
+    asignar(id, insti, tipo) {
+      this.$router.push({
+        name: "progfloasig",
+        params: { prog: id, insti: insti, tipo: tipo },
+      });
     },
   },
 };
