@@ -47,7 +47,7 @@
                   </template>
                   <span>Editar</span>
                 </v-tooltip>
-                <v-tooltip v-if="row.item.editar" top>
+                <v-tooltip v-if="row.item.desact" top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon
                       v-bind="attrs"
@@ -128,10 +128,13 @@ export default {
           if (insti.inst_tipo == 2) tipoinst = "Estación de Servicio";
 
           const edit = res.data.permisosuser.find(
-            (el) => el.name === "admin.user.edit"
+            (el) => el.name === "insti.user.edit"
           );
           const crear = res.data.permisosuser.find(
-            (el) => el.name === "admin.user.create"
+            (el) => el.name === "insti.user.create"
+          );
+          const desactivar = res.data.permisosuser.find(
+            (el) => el.name === "insti.user.desactivar"
           );
           if (crear) this.create = true;
           return {
@@ -144,6 +147,7 @@ export default {
             inst_sector: insti.inst_sector,
             inst_estado: insti.inst_estado,
             editar: edit ? true : false,
+            desact: desactivar ? true : false,
           };
         });
         //window.location.reload();
@@ -196,10 +200,13 @@ export default {
             if (insti.inst_tipo == 2) tipoinst = "Estación de Servicio";
 
             const edit = res.data.permisosuser.find(
-              (el) => el.name === "admin.user.edit"
+              (el) => el.name === "insti.user.edit"
             );
             const crear = res.data.permisosuser.find(
-              (el) => el.name === "admin.user.create"
+              (el) => el.name === "insti.user.create"
+            );
+            const desactivar = res.data.permisosuser.find(
+              (el) => el.name === "insti.user.desactivar"
             );
             if (crear) this.create = true;
             return {
@@ -212,6 +219,7 @@ export default {
               inst_sector: insti.inst_sector,
               inst_estado: insti.inst_estado,
               editar: edit ? true : false,
+              desact: desactivar ? true : false,
             };
           });
           //window.location.reload();

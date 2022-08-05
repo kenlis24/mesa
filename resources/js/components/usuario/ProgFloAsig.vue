@@ -151,7 +151,6 @@ export default {
       { id: "1", nombre: "Automóvil" },
       { id: "2", nombre: "Motos" },
     ],
-    create: false,
     headers: [
       { text: "Id flota", value: "flo_id" },
       { text: "Cédula", value: "pers_cedula" },
@@ -183,10 +182,10 @@ export default {
         //this.datos = res.data;
         this.institucion = res.data.progflot[0].inst_nombre;
         this.datos = res.data.progflot.map((prog) => {
-          const crear = res.data.permisosuser.find(
-            (el) => el.name === "admin.user.create"
+          const asig = res.data.permisosuser.find(
+            (el) => el.name === "proflo.user.desactivar"
           );
-          if (crear) this.create = true;
+
           return {
             flo_id: prog.flo_id,
             inst_nombre: prog.inst_nombre,
@@ -197,7 +196,26 @@ export default {
             mod_nombre: prog.mod_nombre,
             vehi_placa: prog.vehi_placa,
             conp_lts: prog.conp_lts,
-            asignar: crear ? true : false,
+            asignar: asig ? true : false,
+          };
+        });
+        //para los ya programados de la flota
+        this.datosasig = res.data.progflotactiva.map((progact) => {
+          const asig = res.data.permisosuser.find(
+            (el) => el.name === "proflo.user.desactivar"
+          );
+          this.litros += progact.conp_lts;
+          return {
+            flo_id: progact.flo_id,
+            inst_nombre: progact.inst_nombre,
+            pers_cedula: progact.pers_cedula,
+            pers_nombres: progact.pers_nombres,
+            pers_apellidos: progact.pers_apellidos,
+            mca_nombre: progact.mca_nombre,
+            mod_nombre: progact.mod_nombre,
+            vehi_placa: progact.vehi_placa,
+            conp_lts: progact.conp_lts,
+            asignar: asig ? true : false,
           };
         });
         //window.location.reload();
@@ -255,7 +273,7 @@ export default {
           this.regresar();
         })
         .catch((er) => {
-          this.mensaje = er;
+          this.mensaje = er.response.data.mensaje;
           this.color = "red accent-2";
           this.snackbar = true;
         });

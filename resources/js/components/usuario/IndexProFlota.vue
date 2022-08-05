@@ -35,19 +35,6 @@
               <td>{{ row.item.prog_inst_id }}</td>
               <td>{{ row.item.prog_inst_id_es }}</td>
               <td>
-                <v-tooltip v-if="row.item.editar" top>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-icon
-                      v-bind="attrs"
-                      v-on="on"
-                      @click="editar(row.item.id)"
-                      small
-                      disabled
-                      >mdi-lead-pencil</v-icon
-                    >
-                  </template>
-                  <span>Editar</span>
-                </v-tooltip>
                 <v-tooltip v-if="row.item.asignar" top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon
@@ -99,7 +86,6 @@ export default {
     id: "",
     color: "",
     datos: [],
-    create: false,
     headers: [
       {
         text: "ID",
@@ -127,13 +113,9 @@ export default {
           if (prog.prog_condicion == 2) condi = "Programado";
           if (prog.prog_condicion == 3) condi = "Aprobado";
 
-          const edit = res.data.permisosuser.find(
-            (el) => el.name === "admin.user.edit"
+          const asig = res.data.permisosuser.find(
+            (el) => el.name === "proflo.user.desactivar"
           );
-          const crear = res.data.permisosuser.find(
-            (el) => el.name === "admin.user.create"
-          );
-          if (crear) this.create = true;
           return {
             id: prog.id_prog,
             prog_fecha: prog.prog_fecha.slice(0, 10),
@@ -145,8 +127,7 @@ export default {
             prog_inst_id_es: prog.estacion,
             inst_estado: prog.inst_estado,
             esta_estado: prog.esta_estado,
-            editar: edit ? true : false,
-            asignar: crear ? true : false,
+            asignar: asig ? true : false,
           };
         });
         //window.location.reload();
@@ -158,9 +139,6 @@ export default {
       });
   },
   methods: {
-    editar(id) {
-      //this.$router.push({ name: "programaedit", params: { id: id } });
-    },
     activo(valor) {
       if (valor.inst_estado == "A" && valor.esta_estado == "A") {
         return "";

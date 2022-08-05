@@ -4,7 +4,7 @@
       <v-navigation-drawer v-if="$store.state.auth" v-model="drawer" app>
         <v-list-item>
           <v-list-item-avatar>
-            <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+            <v-img src=""></v-img>
           </v-list-item-avatar>
 
           <v-list-item-content>
@@ -143,24 +143,24 @@ export default {
           can: false,
         },
         {
+          title: "Instituciones",
+          icon: "mdi-office-building",
+          url: "indexinsti",
+          permiso: "insti.user.index",
+          can: false,
+        },
+        {
           title: "Programación",
-          icon: "mdi-account-details",
+          icon: "mdi-gas-station",
           url: "indexprogra",
-          permiso: "admin.role.index",
+          permiso: "program.user.index",
           can: false,
         },
         {
           title: "Programación Flota",
-          icon: "mdi-account-details",
+          icon: "mdi-car-2-plus",
           url: "indexproflota",
-          permiso: "admin.role.index",
-          can: false,
-        },
-        {
-          title: "Instituciones",
-          icon: "mdi-account-details",
-          url: "indexinsti",
-          permiso: "admin.role.index",
+          permiso: "proflo.user.index",
           can: false,
         },
         {

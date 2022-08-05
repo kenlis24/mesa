@@ -60,7 +60,7 @@
                   </template>
                   <span>Editar</span>
                 </v-tooltip>
-                <v-tooltip v-if="row.item.editar" top>
+                <v-tooltip v-if="row.item.desact" top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon
                       v-bind="attrs"
@@ -144,10 +144,13 @@ export default {
           if (prog.prog_tipo_vehi == 2) tipovehi = "Motocicleta";
 
           const edit = res.data.permisosuser.find(
-            (el) => el.name === "admin.user.edit"
+            (el) => el.name === "program.user.edit"
           );
           const crear = res.data.permisosuser.find(
-            (el) => el.name === "admin.user.create"
+            (el) => el.name === "program.user.create"
+          );
+          const desactivar = res.data.permisosuser.find(
+            (el) => el.name === "program.user.desactivar"
           );
           if (crear) this.create = true;
           return {
@@ -163,6 +166,7 @@ export default {
             inst_estado: prog.inst_estado,
             esta_estado: prog.esta_estado,
             editar: edit ? true : false,
+            desact: desactivar ? true : false,
           };
         });
         //window.location.reload();
@@ -220,10 +224,13 @@ export default {
             if (prog.prog_tipo_vehi == 2) tipovehi = "Motocicleta";
 
             const edit = res.data.permisosuser.find(
-              (el) => el.name === "admin.user.edit"
+              (el) => el.name === "program.user.edit"
             );
             const crear = res.data.permisosuser.find(
-              (el) => el.name === "admin.user.create"
+              (el) => el.name === "program.user.create"
+            );
+            const desactivar = res.data.permisosuser.find(
+              (el) => el.name === "program.user.desactivar"
             );
             if (crear) this.create = true;
             return {
@@ -239,6 +246,7 @@ export default {
               inst_estado: prog.inst_estado,
               esta_estado: prog.esta_estado,
               editar: edit ? true : false,
+              desact: desactivar ? true : false,
             };
           });
           //window.location.reload();
