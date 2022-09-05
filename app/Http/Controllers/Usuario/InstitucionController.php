@@ -14,6 +14,8 @@ use App\Models\parroquias;
 
 use Spatie\Permission\Models\Permission;
 
+use Illuminate\Support\Facades\DB;
+
 
 class InstitucionController extends Controller
 {
@@ -22,17 +24,54 @@ class InstitucionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id = null)
     {
-        $insti = instituciones::where("inst_tipo", "=", "1")->where("inst_estado", "=", "A")->get();
-        $institodas = instituciones::all();
         $user = User::find(auth()->id());
         $permisosuser = $user->getPermissionsViaRoles();
+        $roles = $user->getRoleNames()->toArray();
+        if (in_array("Admin", $roles))
+            $sql = ' ';
+        else {
+            $sql = " and instituciones.id in(select usui_inst_id from usu_insts where usui_estado ='A' and usui_usu_id =" . auth()->id() . ")";
+        }
+        if ($id) {
+            $insti = DB::select("select * 
+            from instituciones
+            where instituciones.inst_tipo = '1'
+                and   inst_estado = 'A'
+                and  (instituciones.id)
+                not in (select usui_inst_id
+                        from usu_insts
+                        where usui_usu_id = '$id' and usui_estado = 'A')");
+            $instiasig = DB::select("select instituciones.id,instituciones.inst_rif,instituciones.inst_nombre,instituciones.inst_telefono  
+            from instituciones,usu_insts
+            where 
+            instituciones.id = 	usu_insts.usui_inst_id
+            and usu_insts.usui_usu_id = '$id' and usu_insts.usui_estado = 'A'
+            ");
+            $user = User::find(auth()->id());
+            $permisosuser = $user->getPermissionsViaRoles();
+            $user = User::find($id);
+            $institodas = '';
+        } else {
+            $insti = DB::select("select * 
+            from instituciones
+            where instituciones.inst_tipo = '1'
+                and   inst_estado = 'A' $sql");
+            //$insti = instituciones::where("inst_tipo", "=", "1")->where("inst_estado", "=", "A")->get();
+            $institodas = instituciones::all();
+            $user = User::find(auth()->id());
+            $permisosuser = $user->getPermissionsViaRoles();
+            $user = '';
+            $instiasig = '';
+        }
 
         return response()->json([
             'insti' => $insti,
+            'instiasig' => $instiasig,
             'institodas' => $institodas,
-            'permisosuser' => $permisosuser
+            'permisosuser' => $permisosuser,
+            'user' => $user
         ], 200);
     }
 

@@ -107,6 +107,21 @@ const routes = [
         ),
         props: true,
     },
+    {
+        name: 'indexasiginsti',
+        path: '/indexasiginsti',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/indexasiginsti' */ './components/admin/IndexAsigInsti'
+            ),
+    },
+    {
+        name: 'asiginsti',
+        path: '/asiginsti/:id',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/asiginsti' */ './components/admin/AsigInsti'
+        ),
+        props: true,
+    },
 ]
 
 export default new Router({

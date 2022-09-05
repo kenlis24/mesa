@@ -150,6 +150,13 @@ export default {
           can: false,
         },
         {
+          title: "Asignar instituto",
+          icon: "mdi-account-cog",
+          url: "indexasiginsti",
+          permiso: "asiginsti.admin.index",
+          can: false,
+        },
+        {
           title: "Programación",
           icon: "mdi-gas-station",
           url: "indexprogra",

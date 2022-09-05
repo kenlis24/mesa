@@ -116,6 +116,7 @@ export default {
   name: "regisprog",
   data() {
     return {
+      data: "",
       registrar: false,
       valido: false,
       snackbar: false,
@@ -162,8 +163,9 @@ export default {
     axios
       .get("./institu")
       .then((res) => {
+        this.data = res.data;
         const crear = res.data.permisosuser.find(
-          (el) => el.name === "admin.user.create"
+          (el) => el.name === "program.user.create"
         );
         if (crear) this.registrar = true;
         this.institems = res.data.insti.map((inst) => {

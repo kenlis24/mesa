@@ -26,20 +26,21 @@ class ProgramacionController extends Controller
     {
         $user = User::find(auth()->id());
         $permisosuser = $user->getPermissionsViaRoles();
+        $roles = $user->getRoleNames()->toArray();
+        if (in_array("Admin", $roles))
+            $sql = ' ';
+        else
+            $sql = " and instituciones.id in(select usui_inst_id from usu_insts where usui_estado ='A' and usui_usu_id =" . auth()->id() . ")";
 
-        /* $progra = DB::table('programaciones')
-            ->join('instituciones', 'programaciones.prog_inst_id', '=', 'instituciones.id')
-            ->select('programaciones.*', 'instituciones.inst_nombre', 'instituciones.inst_tipo')
-            ->get(); */
         if ($flo) {
             $progra = DB::select("select prog.id as id_prog ,prog.*, insti.id ,insti.id as insti_id ,insti.inst_nombre as institu,insti.inst_estado, esta.inst_nombre as estacion,esta.inst_estado as esta_estado 
             from programaciones as prog,
-            ( select * from instituciones where inst_tipo = '1') as insti,
+            ( select * from instituciones where inst_tipo = '1' $sql ) as insti,
             (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id and prog_condicion in(1,2)");
         } else {
             $progra = DB::select("select prog.*, insti.inst_nombre as institu,insti.inst_estado, esta.inst_nombre as estacion,esta.inst_estado as esta_estado 
             from programaciones as prog,
-            ( select * from instituciones where inst_tipo = '1') as insti,
+            ( select * from instituciones where inst_tipo = '1' $sql) as insti,
             (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id ");
         }
 
@@ -99,8 +100,21 @@ class ProgramacionController extends Controller
     {
         $user = User::find(auth()->id());
         $permisosuser = $user->getPermissionsViaRoles();
+        $roles = $user->getRoleNames()->toArray();
+        $puede = 'si';
+        if (in_array("Admin", $roles))
+            $sql = ' ';
+        else {
+            $puede = 'no';
+            $sql = " and instituciones.id in(select usui_inst_id from usu_insts where usui_estado ='A' and usui_usu_id =" . auth()->id() . ")";
+        }
 
-        $insti = instituciones::where("inst_tipo", "=", "1")->where("inst_estado", "=", "A")->get();
+        $insti = DB::select("
+        select instituciones.* from instituciones,usu_insts where
+        instituciones.id = 	usu_insts.usui_inst_id
+        and instituciones.inst_tipo = '1' and inst_estado = 'A' $sql");
+
+        //$insti = instituciones::where("inst_tipo", "=", "1")->where("inst_estado", "=", "A")->get();
         $estacion = instituciones::where("inst_tipo", "=", "2")->where("inst_estado", "=", "A")->get();
 
         $progra = programaciones::where("id", "=", $id)->get();
@@ -110,6 +124,7 @@ class ProgramacionController extends Controller
             'insti' => $insti,
             'estacion' => $estacion,
             'progra' => $progra,
+            'puede' => $puede
 
         ], 200);
     }

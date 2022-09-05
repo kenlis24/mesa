@@ -41,7 +41,8 @@
               label="Estación de Servicio"
               :disabled="
                 this.datos.progra[0].prog_condicion == 1 ||
-                this.datos.progra[0].prog_condicion == 3
+                this.datos.progra[0].prog_condicion == 3 ||
+                this.puede == 'no'
               "
               return-object
             ></v-autocomplete>
@@ -168,6 +169,7 @@ export default {
       tipovehi: "",
       litros: "",
       condi: "",
+      puede: "",
       observ: "",
       instiRules: [(v) => !!v || "Seleccione una institución"],
       estaserRules: [(v) => v.id != 1 || "Seleccione una estación"],
@@ -203,6 +205,7 @@ export default {
             nombre: inst.inst_nombre,
           };
         });
+        this.puede = res.data.puede;
 
         this.programa = res.data.progra.map((prog) => {
           this.insti = res.data.insti.find((el) => {
