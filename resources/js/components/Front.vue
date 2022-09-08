@@ -3,12 +3,15 @@
     <v-app id="inspire">
       <v-navigation-drawer v-if="$store.state.auth" v-model="drawer" app>
         <v-list-item>
-          <v-list-item-avatar>
-            <v-img src=""></v-img>
-          </v-list-item-avatar>
+          <v-img
+            max-width="20%"
+            src="https://mesacombustible.freddybernalgobernador.com/freddygobernador.png"
+          ></v-img>
 
           <v-list-item-content>
-            <v-list-item-title>{{ $store.state.user.name }}</v-list-item-title>
+            <v-list-item-title
+              >&nbsp;{{ $store.state.user.name }}</v-list-item-title
+            >
           </v-list-item-content>
         </v-list-item>
 
@@ -33,6 +36,12 @@
       <v-app-bar app color="primary" dark>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
         <v-toolbar-title>Mesa de Combustible</v-toolbar-title>
+        <v-col cols="6">
+          <v-img
+            max-width="30%"
+            src="https://mesacombustible.freddybernalgobernador.com/mesadecombustible.png"
+          ></v-img>
+        </v-col>
         <v-row v-if="$store.state.auth">
           <v-col class="text-right">
             {{ $store.state.user.name }}
