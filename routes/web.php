@@ -46,8 +46,8 @@ Route::get('/programa/{id}/edit', 'App\Http\Controllers\Usuario\ProgramacionCont
 Route::get('/programa/{despa?}/{comb?}/comb', 'App\Http\Controllers\Usuario\ProgramacionController@index')->middleware(['permission:despacho.user.index']);
 Route::put('/programa/{progra}/{acti?}', 'App\Http\Controllers\Usuario\ProgramacionController@update')->middleware(['permission:program.user.desactivar']);
 
-Route::get('/progrflota/{insti}/{prog}/{tipo}', 'App\Http\Controllers\Usuario\ProgrFlotaController@index')->middleware(['permission:proflo.user.index']);
-Route::post('/progrflotaregist', 'App\Http\Controllers\Usuario\ProgrFlotaController@store')->middleware(['permission:proflo.user.desactivar']);
+Route::get('/progrflota/{insti}/{prog}/{tipo}', 'App\Http\Controllers\Usuario\ProgrFlotaController@index')->middleware(['permission:proflo.user.index|despacho.user.index']);
+Route::post('/progrflotaregist', 'App\Http\Controllers\Usuario\ProgrFlotaController@store')->middleware(['permission:proflo.user.desactivar|despacho.user.edit']);
 //Route::delete('/programa/{id}', 'App\Http\Controllers\Usuario\ProgrFlotaController@destroy')->middleware(['permission:proflo.user.destroy']);
 //Route::get('/progrflota/{flo?}/', 'App\Http\Controllers\Usuario\ProgrFlotaController@index')->middleware(['permission:proflo.user.edit']);
 //Route::get('/progrflota/{id}/edit', 'App\Http\Controllers\Usuario\ProgrFlotaController@edit')->middleware(['permission:proflo.user.edit']);
