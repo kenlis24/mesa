@@ -180,7 +180,13 @@ export default {
       .get(`./progrflota/${this.prog}/${this.insti}/${this.tipo}`)
       .then((res) => {
         //this.datos = res.data;
-        this.institucion = res.data.progflot[0].inst_nombre;
+        if (res.data.progflot.length > 0) {
+          this.institucion = res.data.progflot[0].inst_nombre;
+        } else {
+          this.color = "warning";
+          this.mensaje = "No contiene flota";
+          this.snackbar = true;
+        }
         this.datos = res.data.progflot.map((prog) => {
           const asig = res.data.permisosuser.find(
             (el) => el.name === "proflo.user.desactivar"
@@ -230,9 +236,6 @@ export default {
     regresar() {
       setTimeout(() => this.$router.push({ name: "indexproflota" }), 2800);
     },
-    editar(id) {
-      this.$router.push({ name: "programaedit", params: { id: id } });
-    },
     asignar(id) {
       var tempo = this.datos.find((element) => element.flo_id == id);
       var litrostemp = this.litros;
@@ -263,6 +266,7 @@ export default {
       const envio = {
         datos: this.datosasig,
         prog: this.prog,
+        despa: "no",
       };
       axios
         .post("./progrflotaregist", envio)

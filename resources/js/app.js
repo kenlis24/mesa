@@ -6,6 +6,10 @@ import Vuetify from '../plugins/vuetify';
 
 store.dispatch("getUser");
 
+/* Vue.config.devtools = false
+Vue.config.debug = false
+Vue.config.silent = true */
+
 Vue.component('front', require('./components/Front.vue').default);
 
 const app = new Vue({

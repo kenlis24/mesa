@@ -30,11 +30,13 @@ class RoleSeeder extends Seeder
         $permission = Permission::create(['name' => 'admin.role.destroy', 'description' => 'Eliminar Roles'])->syncRoles([$role1]);
 
         $permission = Permission::create(['name' => 'insti.user.index', 'description' => 'Ver listado de Instituciones'])->syncRoles([$role1]);
+        $permission = Permission::create(['name' => 'insti.user.consul', 'description' => 'Permite consultar las Instituciones'])->syncRoles([$role1]);
         $permission = Permission::create(['name' => 'insti.user.create', 'description' => 'Crear Instituciones'])->syncRoles([$role1]);
         $permission = Permission::create(['name' => 'insti.user.edit', 'description' => 'Editar Institución'])->syncRoles([$role1]);
         $permission = Permission::create(['name' => 'insti.user.desactivar', 'description' => 'desactivar Institución'])->syncRoles([$role1]);
 
         $permission = Permission::create(['name' => 'program.user.index', 'description' => 'Ver listado de Programaciones'])->syncRoles([$role1]);
+        $permission = Permission::create(['name' => 'program.user.consul', 'description' => 'Permite consultar las Programaciones'])->syncRoles([$role1]);
         $permission = Permission::create(['name' => 'program.user.create', 'description' => 'Crear Programación'])->syncRoles([$role1]);
         $permission = Permission::create(['name' => 'program.user.edit', 'description' => 'Editar Programación'])->syncRoles([$role1]);
         $permission = Permission::create(['name' => 'program.user.desactivar', 'description' => 'desactivar Programación'])->syncRoles([$role1]);
@@ -44,5 +46,8 @@ class RoleSeeder extends Seeder
 
         $permission = Permission::create(['name' => 'asiginsti.admin.index', 'description' => 'Ver listado para asignar institución al usuario'])->syncRoles([$role1]);
         $permission = Permission::create(['name' => 'asiginsti.admin.desactivar', 'description' => 'Asigna y actualiza asignación institución al usuario'])->syncRoles([$role1]);
+
+        $permission = Permission::create(['name' => 'despacho.user.index', 'description' => 'Ver listado programacion aprobado para despacho'])->syncRoles([$role1]);
+        $permission = Permission::create(['name' => 'despacho.user.edit', 'description' => 'Editar el despacho al usuario'])->syncRoles([$role1]);
     }
 }

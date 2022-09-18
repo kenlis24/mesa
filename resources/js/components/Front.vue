@@ -138,7 +138,7 @@ export default {
       menu: [],
       items: [
         {
-          title: "usuarios",
+          title: "Usuarios",
           icon: "mdi-account-group",
           url: "users",
           permiso: "admin.user.index",
@@ -167,7 +167,7 @@ export default {
         },
         {
           title: "Programación",
-          icon: "mdi-gas-station",
+          icon: "mdi-calendar-clock",
           url: "indexprogra",
           permiso: "program.user.index",
           can: false,
@@ -177,6 +177,13 @@ export default {
           icon: "mdi-car-2-plus",
           url: "indexproflota",
           permiso: "proflo.user.index",
+          can: false,
+        },
+        {
+          title: "Despacho",
+          icon: "mdi-gas-station",
+          url: "indexdespacho",
+          permiso: "despacho.user.index",
           can: false,
         },
         {

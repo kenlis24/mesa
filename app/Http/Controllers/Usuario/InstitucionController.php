@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\User;
 use App\Models\instituciones;
+use App\Models\conf_rol_inst;
 
 use Illuminate\Support\Facades\Validator;
 use App\Models\area_servicios;
@@ -29,10 +30,11 @@ class InstitucionController extends Controller
         $user = User::find(auth()->id());
         $permisosuser = $user->getPermissionsViaRoles();
         $roles = $user->getRoleNames()->toArray();
-        if (in_array("Admin", $roles))
-            $sql = ' ';
-        else {
-            $sql = " and instituciones.id in(select usui_inst_id from usu_insts where usui_estado ='A' and usui_usu_id =" . auth()->id() . ")";
+        $roles_insti = conf_rol_inst::where("rins_estado", "=", 'A')->pluck('rins_nombre');
+        $sql = " and instituciones.id in(select usui_inst_id from usu_insts where usui_estado ='A' and usui_usu_id =" . auth()->id() . ")";
+        foreach ($roles_insti as $valor) {
+            if (in_array($valor, $roles))
+                $sql = ' ';
         }
         if ($id) {
             $insti = DB::select("select * 
@@ -56,8 +58,8 @@ class InstitucionController extends Controller
         } else {
             $insti = DB::select("select * 
             from instituciones
-            where instituciones.inst_tipo = '1'
-                and   inst_estado = 'A' $sql");
+            where instituciones.inst_tipo in ('1','2')
+                $sql");
             //$insti = instituciones::where("inst_tipo", "=", "1")->where("inst_estado", "=", "A")->get();
             $institodas = instituciones::all();
             $user = User::find(auth()->id());
@@ -71,7 +73,7 @@ class InstitucionController extends Controller
             'instiasig' => $instiasig,
             'institodas' => $institodas,
             'permisosuser' => $permisosuser,
-            'user' => $user
+            'user' => $user,
         ], 200);
     }
 

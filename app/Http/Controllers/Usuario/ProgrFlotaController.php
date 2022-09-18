@@ -64,6 +64,7 @@ class ProgrFlotaController extends Controller
                     pers_cedula, pers_nombres, 
                     pers_apellidos, mca_nombre, 
                     mod_nombre, vehi_placa,
+                    pflo_litros_paga,pflo_litros_desp,
                     conp_lts 
                 from instituciones, 
                     trabajadores, 
@@ -130,49 +131,65 @@ class ProgrFlotaController extends Controller
         $total = 0;
         $men = "";
         $progra = programaciones::where("id", "=", $prog_id)->get();
-        foreach ($datos as $dat) {
-            $total += $dat['conp_lts'];
-        }
-        if ($total <= $progra[0]->prog_lts) {
+        if ($request->post('despa') == 'no') {
             foreach ($datos as $dat) {
-                $prog_flot_tot = 0;
-                $prog_flot_tot = progr_flotas::where("pflo_prog_id", "=", $prog_id)
-                    ->where("pflo_flot_id", "=", $dat['flo_id'])->get()->count();
-                if ($prog_flot_tot == 1) {
-                    $prog_flot = progr_flotas::where("pflo_prog_id", "=", $prog_id)
-                        ->where("pflo_flot_id", "=", $dat['flo_id'])->get();
-                    $upd = progr_flotas::find($prog_flot[0]->id);
-                    $upd->pflo_condicion = 'C';
-                    $upd->save();
-                } else {
-                    $fila = array(
-                        'pflo_litros' => $dat['conp_lts'],
-                        'pflo_condicion' => 'C',
-                        'pflo_observacion' => $dat['obs'],
-                        'pflo_prog_id' => $prog_id,
-                        'pflo_flot_id' => $dat['flo_id'],
-                    );
-                    progr_flotas::create($fila);
-                }
-                $men = "Se inserto la flota";
+                $total += $dat['conp_lts'];
             }
-            DB::table('progr_flotas')
-                ->where('pflo_prog_id', $prog_id)
-                ->where('pflo_condicion', 'A')
-                ->update(['pflo_condicion' => 'I']);
+            if ($total <= $progra[0]->prog_lts) {
+                foreach ($datos as $dat) {
+                    $prog_flot_tot = 0;
+                    $prog_flot_tot = progr_flotas::where("pflo_prog_id", "=", $prog_id)
+                        ->where("pflo_flot_id", "=", $dat['flo_id'])->get()->count();
+                    if ($prog_flot_tot == 1) {
+                        $prog_flot = progr_flotas::where("pflo_prog_id", "=", $prog_id)
+                            ->where("pflo_flot_id", "=", $dat['flo_id'])->get();
+                        $upd = progr_flotas::find($prog_flot[0]->id);
+                        $upd->pflo_condicion = 'C';
+                        $upd->save();
+                    } else {
+                        $fila = array(
+                            'pflo_litros' => $dat['conp_lts'],
+                            'pflo_condicion' => 'C',
+                            'pflo_observacion' => $dat['obs'],
+                            'pflo_prog_id' => $prog_id,
+                            'pflo_flot_id' => $dat['flo_id'],
+                        );
+                        progr_flotas::create($fila);
+                    }
+                    $men = "Se inserto la flota";
+                }
+                DB::table('progr_flotas')
+                    ->where('pflo_prog_id', $prog_id)
+                    ->where('pflo_condicion', 'A')
+                    ->update(['pflo_condicion' => 'I']);
 
-            DB::table('progr_flotas')
-                ->where('pflo_prog_id', $prog_id)
-                ->where('pflo_condicion', 'C')
-                ->update(['pflo_condicion' => 'A']);
-            $programa = programaciones::find($prog_id);
-            $programa->prog_condicion = '2';
-            $programa->save();
-            $men = "Se inserto la flota";
-            $codigo = "200";
+                DB::table('progr_flotas')
+                    ->where('pflo_prog_id', $prog_id)
+                    ->where('pflo_condicion', 'C')
+                    ->update(['pflo_condicion' => 'A']);
+
+                $programa = programaciones::find($prog_id);
+                $programa->prog_condicion = '2';
+                $programa->save();
+
+                $men = "Se actualizo la flota a la programación";
+                $codigo = "200";
+            } else {
+                $men = "Los litros programados no puede ser menor al total de la flota";
+                $codigo = "422";
+            }
         } else {
-            $men = "Los litros programados no puede ser menor al total de la flota";
-            $codigo = "422";
+            foreach ($datos as $dat) {
+                $prog_flot = progr_flotas::where("pflo_prog_id", "=", $prog_id)
+                    ->where("pflo_flot_id", "=", $dat['flo_id'])->get();
+                $upd = progr_flotas::find($prog_flot[0]->id);
+                $upd->pflo_litros_paga = $dat['litros_paga'];
+                $upd->pflo_litros_desp = $dat['litros_desp'];
+                $upd->pflo_observacion = $dat['obs'];
+                $upd->save();
+                $men = "Se actualizo el despacho de litros a la flota";
+                $codigo = "200";
+            }
         }
         return response()->json([
             'mensaje' => $men,

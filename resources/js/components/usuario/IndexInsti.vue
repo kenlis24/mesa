@@ -2,6 +2,7 @@
   <v-container class="fill-height" fluid v-if="$store.state.auth">
     <v-row align="center" justify="center">
       <v-card class="mt-12 mx-auto">
+        <div class="text-center text-h6">INSTITUCIONES</div>
         <div class="text-right">
           <v-btn v-if="create" outlined color="indigo" @click="registrar()">
             <v-icon dense>mdi-plus</v-icon>
@@ -93,6 +94,7 @@ export default {
     id: "",
     color: "",
     datos: [],
+    datos2: [],
     create: false,
     headers: [
       {
@@ -114,9 +116,9 @@ export default {
     axios
       .get("./institu")
       .then((res) => {
-        //this.datos = res.data;
+        this.datos2 = res.data.que;
 
-        this.datos = res.data.institodas.map((insti) => {
+        this.datos = res.data.insti.map((insti) => {
           var condi = "";
           if (insti.inst_dependencia == 1) condi = "Nacional";
           if (insti.inst_dependencia == 2) condi = "Regional";
@@ -188,17 +190,15 @@ export default {
         .get("./institu")
         .then((res) => {
           //this.datos = res.data;
-          this.datos = res.data.institodas.map((insti) => {
+          this.datos = res.data.insti.map((insti) => {
             var condi = "";
             if (insti.inst_dependencia == 1) condi = "Nacional";
             if (insti.inst_dependencia == 2) condi = "Regional";
             if (insti.inst_dependencia == 3) condi = "Estadal";
             if (insti.inst_dependencia == 4) condi = "Municipal";
-
             var tipoinst = "";
             if (insti.inst_tipo == 1) tipoinst = "Organismo";
             if (insti.inst_tipo == 2) tipoinst = "Estación de Servicio";
-
             const edit = res.data.permisosuser.find(
               (el) => el.name === "insti.user.edit"
             );

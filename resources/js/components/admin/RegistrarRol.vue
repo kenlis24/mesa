@@ -13,6 +13,10 @@
               label="Nombre"
               required
             ></v-text-field>
+            <v-checkbox
+              v-model="permitir"
+              label="Permitir Instituciones"
+            ></v-checkbox>
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -48,6 +52,7 @@ export default {
     return {
       valido: false,
       snackbar: false,
+      permitir: false,
       mensaje: "",
       color: "",
       nombre: "",
@@ -57,14 +62,16 @@ export default {
     crear() {
       var datos = {
         name: this.nombre,
+        permitir: this.permitir,
       };
       axios
         .post("./rolesregist", datos)
         .then((res) => {
           this.color = "success";
-          this.mensaje = "El rol fue registrado";
+          this.mensaje = res.data.mensaje;
           this.snackbar = true;
           this.nombre = "";
+          this.permitir = false;
         })
         .catch((er) => {
           if (er.toString().includes("500")) this.mensaje = "El rol ya existe ";

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\User;
+use App\Models\conf_rol_inst;
 
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -44,11 +45,17 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //        
-        $roles = Role::create($request->post());
+        //     
+        $Data = array('name' => $request->post('name'));
+        $roles = Role::create($Data);
+        if ($request->post('permitir')) {
+            $Data = array('rins_nombre' => $request->post('name'), 'rins_estado' => 'A');
+            conf_rol_inst::create($Data);
+        }
         return response()->json([
             'roles' => $roles,
-        ]);
+            'mensaje' => 'Se registro el rol'
+        ], 200);
     }
 
     /**
@@ -73,10 +80,19 @@ class RoleController extends Controller
         $permisos = Permission::all();
         $permisosrol = $role->permissions;
 
+
+        if (conf_rol_inst::where("rins_nombre", "=", $role->name)->where("rins_estado", "=", 'A')->get()->count() >= 1) {
+            $rol_insti = true;
+        } else {
+            $rol_insti = false;
+        }
+
+
         return response()->json([
             'rol' => $role,
             'permisosRol' => $permisosrol,
-            'permisos' => $permisos
+            'permisos' => $permisos,
+            'rol_insti' => $rol_insti
         ], 200);
     }
 
@@ -89,7 +105,21 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
-        $permisos = $request->all();
+        $rol_inst_tot = conf_rol_inst::where("rins_nombre", "=", $request->post('role'))->get()->count();
+        if ($rol_inst_tot >= 1) {
+            $rol_inst_id = conf_rol_inst::where("rins_nombre", "=", $request->post('role'))->get();
+            $rol_inst = conf_rol_inst::find($rol_inst_id[0]->id);
+            if ($request->post('permitir')) {
+                $rol_inst->rins_estado = 'A';
+            } else {
+                $rol_inst->rins_estado = 'I';
+            }
+            $rol_inst->save();
+        } else {
+            $Data = array('rins_nombre' => $request->post('role'), 'rins_estado' => 'A');
+            conf_rol_inst::create($Data);
+        }
+        $permisos = $request->post('permisos');
         $role->syncPermissions($permisos);
 
         return response()->json([

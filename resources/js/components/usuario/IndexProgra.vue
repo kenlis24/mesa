@@ -2,6 +2,7 @@
   <v-container class="fill-height" fluid v-if="$store.state.auth">
     <v-row align="center" justify="center">
       <v-card class="mt-12 mx-auto">
+        <div class="text-center text-h6">PROGRAMACIONES</div>
         <div class="text-right">
           <v-btn v-if="create" outlined color="indigo" @click="registrar()">
             <v-icon dense>mdi-plus</v-icon>
@@ -50,11 +51,16 @@
                       v-on="on"
                       @click="
                         row.item.prog_condicion != 'Aprobado'
-                          ? editar(row.item.id)
+                          ? activo(row.item) == ''
+                            ? editar(row.item.id)
+                            : ''
                           : ''
                       "
                       small
-                      :disabled="row.item.prog_condicion == 'Aprobado'"
+                      :disabled="
+                        row.item.prog_condicion == 'Aprobado' ||
+                        activo(row.item) != ''
+                      "
                       >mdi-lead-pencil</v-icon
                     >
                   </template>

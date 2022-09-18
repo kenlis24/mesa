@@ -13,6 +13,11 @@
             ><b>{{ datos.rol.name }}</b></span
           ></label
         >
+        <v-checkbox
+          v-model="permitir"
+          label="Permitir Instituciones"
+        ></v-checkbox>
+
         <v-spacer></v-spacer>
 
         <v-spacer></v-spacer>
@@ -74,6 +79,7 @@ export default {
     return {
       datos: "",
       snackbar: false,
+      permitir: false,
       color: "",
       permisos: [],
       mensaje: "",
@@ -97,6 +103,7 @@ export default {
           };
         });
         this.datos = res.data;
+        this.permitir = res.data.rol_insti;
       })
       .catch((er) => {
         this.datos = er;
@@ -109,6 +116,8 @@ export default {
     asignar() {
       var rol = {
         permisos: this.nuevospermisos,
+        permitir: this.permitir,
+        role: this.datos.rol.name,
       };
       axios
         .put(`./roles/${this.id}`, rol)

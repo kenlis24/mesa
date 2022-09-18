@@ -49,7 +49,7 @@
             <v-text-field
               type="datetime-local"
               v-model="dateFormatted"
-              label="Fcha"
+              label="Fecha"
               :rules="fechaRules"
               :disabled="this.datos.progra[0].prog_condicion == 3"
               required

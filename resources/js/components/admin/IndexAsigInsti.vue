@@ -2,6 +2,7 @@
   <v-container class="fill-height" fluid v-if="$store.state.auth">
     <v-row align="center" justify="center">
       <v-card class="mt-12 mx-auto">
+        <div class="text-center text-h6">ASIGNAR INSTITUCIONES</div>
         <v-card-title>
           <v-text-field
             v-model="search"

@@ -16,6 +16,8 @@ class CreateProgrFlotasTable extends Migration
         Schema::create('progr_flotas', function (Blueprint $table) {
             $table->id();
             $table->integer('pflo_litros')->length(3);
+            $table->integer('pflo_litros_paga')->length(3)->nullable();
+            $table->integer('pflo_litros_desp')->length(3)->nullable();
             $table->string('pflo_condicion', 1);
             $table->string('pflo_observacion', 250)->nullable();
             $table->unsignedBigInteger('pflo_prog_id');

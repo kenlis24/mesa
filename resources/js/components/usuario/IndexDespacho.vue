@@ -2,7 +2,7 @@
   <v-container class="fill-height" fluid v-if="$store.state.auth">
     <v-row align="center" justify="center">
       <v-card class="mt-12 mx-auto">
-        <div class="text-center text-h6">PROGRAMACIÓN FLOTA</div>
+        <div class="text-center text-h6">DESPACHO COMBUSTIBLE POR USUARIO</div>
         <v-card-title>
           <v-text-field
             v-model="search"
@@ -54,10 +54,10 @@
                         (row.item.esta_estado || row.item.inst_estado) != 'A'
                       "
                       small
-                      >mdi-car</v-icon
+                      >mdi-gas-station-outline</v-icon
                     >
                   </template>
-                  <span>Asignar</span>
+                  <span>Despachado</span>
                 </v-tooltip>
               </td>
             </tr>
@@ -79,7 +79,7 @@
 </template>
 <script>
 export default {
-  name: "indexprograflota",
+  name: "indexdespacho",
   data: () => ({
     snackbar: false,
     mensaje: "",
@@ -104,18 +104,16 @@ export default {
   }),
   mounted() {
     axios
-      .get("./programa/flo")
+      .get("./programa/despa/comb/comb")
       .then((res) => {
         //this.datos = res.data;
 
         this.datos = res.data.progra.map((prog) => {
           var condi = "";
-          if (prog.prog_condicion == 1) condi = "Creado";
-          if (prog.prog_condicion == 2) condi = "Programado";
           if (prog.prog_condicion == 3) condi = "Aprobado";
 
           const asig = res.data.permisosuser.find(
-            (el) => el.name === "proflo.user.desactivar"
+            (el) => el.name === "despacho.user.edit"
           );
           return {
             id: prog.id_prog,
@@ -147,7 +145,7 @@ export default {
     },
     asignar(id, insti, tipo) {
       this.$router.push({
-        name: "progfloasig",
+        name: "despasig",
         params: { prog: id, insti: insti, tipo: tipo },
       });
     },

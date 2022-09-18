@@ -122,6 +122,21 @@ const routes = [
         ),
         props: true,
     },
+    {
+        name: 'indexdespacho',
+        path: '/indexdespacho',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/indexdespacho' */ './components/usuario/IndexDespacho'
+        ),
+    },
+    {
+        name: 'despasig',
+        path: '/despasig/:prog/:insti/:tipo',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/despasig' */ './components/usuario/DespAsig'
+        ),
+        props: true,
+    },
 ]
 
 export default new Router({
