@@ -150,6 +150,8 @@ class ProgrFlotaController extends Controller
                         $fila = array(
                             'pflo_litros' => $dat['conp_lts'],
                             'pflo_condicion' => 'C',
+                            'pflo_litros_paga' => '0',
+                            'pflo_litros_desp' => '0',
                             'pflo_observacion' => $dat['obs'],
                             'pflo_prog_id' => $prog_id,
                             'pflo_flot_id' => $dat['flo_id'],
