@@ -27,6 +27,14 @@ const routes = [
         props: true
     },
     {
+        name: 'changepass',
+        path: '/changepass/:id',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/changepass' */ './components/admin/ChangePass'
+        ),
+        props: true
+    },
+    {
         name: 'roles',
         path: '/roles',
         component: () => import(

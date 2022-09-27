@@ -22,6 +22,7 @@ Route::get('/users', 'App\Http\Controllers\Admin\UserController@index')->middlew
 Route::get('/users/{user}/edit', 'App\Http\Controllers\Admin\UserController@edit')->middleware(['permission:admin.user.edit']);
 Route::put('/users/{user}', 'App\Http\Controllers\Admin\UserController@update')->middleware(['permission:admin.user.edit']);
 Route::delete('/users/{user}', 'App\Http\Controllers\Admin\UserController@destroy')->middleware(['permission:admin.user.destroy']);
+Route::post('/changepass/{id}', 'App\Http\Controllers\Admin\UserController@changepass')->middleware(['permission:admin.user.edit']);
 
 Route::get('/roles', 'App\Http\Controllers\Admin\RoleController@index')->middleware(['permission:admin.role.index']);
 Route::post('/rolesregist', 'App\Http\Controllers\Admin\RoleController@store')->middleware(['permission:admin.role.create']);

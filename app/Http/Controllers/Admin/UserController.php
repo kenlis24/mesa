@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 use Spatie\Permission\Models\Role;
@@ -82,6 +83,26 @@ class UserController extends Controller
             'permisos' => $roleuser
         ], 200);
         //return $user;
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function changepass(Request $request, $id)
+    {
+        $datos = $request->post('datos');
+        $valido = User::find($id)->update(['password' => Hash::make($datos['password'])]);
+        if ($valido)
+            $mensaje = 'Se cambio el password';
+        else
+            $mensaje = 'Ocurrio un error al cambiar el password';
+
+        return response()->json([
+            'mensaje' => $mensaje,
+        ], 200);
     }
 
     /**

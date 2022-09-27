@@ -21,16 +21,42 @@
               <td>{{ row.item.name }}</td>
               <td>{{ row.item.email }}</td>
               <td>
-                <v-btn v-if="row.item.editar" icon @click="editar(row.item.id)">
-                  <v-icon>mdi-lead-pencil</v-icon>
-                </v-btn>
-                <v-btn
-                  v-if="row.item.eliminar"
-                  icon
-                  @click="eliminar(row.item.id)"
-                >
-                  <v-icon>mdi-delete</v-icon>
-                </v-btn>
+                <v-tooltip v-if="row.item.editar" top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="editar(row.item.id)"
+                      small
+                      >mdi-lead-pencil</v-icon
+                    >
+                  </template>
+                  <span>Editar roles</span>
+                </v-tooltip>
+                <v-tooltip v-if="row.item.eliminar" top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="eliminar(row.item.id)"
+                      small
+                      >mdi-delete</v-icon
+                    >
+                  </template>
+                  <span>Eliminar</span>
+                </v-tooltip>
+                <v-tooltip v-if="row.item.editar" top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="cambiar(row.item.id)"
+                      small
+                      >mdi-account-wrench</v-icon
+                    >
+                  </template>
+                  <span>Cambiar clave</span>
+                </v-tooltip>
               </td>
             </tr>
           </template>
@@ -120,6 +146,9 @@ export default {
       });
   },
   methods: {
+    cambiar(id) {
+      this.$router.push({ name: "changepass", params: { id: id } });
+    },
     editar(id) {
       this.$router.push({ name: "usersedit", params: { id: id } });
     },
