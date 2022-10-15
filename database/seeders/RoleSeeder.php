@@ -44,6 +44,8 @@ class RoleSeeder extends Seeder
         $permission = Permission::create(['name' => 'proflo.user.index', 'description' => 'Ver listado de Programación flotas'])->syncRoles([$role1]);
         $permission = Permission::create(['name' => 'proflo.user.desactivar', 'description' => 'Asigna y actualiza Programación flotas'])->syncRoles([$role1]);
 
+        $permission = Permission::create(['name' => 'proflorep.user.index', 'description' => 'Ver listado de Programación flotas reporte'])->syncRoles([$role1]);
+        
         $permission = Permission::create(['name' => 'asiginsti.admin.index', 'description' => 'Ver listado para asignar institución al usuario'])->syncRoles([$role1]);
         $permission = Permission::create(['name' => 'asiginsti.admin.desactivar', 'description' => 'Asigna y actualiza asignación institución al usuario'])->syncRoles([$role1]);
 

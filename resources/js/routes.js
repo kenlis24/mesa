@@ -94,6 +94,21 @@ const routes = [
         props: true
     },
     {
+        name: 'indexproflotarep',
+        path: '/indexproflotarep/:fecha',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/indexproflotarep' */ './components/usuario/IndexProFlotaRep'
+        ),
+        props: true
+    },
+    {
+        name: 'reporteproflota',
+        path: '/reporteproflota',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/reporteproflota' */ './components/usuario/ReporteProFlota'
+        ),
+    },
+    {
         name: 'indexinsti',
         path: '/indexinsti',
         component: () => import(

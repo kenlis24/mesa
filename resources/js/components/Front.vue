@@ -187,6 +187,13 @@ export default {
           can: false,
         },
         {
+          title: "Programación Flota Reporte",
+          icon: "mdi-file-document-multiple-outline",
+          url: "reporteproflota",
+          permiso: "proflorep.user.index",
+          can: false,
+        },
+        {
           title: "About",
           icon: "mdi-forum",
           url: "#",

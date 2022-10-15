@@ -54,6 +54,9 @@ Route::post('/progrflotaregist', 'App\Http\Controllers\Usuario\ProgrFlotaControl
 //Route::get('/progrflota/{id}/edit', 'App\Http\Controllers\Usuario\ProgrFlotaController@edit')->middleware(['permission:proflo.user.edit']);
 //Route::put('/progrflota/{progra}/{acti?}', 'App\Http\Controllers\Usuario\ProgrFlotaController@update')->middleware(['permission:proflo.user.edit']);
 
+Route::get('/reporteproflota', 'App\Http\Controllers\Usuario\ProgrFlotaController@reporteParam')->middleware('can:proflorep.user.index');
+Route::post('/progrflotarep', 'App\Http\Controllers\Usuario\ProgrFlotaController@reporte')->middleware('can:proflorep.user.index');
+
 Route::get('/areaser', 'App\Http\Controllers\Usuario\AreaServicioController@index')->middleware(['permission:insti.user.index']);
 //Route::post('/areaserregist', 'App\Http\Controllers\Usuario\AreaServicioController@store')->middleware(['permission:admin.role.create']);
 //Route::delete('/areaser/{id}', 'App\Http\Controllers\Usuario\AreaServicioController@destroy')->middleware(['permission:admin.role.destroy']);

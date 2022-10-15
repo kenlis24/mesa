@@ -107,6 +107,70 @@ class ProgrFlotaController extends Controller
         ], 200);
     }
 
+    public function reporte(Request $request)
+    {
+        $fech = $request->post('fecha');
+        $sql = "select instituciones.id,flotas.id as flo_id, pflo_flot_id, inst_nombre, 
+        pers_cedula, CONCAT(pers_nombres,' ',pers_apellidos) as nombre, mca_nombre, 
+        mod_nombre, vehi_placa, vehi_tag,
+        conp_lts, prog_fecha
+    from instituciones, 
+        trabajadores, 
+        flotas, 
+        personas,
+        vehiculos, 
+        modelo_vehi, 
+        marca_vehi,
+        conf_prog,
+        programaciones,
+        progr_flotas
+    where    inst_estado = 'A'    
+    and   date_format(prog_fecha,'%d-%m-%Y') = '$fech'
+    and   prog_inst_id = instituciones.id                
+    and   trab_inst_id = instituciones.id
+    and   trab_estado = 'A'
+    and   personas.id = trab_pers_id
+    and   pers_estado = 'A'
+    and   flot_trab_id = trabajadores.id
+    and   flot_estado = 'A'
+    and   pflo_condicion ='A'
+    and   pflo_prog_id = programaciones.id
+    and   pflo_flot_id = flotas.id
+    and   vehiculos.id = flot_vehi_id
+    and   vehi_estado = 'A'
+    and   vehi_tipo_vehi = prog_tipo_vehi 
+    and   vehi_mod_id = modelo_vehi.id
+    and   mod_mca_id = marca_vehi.id
+    and   conp_tipo_vehi = vehi_tipo_vehi 
+    order by instituciones.id, pers_cedula, vehi_placa";
+        $progflotrep = DB::select($sql);
+
+        return response()->json([
+            'progflotrep' => $progflotrep,
+        ], 200);
+    }
+
+    public function reporteParam()
+    {
+        $progflotrepa = DB::select("select distinct inst_nombre, date_format(prog_fecha, '%d-%m-%Y') fecha
+        from instituciones, 
+            programaciones
+        where    inst_estado = 'A'
+        and   inst_tipo = 2
+        and   prog_inst_id_es = instituciones.id   
+        and   prog_estado = 'A'
+        and   prog_inst_id_es != 1
+        order by instituciones.id");
+
+        $user = User::find(auth()->id());
+        $permisosuser = $user->getPermissionsViaRoles();
+
+        return response()->json([
+            'progflotrepa' => $progflotrepa,
+            'permisosuser' => $permisosuser
+        ], 200);
+    }
+    
     /**
      * Show the form for creating a new resource.
      *
