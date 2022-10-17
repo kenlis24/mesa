@@ -12,6 +12,8 @@
     "/js/compiled/programaedit.js?h=029fd3dd3f2060f5": "/js/compiled/programaedit.js?h=029fd3dd3f2060f5",
     "/js/compiled/indexproflota.js?h=76d2031c202154c2": "/js/compiled/indexproflota.js?h=76d2031c202154c2",
     "/js/compiled/progfloasig.js?h=9ea51aaf96dcbdd2": "/js/compiled/progfloasig.js?h=9ea51aaf96dcbdd2",
+    "/js/compiled/indexproflotarep.js?h=e6cf295e9bbc447f": "/js/compiled/indexproflotarep.js?h=e6cf295e9bbc447f",
+    "/js/compiled/reporteproflota.js?h=ece1c4e940b4aa8a": "/js/compiled/reporteproflota.js?h=ece1c4e940b4aa8a",
     "/js/compiled/indexinsti.js?h=9050dd27ab7d2fe5": "/js/compiled/indexinsti.js?h=9050dd27ab7d2fe5",
     "/js/compiled/institucion.js?h=b5810e503a2a0ea8": "/js/compiled/institucion.js?h=b5810e503a2a0ea8",
     "/js/compiled/instiedit.js?h=be1789ab1c4b2580": "/js/compiled/instiedit.js?h=be1789ab1c4b2580",
@@ -19,8 +21,5 @@
     "/js/compiled/asiginsti.js?h=aab1bb6d9f6baf05": "/js/compiled/asiginsti.js?h=aab1bb6d9f6baf05",
     "/js/compiled/indexdespacho.js?h=b6d79a683b3aec95": "/js/compiled/indexdespacho.js?h=b6d79a683b3aec95",
     "/js/compiled/despasig.js?h=1c7a4e4929180716": "/js/compiled/despasig.js?h=1c7a4e4929180716",
-    "/css/app.css": "/css/app.css",
-    "/js/compiled/reporteproflota.js?h=ece1c4e940b4aa8a": "/js/compiled/reporteproflota.js?h=ece1c4e940b4aa8a",
-    "/js/compiled/indexproflotarep.js?h=7f6f18ab79d8072d": "/js/compiled/indexproflotarep.js?h=7f6f18ab79d8072d",
-    "/js/compiled/indexproflotarep.js?h=e6cf295e9bbc447f": "/js/compiled/indexproflotarep.js?h=e6cf295e9bbc447f"
+    "/css/app.css": "/css/app.css"
 }
