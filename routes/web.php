@@ -43,7 +43,7 @@ Route::get('/programa', 'App\Http\Controllers\Usuario\ProgramacionController@ind
 Route::post('/programaregist', 'App\Http\Controllers\Usuario\ProgramacionController@store')->middleware(['permission:program.user.create']);
 //Route::delete('/programa/{id}', 'App\Http\Controllers\Usuario\ProgramacionController@destroy')->middleware(['permission:program.user.destroy']);
 Route::get('/programa/{flo?}/', 'App\Http\Controllers\Usuario\ProgramacionController@index')->middleware(['permission:program.user.edit|proflo.user.index']);
-Route::get('/programa/{id}/edit', 'App\Http\Controllers\Usuario\ProgramacionController@edit')->middleware(['permission:program.user.edit']);
+Route::get('/programa/{id}/edit', 'App\Http\Controllers\Usuario\ProgramacionController@edit')->middleware(['permission:program.user.edit|proflo.user.desactivar']);
 Route::get('/programa/{despa?}/{comb?}/comb', 'App\Http\Controllers\Usuario\ProgramacionController@index')->middleware(['permission:despacho.user.index']);
 Route::put('/programa/{progra}/{acti?}', 'App\Http\Controllers\Usuario\ProgramacionController@update')->middleware(['permission:program.user.desactivar']);
 
