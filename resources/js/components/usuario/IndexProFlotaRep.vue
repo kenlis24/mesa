@@ -21,6 +21,7 @@
           item-key="name"
           class="elevation-1"
         >
+        {{ cont=0 }}
           <template v-slot:item="row">
             <tr
               :class="activo(row.item)"
@@ -30,14 +31,15 @@
                   : ''
               "
             >
-              <td>{{ row.item.id }}</td>
-              <td>{{ row.item.prog_inst_id }}</td>
-              <td>{{ row.item.prog_lts }}</td>
-              <td>{{ row.item.prog_placa }}</td>          
+              <td>{{ cont=cont+1 }}</td>
+                       
               <td>{{ row.item.prog_nombre }}</td>  
-              <td>{{ row.item.prog_cedula }}</td>  
-              <td>{{ row.item.prog_tag }}</td>      
-              <td>{{ row.item.prog_condicion }}</td>    
+              <td>{{ row.item.prog_cedula }}</td> 
+              <td>{{ row.item.prog_inst_id }}</td>  
+              <td>{{ row.item.prog_condicion }}</td> 
+              <td>{{ row.item.prog_lts }}</td>
+              <td>{{ row.item.prog_placa }}</td>  
+              <td>{{ row.item.prog_tag }}</td>       
               <td>
                 <v-tooltip v-if="row.item.asignar" top>
                   <template v-slot:activator="{ on, attrs }">
@@ -100,14 +102,14 @@ export default {
         align: "start",
         sortable: false,
         value: "id",
-      },
-      { text: "Institución", value: "prog_inst_id" },
-      { text: "Litros", value: "prog_lts" },
-      { text: "Placa", value: "prog_placa" },
+      },      
       { text: "Nombres y Apellidos", value: "prog_nombre" },
       { text: "Cedula", value: "prog_cedula" },
-      { text: "Tag", value: "prog_tag" },
+      { text: "Institución", value: "prog_inst_id" },      
       { text: "Modelo", value: "prog_condicion" },
+      { text: "Litros", value: "prog_lts" },
+      { text: "Placa", value: "prog_placa" },
+      { text: "Tag", value: "prog_tag" },
     ],
   }),
   mounted() {
@@ -153,18 +155,18 @@ export default {
     createPDF (fecha) {      
             var source =  this.$refs["myTable"];
             let rows = [];
-            let columnHeader = ['N°', 'Intitucción', 'Litros', 'Placa', 'Nombre y Apellido', 'Cedula','Tag','Modelo'];
+            let columnHeader = ['N°', 'Cedula', 'Nombre y Apellido', 'Intitucción', 'Modelo', 'Litros', 'Placa', 'Tag'];
             let pdfName = 'Listado Mesa de Combustible'+fecha;
             source.items.forEach(element => {
                 var temp = [
                     element.id,
-                    element.prog_inst_id,
-                    element.prog_lts,
-                    element.prog_placa,
                     element.prog_nombre,
                     element.prog_cedula,
-                    element.prog_tag,
-                    element.prog_condicion,   
+                    element.prog_inst_id,
+                    element.prog_condicion,  
+                    element.prog_lts,
+                    element.prog_placa,                    
+                    element.prog_tag, 
                 ];
                 rows.push(temp);
             });
