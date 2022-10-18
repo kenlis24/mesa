@@ -117,9 +117,9 @@ export default {
       snackbar: false,
       mensaje: "",
       user: {},
-      correo: "admin@admin.com",
+      correo: "",
       mostrarPass: false,
-      clave: "admin123",
+      clave: "",
       correoRules: [
         (v) => !!v || "Correo es requerido",
         (v) => v.length >= 5 || "El usuario es minimo 5 caracteres",
