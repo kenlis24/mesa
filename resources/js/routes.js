@@ -94,6 +94,35 @@ const routes = [
         props: true
     },
     {
+        name: 'indexpersona',
+        path: '/indexpersona',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/indexpersona' */ './components/usuario/IndexPersona'
+        ),
+    },
+    {
+        name: 'personaregist',
+        path: '/personaregist',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/personaregist' */ './components/usuario/PersonaRegist'
+        ),
+    },
+        {
+        name: 'personaedit',
+        path: '/personaedit/:id',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/personaedit' */ './components/usuario/PersonaEdit'
+        ),
+        props: true
+    },
+    {
+        name: 'indexvehiculo',
+        path: '/indexvehiculo',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/indexvehiculo' */ './components/usuario/IndexVehiculo'
+        ),
+    },
+    {
         name: 'indexproflotarep',
         path: '/indexproflotarep/:fecha',
         component: () => import(

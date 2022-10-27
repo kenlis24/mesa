@@ -117,9 +117,9 @@ export default {
       snackbar: false,
       mensaje: "",
       user: {},
-      correo: "",
+      correo: "admin@admin.com",
       mostrarPass: false,
-      clave: "",
+      clave: "admin123",
       correoRules: [
         (v) => !!v || "Correo es requerido",
         (v) => v.length >= 5 || "El usuario es minimo 5 caracteres",
@@ -191,6 +191,20 @@ export default {
           icon: "mdi-file-document-multiple-outline",
           url: "reporteproflota",
           permiso: "proflorep.user.index",
+          can: false,
+        },
+        {
+          title: "Asignar Vehiculo",
+          icon: "mdi-car-cog",
+          url: "indexvehiculo",
+          permiso: "vehis.user.index",
+          can: false,
+        },
+        {
+          title: "Personal",
+          icon: "mdi-account-multiple-plus",
+          url: "indexpersona",
+          permiso: "persos.user.index",
           can: false,
         },
         {

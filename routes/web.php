@@ -30,7 +30,7 @@ Route::delete('/roles/{role}', 'App\Http\Controllers\Admin\RoleController@destro
 Route::get('/roles/{role}/edit', 'App\Http\Controllers\Admin\RoleController@edit')->middleware(['permission:admin.role.edit']);
 Route::put('/roles/{role}', 'App\Http\Controllers\Admin\RoleController@update')->middleware(['permission:admin.role.edit']);
 
-Route::get('/institu', 'App\Http\Controllers\Usuario\InstitucionController@index')->middleware(['permission:insti.user.index|insti.user.consul']);
+Route::get('/institu', 'App\Http\Controllers\Usuario\InstitucionController@index')->middleware(['permission:insti.user.index|insti.user.consul|vehi.user.index']);
 Route::get('/institu/{id?}/', 'App\Http\Controllers\Usuario\InstitucionController@index')->middleware(['permission:insti.user.index']);
 Route::post('/instituregist', 'App\Http\Controllers\Usuario\InstitucionController@store')->middleware(['permission:insti.user.create']);
 //Route::delete('/institu/{id}', 'App\Http\Controllers\Usuario\InstitucionController@destroy')->middleware(['permission:insti.user.destroy']);
@@ -46,6 +46,11 @@ Route::get('/programa/{flo?}/', 'App\Http\Controllers\Usuario\ProgramacionContro
 Route::get('/programa/{id}/edit', 'App\Http\Controllers\Usuario\ProgramacionController@edit')->middleware(['permission:program.user.edit|proflo.user.desactivar']);
 Route::get('/programa/{despa?}/{comb?}/comb', 'App\Http\Controllers\Usuario\ProgramacionController@index')->middleware(['permission:despacho.user.index']);
 Route::put('/programa/{progra}/{acti?}', 'App\Http\Controllers\Usuario\ProgramacionController@update')->middleware(['permission:program.user.desactivar']);
+
+Route::get('/persona', 'App\Http\Controllers\Usuario\PersonaController@index')->middleware(['permission:perso.user.index']);
+Route::put('/persona/{id}/{acti?}', 'App\Http\Controllers\Usuario\PersonaController@update')->middleware(['permission:perso.user.desactivar']);
+
+Route::get('/persoymodel', 'App\Http\Controllers\Usuario\VehiculoController@persoymodel')->middleware(['permission:vehi.user.index']);
 
 Route::get('/progrflota/{insti}/{prog}/{tipo}', 'App\Http\Controllers\Usuario\ProgrFlotaController@index')->middleware(['permission:proflo.user.index|despacho.user.index']);
 Route::post('/progrflotaregist', 'App\Http\Controllers\Usuario\ProgrFlotaController@store')->middleware(['permission:proflo.user.desactivar|despacho.user.edit']);

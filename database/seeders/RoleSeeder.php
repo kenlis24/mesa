@@ -45,11 +45,21 @@ class RoleSeeder extends Seeder
         $permission = Permission::create(['name' => 'proflo.user.desactivar', 'description' => 'Asigna y actualiza Programación flotas'])->syncRoles([$role1]);
 
         $permission = Permission::create(['name' => 'proflorep.user.index', 'description' => 'Ver listado de Programación flotas reporte'])->syncRoles([$role1]);
-        
+
         $permission = Permission::create(['name' => 'asiginsti.admin.index', 'description' => 'Ver listado para asignar institución al usuario'])->syncRoles([$role1]);
         $permission = Permission::create(['name' => 'asiginsti.admin.desactivar', 'description' => 'Asigna y actualiza asignación institución al usuario'])->syncRoles([$role1]);
 
         $permission = Permission::create(['name' => 'despacho.user.index', 'description' => 'Ver listado programacion aprobado para despacho'])->syncRoles([$role1]);
         $permission = Permission::create(['name' => 'despacho.user.edit', 'description' => 'Editar el despacho al usuario'])->syncRoles([$role1]);
+
+        $permission = Permission::create(['name' => 'vehi.user.index', 'description' => 'Ver listado de vehiculos'])->syncRoles([$role1]);
+        $permission = Permission::create(['name' => 'vehi.user.create', 'description' => 'Permite crear un vehiculo'])->syncRoles([$role1]);
+        $permission = Permission::create(['name' => 'vehi.user.edit', 'description' => 'Permite editar un vehiculo'])->syncRoles([$role1]);
+        $permission = Permission::create(['name' => 'vehi.user.desactivar', 'description' => 'Permite desactivar un vehiculo'])->syncRoles([$role1]);
+
+        $permission = Permission::create(['name' => 'perso.user.index', 'description' => 'Ver listado de personas'])->syncRoles([$role1]);
+        $permission = Permission::create(['name' => 'perso.user.create', 'description' => 'Permite crear una persona'])->syncRoles([$role1]);
+        $permission = Permission::create(['name' => 'perso.user.edit', 'description' => 'Permite editar una persona'])->syncRoles([$role1]);
+        $permission = Permission::create(['name' => 'perso.user.desactivar', 'description' => 'Permite desactivar una persona'])->syncRoles([$role1]);
     }
 }
