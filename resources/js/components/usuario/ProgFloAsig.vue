@@ -47,6 +47,7 @@
             </tr>
           </template>
         </v-data-table>
+        <v-btn @click="createPDF(institucion)" color="primary">Generar PDF</v-btn>
         <v-card-title v-if="datosasig != ''"> Asignados </v-card-title>
         <v-col cols="12" sm="4">
           <v-textarea
@@ -72,6 +73,7 @@
         <v-data-table
           v-if="datosasig != ''"
           dense
+          ref="myTables"
           :headers="headers"
           :items="datosasig"
           :search="searchasig"
@@ -131,6 +133,8 @@
   </v-container>
 </template>
 <script>
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 export default {
   name: "progfloasig",
   props: ["prog", "insti", "tipo"],
@@ -282,6 +286,35 @@ export default {
           this.snackbar = true;
         });
     },
+    createPDF (institucion) {      
+            var source =  this.$refs["myTables"];
+            let rows = [];
+            let columnHeader = ['Cedula', 'Nombres','Apellido', 'Marca', 'Modelo', 'Placa', 'Litros'];
+            let pdfName = 'Listado Mesa de Combustible';
+            source.items.forEach(element => {
+                var temp = [
+                    element.pers_cedula,
+                    element.pers_nombres,
+                    element.pers_apellidos,
+                    element.mca_nombre,
+                    element.mod_nombre,  
+                    element.vehi_placa,
+                    element.conp_lts, 
+                ];
+                rows.push(temp);
+            });
+            var doc = new jsPDF('landscape');
+            const fecha = new Date();
+            doc.setFontSize(13);
+            doc.text( 20, 10, 'Mesa de Combustible','left') ;    
+            doc.text( 280, 10, 'Fecha: '+fecha.toLocaleDateString(),'right') ;          
+            doc.text( 20, 15, 'Táchira','left') ;
+            doc.setFontSize(13);
+            doc.text( 150, 20, 'Programación ' + institucion,'center') ;
+            doc.setLineWidth(5);
+            doc.autoTable(columnHeader, rows, { startY: 25 });
+            doc.save(pdfName + '.pdf');
+    }
   },
 };
 </script>

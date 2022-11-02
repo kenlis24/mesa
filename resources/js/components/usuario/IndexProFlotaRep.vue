@@ -171,11 +171,15 @@ export default {
                 rows.push(temp);
             });
             var doc = new jsPDF('landscape');
-            
+            const fecha2 = new Date();
+             doc.setFontSize(13);
+            doc.text( 20, 10, 'Mesa de Combustible','left') ;    
+            doc.text( 280, 10, 'Fecha: '+fecha2.toLocaleDateString(),'right') ;          
+            doc.text( 20, 15, 'Táchira','left') ;
             doc.setFontSize(13);
-            doc.text( 150, 10, 'Fecha de Programación ' + fecha,'center') ;
+            doc.text( 150, 20, 'Fecha de Programación ' + fecha,'center') ;
             doc.setLineWidth(5);
-            doc.autoTable(columnHeader, rows, { startY: 15 });
+            doc.autoTable(columnHeader, rows, { startY: 25 });
             doc.save(pdfName + '.pdf');
         }
   },
