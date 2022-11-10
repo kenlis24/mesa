@@ -39,7 +39,7 @@
             <v-text-field
               type="datetime-local"
               v-model="dateFormatted"
-              label="Fcha"
+              label="Fecha"
               :rules="fechaRules"
               required
             ></v-text-field>
@@ -145,7 +145,7 @@ export default {
       estaserRules: [(v) => !!v || "Seleccione una estación"],
       fechaRules: [
         (v) => !!v || "Seleccione una fecha",
-        (v) => v.length > 0 || "Seleccione una fecha2",
+        (v) => v.length > 0 || "Seleccione una fecha",
       ],
       tipoRules: [(v) => !!v || "Seleccione un combustible"],
       vehiRules: [(v) => !!v || "Seleccione un tipo de vehículo"],

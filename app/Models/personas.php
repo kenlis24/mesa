@@ -9,6 +9,8 @@ class personas extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['pers_cedula', 'pers_nombres', 'pers_apellidos', 'pers_fec_nac', 'pers_sexo', 'pers_telf_cel', 'pers_correo', 'pers_estado', 'pers_observacion'];
+
     public function vehiculos()
     {
         return $this->hasMany(vehiculos::class, 'vehi_pers_id');

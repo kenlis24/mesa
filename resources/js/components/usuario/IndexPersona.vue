@@ -2,16 +2,27 @@
   <v-container class="fill-height" fluid v-if="$store.state.auth">
     <v-row align="center" justify="center">
       <v-card class="mt-12 mx-auto">
+        <div class="text-center text-h6">Información personas</div>
         <div class="text-right">
           <v-btn v-if="create" outlined color="indigo" @click="registrar()">
             <v-icon dense>mdi-plus</v-icon>
             Registrar Persona
           </v-btn>
         </div>
+        <v-card-title>
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Buscar"
+            single-line
+            hide-details
+          ></v-text-field>
+        </v-card-title>
         <v-data-table
           dense
           :headers="headers"
           :items="datos"
+          :search="search"
           item-key="name"
           class="elevation-1"
         >
@@ -21,7 +32,7 @@
               <td>{{ row.item.pers_cedula }}</td>
               <td>{{ row.item.pers_nombres }}</td>
               <td>{{ row.item.pers_apellidos }}</td>
-              <td>{{ row.item.pers_telefono }}</td>
+              <td>{{ row.item.pers_telf_cel }}</td>
               <td>{{ row.item.pers_correo }}</td>
               <td>
                 <v-tooltip v-if="row.item.editar" top>
@@ -79,6 +90,7 @@ export default {
     mensaje: "",
     id: "",
     color: "",
+    search: "",
     datos: [],
     datos2: [],
     create: false,
@@ -92,7 +104,7 @@ export default {
       { text: "Cédula", value: "pers_cedula" },
       { text: "Nombres", value: "pers_nombres" },
       { text: "Apellidos", value: "pers_apellidos" },
-      { text: "Teléfono", value: "pers_telefono" },
+      { text: "Celular", value: "pers_telf_cel" },
       { text: "Correo", value: "pers_correo" },
       { text: "Acciones", value: "" },
     ],
@@ -118,7 +130,7 @@ export default {
             pers_cedula: pers.pers_cedula,
             pers_nombres: pers.pers_nombres,
             pers_apellidos: pers.pers_apellidos,
-            pers_telefono: pers.pers_telefono,
+            pers_telf_cel: pers.pers_telf_cel,
             pers_correo: pers.pers_correo,
             pers_estado: pers.pers_estado,
             editar: edit ? true : false,
@@ -175,7 +187,7 @@ export default {
               pers_cedula: pers.pers_cedula,
               pers_nombres: pers.pers_nombres,
               pers_apellidos: pers.pers_apellidos,
-              pers_telefono: pers.pers_telefono,
+              pers_telf_cel: pers.pers_telf_cel,
               pers_correo: pers.pers_correo,
               pers_estado: pers.pers_estado,
               editar: edit ? true : false,

@@ -18,7 +18,7 @@ class CreatePersonasTable extends Migration
             $table->string('pers_cedula', 10)->unique();
             $table->string('pers_nombres', 100);
             $table->string('pers_apellidos', 100);
-            $table->string('pers_telefono', 14)->nullable();
+            $table->string('pers_telf_cel', 14)->nullable();
             $table->string('pers_correo', 100)->nullable();
             $table->string('pers_estado', 1);
             $table->string('pers_observacion', 250)->nullable();

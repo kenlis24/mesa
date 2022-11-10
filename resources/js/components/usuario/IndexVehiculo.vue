@@ -245,7 +245,7 @@ export default {
         vehi_pers_id: this.persona.id,
         vehi_mod_id: this.modelo.id,
       };
-      alert(JSON.stringify(envio));
+      //alert(JSON.stringify(envio));
       /*var tempo = this.datos.find((element) => element.flo_id == id);
       var litrostemp = this.litros;
       litrostemp += tempo.conp_lts;

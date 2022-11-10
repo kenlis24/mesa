@@ -39,19 +39,19 @@ class ProgramacionController extends Controller
             $progra = DB::select("select prog.id as id_prog ,prog.*, insti.id ,insti.id as insti_id ,insti.inst_nombre as institu,insti.inst_estado, esta.inst_nombre as estacion,esta.inst_estado as esta_estado 
             from programaciones as prog,
             ( select * from instituciones where inst_tipo = '1' $sql ) as insti,
-            (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id and prog_condicion in(1,2)");
+            (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id and prog_condicion in(1,2) ORDER BY prog.prog_fecha DESC");
         } else {
             if ($flo == null && $despa == null) {
                 $progra = DB::select("select prog.*, insti.inst_nombre as institu,insti.inst_estado, esta.inst_nombre as estacion,esta.inst_estado as esta_estado 
                 from programaciones as prog,
                 ( select * from instituciones where inst_tipo = '1' $sql) as insti,
-                (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id ");
+                (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id ORDER BY prog.prog_fecha DESC");
             } else {
                 $DateAndTime = date('Y-m-d h:i:s', time());
                 $progra = DB::select("select prog.id as id_prog ,prog.*, insti.id ,insti.id as insti_id ,insti.inst_nombre as institu,insti.inst_estado, esta.inst_nombre as estacion,esta.inst_estado as esta_estado 
                 from programaciones as prog,
                 ( select * from instituciones where inst_tipo = '1' $sql) as insti,
-                (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id and date(prog_fecha)<='$DateAndTime' and prog_condicion in(3)");
+                (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id and date(prog_fecha)<='$DateAndTime' and prog_condicion in(3) ORDER BY prog.prog_fecha DESC");
             }
         }
 

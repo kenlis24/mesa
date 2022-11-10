@@ -48,7 +48,9 @@ Route::get('/programa/{despa?}/{comb?}/comb', 'App\Http\Controllers\Usuario\Prog
 Route::put('/programa/{progra}/{acti?}', 'App\Http\Controllers\Usuario\ProgramacionController@update')->middleware(['permission:program.user.desactivar']);
 
 Route::get('/persona', 'App\Http\Controllers\Usuario\PersonaController@index')->middleware(['permission:perso.user.index']);
-Route::put('/persona/{id}/{acti?}', 'App\Http\Controllers\Usuario\PersonaController@update')->middleware(['permission:perso.user.desactivar']);
+Route::post('/personaregist', 'App\Http\Controllers\Usuario\PersonaController@store')->middleware(['permission:perso.user.create']);
+Route::get('/personabyid/{id}', 'App\Http\Controllers\Usuario\PersonaController@consultar')->middleware(['permission:perso.user.edit']);
+Route::put('/persona/{id}/{acti?}', 'App\Http\Controllers\Usuario\PersonaController@update')->middleware(['permission:perso.user.desactivar|permission:perso.user.edit']);
 
 Route::get('/persoymodel', 'App\Http\Controllers\Usuario\VehiculoController@persoymodel')->middleware(['permission:vehi.user.index']);
 

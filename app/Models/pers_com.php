@@ -9,6 +9,8 @@ class pers_com extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['pcom_fecha_act', 'pcom_telf_res', 'pcom_calle', 'pcom_casa', 'pcom_fecha_inac', 'pcom_estado', 'pcom_com_id', 'pcom_pers_id', 'pcom_car_id'];
+
     public function comunidad()
     {
         return $this->belongsTo(comunidades::class,  'pcom_com_id');
