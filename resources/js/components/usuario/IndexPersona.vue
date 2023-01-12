@@ -47,6 +47,30 @@
                   </template>
                   <span>Editar</span>
                 </v-tooltip>
+                <v-tooltip v-if="row.item.asigauto" top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="asigvehi(row.item.id)"
+                      small
+                      >mdi-car-arrow-right</v-icon
+                    >
+                  </template>
+                  <span>Asignar Vehículo</span>
+                </v-tooltip>
+                <v-tooltip v-if="row.item.asiginsti" top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="asiginsti(row.item.ido)"
+                      small
+                      >mdi-office-building-outline</v-icon
+                    >
+                  </template>
+                  <span>Asignar Instituto</span>
+                </v-tooltip>
                 <v-tooltip v-if="row.item.desact" top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon
@@ -113,7 +137,7 @@ export default {
     axios
       .get("./persona")
       .then((res) => {
-        this.datos2 = res.data.roles;
+        //this.datos2 = res.data.roles;
         this.datos = res.data.personas.map((pers) => {
           const edit = res.data.permisosuser.find(
             (el) => el.name === "perso.user.edit"
@@ -123,6 +147,12 @@ export default {
           );
           const crear = res.data.permisosuser.find(
             (el) => el.name === "perso.user.create"
+          );
+          const asigauto = res.data.permisosuser.find(
+            (el) => el.name === "perso.user.asigauto"
+          );
+          const asiginsti = res.data.permisosuser.find(
+            (el) => el.name === "perso.user.asiginti"
           );
           if (crear) this.create = true;
           return {
@@ -135,6 +165,8 @@ export default {
             pers_estado: pers.pers_estado,
             editar: edit ? true : false,
             desact: desactivar ? true : false,
+            asigauto: asigauto ? true : false,
+            asiginsti: asiginsti ? true : false,
           };
         });
       })
@@ -147,6 +179,12 @@ export default {
   methods: {
     editar(id) {
       this.$router.push({ name: "personaedit", params: { id: id } });
+    },
+    asigvehi(id) {
+      this.$router.push({ name: "asigvehi", params: { id: id } });
+    },
+    asiginsti(id) {
+      this.$router.push({ name: "persoinsti", params: { id: id } });
     },
     desactivar(id, acti) {
       axios
@@ -170,7 +208,7 @@ export default {
       axios
         .get("./persona")
         .then((res) => {
-          this.datos2 = res.data.roles;
+          //this.datos2 = res.data.roles;
           this.datos = res.data.personas.map((pers) => {
             const edit = res.data.permisosuser.find(
               (el) => el.name === "perso.user.edit"
@@ -180,6 +218,12 @@ export default {
             );
             const crear = res.data.permisosuser.find(
               (el) => el.name === "perso.user.create"
+            );
+            const asigauto = res.data.permisosuser.find(
+              (el) => el.name === "perso.user.asigauto"
+            );
+            const asiginsti = res.data.permisosuser.find(
+              (el) => el.name === "perso.user.asiginti"
             );
             if (crear) this.create = true;
             return {
@@ -192,6 +236,8 @@ export default {
               pers_estado: pers.pers_estado,
               editar: edit ? true : false,
               desact: desactivar ? true : false,
+              asigauto: asigauto ? true : false,
+              asiginsti: asiginsti ? true : false,
             };
           });
         })

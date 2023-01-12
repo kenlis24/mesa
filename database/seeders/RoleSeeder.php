@@ -61,5 +61,7 @@ class RoleSeeder extends Seeder
         $permission = Permission::create(['name' => 'perso.user.create', 'description' => 'Permite crear una persona'])->syncRoles([$role1]);
         $permission = Permission::create(['name' => 'perso.user.edit', 'description' => 'Permite editar una persona'])->syncRoles([$role1]);
         $permission = Permission::create(['name' => 'perso.user.desactivar', 'description' => 'Permite desactivar una persona'])->syncRoles([$role1]);
+        $permission = Permission::create(['name' => 'perso.user.asigauto', 'description' => 'Permite asignar un vehiculo a una persona'])->syncRoles([$role1]);
+        $permission = Permission::create(['name' => 'perso.user.asiginti', 'description' => 'Permite asignar una institución a una persona'])->syncRoles([$role1]);
     }
 }

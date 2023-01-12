@@ -16,14 +16,7 @@ class TemporalSeeder extends Seeder
      */
     public function run()
     {
-        $permission = Permission::create(['name' => 'vehi.user.index', 'description' => 'Ver listado de vehiculos'])->syncRoles(['Admin']);
-        $permission = Permission::create(['name' => 'vehi.user.create', 'description' => 'Permite crear un vehiculo'])->syncRoles(['Admin']);
-        $permission = Permission::create(['name' => 'vehi.user.edit', 'description' => 'Permite editar un vehiculo'])->syncRoles(['Admin']);
-        $permission = Permission::create(['name' => 'vehi.user.desactivar', 'description' => 'Permite desactivar un vehiculo'])->syncRoles(['Admin']);
-
-        $permission = Permission::create(['name' => 'perso.user.index', 'description' => 'Ver listado de personas'])->syncRoles(['Admin']);
-        $permission = Permission::create(['name' => 'perso.user.create', 'description' => 'Permite crear una persona'])->syncRoles(['Admin']);
-        $permission = Permission::create(['name' => 'perso.user.edit', 'description' => 'Permite editar una persona'])->syncRoles(['Admin']);
-        $permission = Permission::create(['name' => 'perso.user.desactivar', 'description' => 'Permite desactivar una persona'])->syncRoles(['Admin']);
+        $permission = Permission::create(['name' => 'perso.user.asigauto', 'description' => 'Permite asignar un vehiculo a una persona'])->syncRoles(['Admin']);
+        $permission = Permission::create(['name' => 'perso.user.asiginti', 'description' => 'Permite asignar una institución a una persona'])->syncRoles(['Admin']);
     }
 }

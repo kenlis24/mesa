@@ -52,6 +52,14 @@ Route::post('/personaregist', 'App\Http\Controllers\Usuario\PersonaController@st
 Route::get('/personabyid/{id}', 'App\Http\Controllers\Usuario\PersonaController@consultar')->middleware(['permission:perso.user.edit']);
 Route::put('/persona/{id}/{acti?}', 'App\Http\Controllers\Usuario\PersonaController@update')->middleware(['permission:perso.user.desactivar|permission:perso.user.edit']);
 
+Route::get('/vehiculo', 'App\Http\Controllers\Usuario\VehiculoController@index')->middleware(['permission:vehi.user.index']);
+Route::put('/vehiculodesac/{id}/{acti?}', 'App\Http\Controllers\Usuario\VehiculoController@vehiculodesac')->middleware(['permission:vehi.user.desactivar']);
+Route::get('/vehixpers/{id}', 'App\Http\Controllers\Usuario\VehiculoController@consulxpers')->middleware(['permission:perso.user.asigauto']);
+Route::get('/vehiculo/{id}/edit', 'App\Http\Controllers\Usuario\VehiculoController@edit')->middleware(['permission:perso.user.edit']);
+Route::put('/vehixpers/{id}/{unico}', 'App\Http\Controllers\Usuario\VehiculoController@update')->middleware(['permission:perso.user.asigauto']);
+Route::put('/vehiupdate/{id}', 'App\Http\Controllers\Usuario\VehiculoController@vehiupdate')->middleware(['permission:perso.user.edit']);
+Route::post('/vehiregist', 'App\Http\Controllers\Usuario\VehiculoController@store')->middleware(['permission:vehi.user.create']);
+
 Route::get('/persoymodel', 'App\Http\Controllers\Usuario\VehiculoController@persoymodel')->middleware(['permission:vehi.user.index']);
 
 Route::get('/progrflota/{insti}/{prog}/{tipo}', 'App\Http\Controllers\Usuario\ProgrFlotaController@index')->middleware(['permission:proflo.user.index|despacho.user.index']);

@@ -117,9 +117,9 @@ export default {
       snackbar: false,
       mensaje: "",
       user: {},
-      correo: "",
+      correo: "admin@admin.com",
       mostrarPass: false,
-      clave: "",
+      clave: "admin123",
       correoRules: [
         (v) => !!v || "Correo es requerido",
         (v) => v.length >= 5 || "El usuario es minimo 5 caracteres",
@@ -194,10 +194,10 @@ export default {
           can: false,
         },
         {
-          title: "Asignar Vehiculo",
+          title: "Vehiculos",
           icon: "mdi-car-cog",
           url: "indexvehiculo",
-          permiso: "vehis.user.index",
+          permiso: "vehi.user.index",
           can: false,
         },
         {

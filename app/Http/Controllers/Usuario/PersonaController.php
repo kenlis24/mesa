@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\User;
 use App\Models\personas;
+use App\Models\vehiculos;
 use App\Models\pers_com;
 use App\Models\comunidades;
 use App\Models\agrupaciones;
@@ -30,11 +31,11 @@ class PersonaController extends Controller
         $user = User::find(auth()->id());
         $permisosuser = $user->getPermissionsViaRoles();
         $personas = personas::all();
-        $comunidades = comunidades::where("com_estado", "=", "A")->get();;
-        $agrupaciones = agrupaciones::where("agr_estado", "=", "A")->get();;
-        $parroquias = parroquias::where("par_estado", "=", "A")->get();;
-        $municipios = municipios::where("mun_estado", "=", "A")->get();;
-        $cargos = cargos::where("car_estado", "=", "A")->get();;
+        $comunidades = comunidades::where("com_estado", "=", "A")->get();
+        $agrupaciones = agrupaciones::where("agr_estado", "=", "A")->get();
+        $parroquias = parroquias::where("par_estado", "=", "A")->get();
+        $municipios = municipios::where("mun_estado", "=", "A")->get();
+        $cargos = cargos::where("car_estado", "=", "A")->get();
 
 
         return response()->json([
@@ -84,11 +85,11 @@ class PersonaController extends Controller
         AND municipios.mun_estado='A'
         AND pers.id='$id'";
         $persona = DB::select($sql);
-        $comunidades = comunidades::where("com_estado", "=", "A")->get();;
-        $agrupaciones = agrupaciones::where("agr_estado", "=", "A")->get();;
-        $parroquias = parroquias::where("par_estado", "=", "A")->get();;
-        $municipios = municipios::where("mun_estado", "=", "A")->get();;
-        $cargos = cargos::where("car_estado", "=", "A")->get();;
+        $comunidades = comunidades::where("com_estado", "=", "A")->get();
+        $agrupaciones = agrupaciones::where("agr_estado", "=", "A")->get();
+        $parroquias = parroquias::where("par_estado", "=", "A")->get();
+        $municipios = municipios::where("mun_estado", "=", "A")->get();
+        $cargos = cargos::where("car_estado", "=", "A")->get();
 
 
         return response()->json([

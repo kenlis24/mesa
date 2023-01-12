@@ -9,6 +9,8 @@ class vehiculos extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['vehi_placa', 'vehi_tag', 'vehi_tipo_vehi', 'vehi_tipo_comb', 'vehi_capacidad_Lts', 'vehi_estado', 'vehi_observacion', 'vehi_pers_id', 'vehi_mod_id'];
+
     public function persona()
     {
         return $this->belongsTo(personas::class,  'vehi_pers_id');

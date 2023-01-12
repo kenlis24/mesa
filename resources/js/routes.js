@@ -123,6 +123,37 @@ const routes = [
         ),
     },
     {
+        name: 'vehiculoedit',
+        path: '/vehiculoedit/:id',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/vehiculoedit' */ './components/usuario/VehiculoEdit'
+        ),
+        props: true
+    },
+    {
+        name: 'vehiregis',
+        path: '/vehiregis',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/vehiregis' */ './components/usuario/VehiRegis'
+        ),
+    },
+    {
+        name: 'asigvehi',
+        path: '/asigvehi/:id',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/asigvehi' */ './components/usuario/AsigVehi'
+        ),
+        props: true,
+    },
+    {
+        name: 'persoinsti',
+        path: '/personsti/:id',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/persoinsti' */ './components/usuario/PersoInsti'
+        ),
+        props: true,
+    },
+    {
         name: 'indexproflotarep',
         path: '/indexproflotarep/:fecha',
         component: () => import(

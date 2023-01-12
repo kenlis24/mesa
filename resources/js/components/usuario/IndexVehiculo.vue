@@ -1,228 +1,137 @@
 <template>
-  <v-container class="fill-height" fluid>
-    <v-col cols="12" sm="6" md="3">
-      <v-autocomplete
-        align="center"
-        justify="center"
-        v-model="insti"
-        :items="institems"
-        :rules="instiRules"
-        item-text="nombre"
-        item-value="id"
-        outlined
-        dense
-        chips
-        small-chips
-        label="Institución"
-        return-object
-      ></v-autocomplete>
-    </v-col>
+  <v-container class="fill-height" fluid v-if="$store.state.auth">
     <v-row align="center" justify="center">
-      <v-card class="elevation-12" v-if="$store.state.auth && registrar">
-        <v-toolbar color="primary" dark flat>
-          <v-toolbar-title>Registrar Vehículos</v-toolbar-title>
-          <v-spacer></v-spacer>
-        </v-toolbar>
-
-        <v-card-text>
-          <v-form ref="form" v-model="valido">
-            <v-autocomplete
-              v-model="persona"
-              :items="personaitems"
-              :rules="personaRules"
-              item-text="nombre"
-              item-value="id"
-              outlined
-              dense
-              chips
-              small-chips
-              label="Persona"
-              return-object
-            ></v-autocomplete>
-            <v-text-field
-              v-model="placa"
-              :rules="placaRules"
-              label="Placa"
-              required
-            ></v-text-field>
-            <v-text-field
-              v-model="tag"
-              :rules="tagRules"
-              label="Tag"
-              required
-            ></v-text-field>
-            <v-autocomplete
-              v-model="tipove"
-              :items="tipoveitems"
-              :rules="tipoveRules"
-              item-text="nombre"
-              item-value="id"
-              outlined
-              dense
-              chips
-              small-chips
-              label="Tipo de vehículo"
-              return-object
-            ></v-autocomplete>
-            <v-autocomplete
-              align="center"
-              justify="center"
-              v-model="modelo"
-              :items="modeloitems"
-              :rules="modeloRules"
-              item-text="nombre"
-              item-value="id"
-              outlined
-              dense
-              chips
-              small-chips
-              label="Modelo"
-              return-object
-            ></v-autocomplete>
-            <v-autocomplete
-              v-model="combus"
-              :items="combusitems"
-              :rules="combusRules"
-              item-text="nombre"
-              item-value="id"
-              outlined
-              dense
-              chips
-              small-chips
-              label="Tipo de combustible"
-              return-object
-            ></v-autocomplete>
-            <v-text-field
-              v-model="litros"
-              :counter="4"
-              :rules="litrosRules"
-              max="9999"
-              type="number"
-              label="Litros"
-              required
-            ></v-text-field>
-            <v-textarea
-              counter
-              label="Observación"
-              :rules="observRules"
-              v-model="observ"
-            ></v-textarea>
-          </v-form>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            v-if="registrar"
-            :disabled="!valido"
-            color="primary"
-            class="mr-4"
-            @click="asignar()"
-          >
-            Asignar
+      <v-card class="mt-12 mx-auto">
+        <div class="text-center text-h6">Información vehículos</div>
+        <div class="text-right">
+          <v-btn v-if="create" outlined color="indigo" @click="registrar()">
+            <v-icon dense>mdi-plus</v-icon>
+            Registrar Vehículo
           </v-btn>
-        </v-card-actions>
+        </div>
+        <v-card-title>
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Buscar"
+            single-line
+            hide-details
+          ></v-text-field>
+        </v-card-title>
+        <v-data-table
+          dense
+          :headers="headers"
+          :items="datos"
+          :search="search"
+          item-key="name"
+          class="elevation-1"
+        >
+          <template v-slot:item="row">
+            <tr>
+              <td>{{ row.item.id }}</td>
+              <td>{{ row.item.vehi_placa }}</td>
+              <td>{{ row.item.vehi_tag }}</td>
+              <td>{{ row.item.vehi_tipo_vehi }}</td>
+              <td>{{ row.item.mod_nombre }}</td>
+              <td>
+                <v-tooltip v-if="row.item.editar" top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="editar(row.item.id)"
+                      small
+                      >mdi-lead-pencil</v-icon
+                    >
+                  </template>
+                  <span>Editar</span>
+                </v-tooltip>
+                <v-tooltip v-if="row.item.desact" top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="desactivar(row.item.id, row.item.vehi_estado)"
+                      small
+                      :color="row.item.vehi_estado == 'A' ? 'blue' : 'red'"
+                      >mdi-cancel</v-icon
+                    >
+                  </template>
+                  <span
+                    v-text="
+                      row.item.vehi_estado == 'A' ? 'Desactivar' : 'Activar'
+                    "
+                  ></span>
+                </v-tooltip>
+              </td>
+            </tr>
+          </template>
+        </v-data-table>
+        <v-snackbar
+          :timeout="2500"
+          v-model="snackbar"
+          absolute
+          :color="color"
+          rounded="pill"
+          right
+        >
+          {{ this.mensaje }}
+        </v-snackbar>
       </v-card>
     </v-row>
-    <v-snackbar
-      bottom
-      :timeout="2500"
-      v-model="snackbar"
-      :color="color"
-      rounded="pill"
-      right
-    >
-      {{ this.mensaje }}
-    </v-snackbar>
   </v-container>
 </template>
 <script>
 export default {
-  name: "indexvehi",
-  data() {
-    return {
-      data: "",
-      registrar: false,
-      valido: false,
-      snackbar: false,
-      color: "",
-      mensaje: "",
-      institems: [],
-      insti: "",
-      instiRules: [(v) => !!v || "Seleccione una institución"],
-      personaitems: [],
-      persona: "",
-      personaRules: [(v) => !!v || "Seleccione una Persona"],
-      placa: "",
-      placaRules: [(v) => !!v || "Debe colocar una placa"],
-      tag: "",
-      tagRules: [(v) => !!v || "Debe colocar el tag"],
-      tipoveitems: [
-        { id: "1", nombre: "Automóvil" },
-        { id: "2", nombre: "Motocicletaa" },
-      ],
-      tipove: "",
-      tipoveRules: [(v) => !!v || "Seleccione un Tipo de vehíuclo"],
-      modeloitems: [],
-      modelo: "",
-      modeloRules: [(v) => !!v || "Seleccione un modelo"],
-      combusitems: [
-        { id: "1", nombre: "Gasolina" },
-        { id: "2", nombre: "Gasoil" },
-      ],
-      combus: "",
-      combusRules: [(v) => !!v || "Seleccione un Tipo de Combustible"],
-      litros: "",
-      litrosRules: [
-        (v) => !!v || "Seleccione cantidad de litros",
-        (v) => v.length > 0 || "Seleccione cantidad de litros",
-        (v) => v <= 9999 || "cantidad maxima 9999",
-        (v) => v > 0 || "cantidad de litros debe ser mayor a cero",
-      ],
-      observ: "",
-      observRules: [(v) => v.length <= 250 || "Maximo 250 caracteres"],
-    };
-  },
+  name: "indexvehiculo",
+  data: () => ({
+    snackbar: false,
+    mensaje: "",
+    id: "",
+    color: "",
+    search: "",
+    datos: [],
+    datos2: [],
+    create: false,
+    headers: [
+      {
+        text: "ID",
+        align: "start",
+        sortable: false,
+        value: "id",
+      },
+      { text: "Placa", value: "vehi_placa" },
+      { text: "Tag", value: "vehi_tag" },
+      { text: "Tipo", value: "vehi_tipo_vehi" },
+      { text: "Modelo", value: "mod_nombre" },
+      { text: "Acciones", value: "" },
+    ],
+  }),
   mounted() {
     axios
-      .get("./institu")
+      .get("./vehiculo")
       .then((res) => {
-        //this.data = res.data;
-        const crear = res.data.permisosuser.find(
-          (el) => el.name === "vehi.user.create"
-        );
-        if (crear) this.registrar = true;
-        this.institems = res.data.insti.map((inst) => {
+        //this.datos2 = res.data.roles;
+        this.datos = res.data.vehiculos.map((vehi) => {
+          const edit = res.data.permisosuser.find(
+            (el) => el.name === "vehi.user.edit"
+          );
+          const desactivar = res.data.permisosuser.find(
+            (el) => el.name === "vehi.user.desactivar"
+          );
+          const crear = res.data.permisosuser.find(
+            (el) => el.name === "vehi.user.create"
+          );
+          if (crear) this.create = true;
           return {
-            id: inst.id,
-            nombre: inst.inst_nombre,
-          };
-        });
-        //window.location.reload();
-      })
-      .catch((er) => {
-        this.color = "red accent-2";
-        this.mensaje = er;
-        this.snackbar = true;
-      });
-    axios
-      .get("./persoymodel")
-      .then((res) => {
-        //this.data = res.data;
-        this.modeloitems = res.data.modelos.map((mode) => {
-          return {
-            id: mode.id,
-            nombre: mode.mod_nombre,
-          };
-        });
-        this.personaitems = res.data.personas.map((pers) => {
-          return {
-            id: pers.id,
-            nombre:
-              pers.pers_nombres +
-              " " +
-              pers.pers_apellidos +
-              "-" +
-              pers.pers_cedula,
+            id: vehi.id,
+            vehi_placa: vehi.vehi_placa,
+            vehi_tag: vehi.vehi_tag,
+            vehi_tipo_vehi: vehi.vehi_tipo_vehi,
+            mod_nombre: vehi.mod_nombre,
+            vehi_estado: vehi.vehi_estado,
+            editar: edit ? true : false,
+            desact: desactivar ? true : false,
           };
         });
       })
@@ -233,65 +142,58 @@ export default {
       });
   },
   methods: {
-    asignar() {
-      const envio = {
-        vehi_placa: this.placa,
-        vehi_tag: this.tag,
-        vehi_tipo_vehi: this.tipove.id,
-        vehi_tipo_comb: this.combus.id,
-        vehi_capacidad_Lts: this.litros,
-        vehi_estado: "A",
-        vehi_observacion: this.observ,
-        vehi_pers_id: this.persona.id,
-        vehi_mod_id: this.modelo.id,
-      };
-      //alert(JSON.stringify(envio));
-      /*var tempo = this.datos.find((element) => element.flo_id == id);
-      var litrostemp = this.litros;
-      litrostemp += tempo.conp_lts;
-      if (litrostemp <= this.litrosasig) {
-        this.litros += tempo.conp_lts;
-        this.datosasig.push(this.datos.find((element) => element.flo_id == id));
-        this.datos = this.datos.filter((item) => item.flo_id !== id);
-      } else {
-        this.color = "red accent-2";
-        this.mensaje =
-          "No puedes pasar de los litros asignados a la programación";
-        this.snackbar = true;
-      }*/
+    editar(id) {
+      this.$router.push({ name: "vehiculoedit", params: { id: id } });
     },
-    validar() {
-      var datos = {
-        prog_fecha: this.dateFormatted,
-        prog_tipo_comb: this.tipo.id,
-        prog_lts: this.litros,
-        prog_condicion: this.condi,
-        prog_tipo_vehi: this.tipovehi.id,
-        prog_observacion: this.observ,
-        prog_estado: "A",
-        prog_inst_id: this.insti.id.toString(),
-        prog_inst_id_es: this.estaser.id,
-      };
-
-      //alert(JSON.stringify(datos));
+    desactivar(id, acti) {
       axios
-        .post("./programaregist", datos)
+        .put(`./vehiculodesac/${id}/${acti}`)
         .then((res) => {
           this.color = "success";
           this.mensaje = res.data.mensaje;
           this.snackbar = true;
-          this.dateFormatted = "";
-          this.tipo = "";
-          this.litros = "";
-          this.observ = "";
-          this.insti = "";
-          this.estaser = "";
-          this.$refs.form.resetValidation();
-          //window.location.reload();
+          this.cargar();
         })
         .catch((er) => {
-          this.mensaje = er;
           this.color = "red accent-2";
+          this.mensaje = er;
+          this.snackbar = true;
+        });
+    },
+    registrar() {
+      this.$router.push({ name: "vehiregis" });
+    },
+    cargar() {
+      axios
+        .get("./vehiculo")
+        .then((res) => {
+          //this.datos2 = res.data.roles;
+          this.datos = res.data.vehiculos.map((vehi) => {
+            const edit = res.data.permisosuser.find(
+              (el) => el.name === "vehi.user.edit"
+            );
+            const desactivar = res.data.permisosuser.find(
+              (el) => el.name === "vehi.user.desactivar"
+            );
+            const crear = res.data.permisosuser.find(
+              (el) => el.name === "vehi.user.create"
+            );
+            if (crear) this.create = true;
+            return {
+              id: vehi.id,
+              vehi_placa: vehi.vehi_placa,
+              vehi_tag: vehi.vehi_tag,
+              vehi_tipo_vehi: vehi.vehi_tipo_vehi,
+              mod_nombre: vehi.mod_nombre,
+              vehi_estado: vehi.vehi_estado,
+              editar: edit ? true : false,
+              desact: desactivar ? true : false,
+            };
+          });
+        })
+        .catch((er) => {
+          this.color = "red accent-2";
+          this.mensaje = er;
           this.snackbar = true;
         });
     },
