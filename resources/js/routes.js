@@ -213,10 +213,25 @@ const routes = [
         ),
     },
     {
+        name: 'indexdespaxesta',
+        path: '/indexdespaxesta',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/indexdespaxesta' */ './components/usuario/IndexDespaxEsta'
+        ),
+    },
+    {
         name: 'despasig',
         path: '/despasig/:prog/:insti/:tipo',
         component: () => import(
             /* webpackChunkName: 'js/compiled/despasig' */ './components/usuario/DespAsig'
+        ),
+        props: true,
+    },
+    {
+        name: 'despasigxesta',
+        path: '/despasigxesta/:fecha/:insti',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/despasigxesta' */ './components/usuario/DespAsigxEsta'
         ),
         props: true,
     },

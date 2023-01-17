@@ -64,6 +64,26 @@ class ProgramacionController extends Controller
             'progra' => $progra,
         ], 200);
     }
+    public function programaxesta()
+    {
+        $user = User::find(auth()->id());
+        $permisosuser = $user->getPermissionsViaRoles();
+        $roles = $user->getRoleNames()->toArray();
+        $roles_insti = conf_rol_inst::where("rins_estado", "=", 'A')->pluck('rins_nombre');
+        $DateAndTime = date('Y-m-d h:i:s', time());
+        $progra = DB::select("select esta.id as esta_id, DATE_FORMAT(prog.prog_fecha, '%Y-%m-%d') as prog_fecha, esta.inst_nombre as estacion,esta.inst_estado as esta_estado 
+                from programaciones as prog,
+                ( select * from instituciones where inst_tipo = '1') as insti,
+                (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id and date(prog_fecha)<='$DateAndTime' and prog_condicion in(3)
+                GROUP BY estacion,DATE_FORMAT(prog.prog_fecha, '%Y-%m-%d') ORDER BY prog_fecha DESC");
+        $roles = Role::all();
+        //$progra = programaciones::all()->institucion;
+        return response()->json([
+            'roles' => $roles,
+            'permisosuser' => $permisosuser,
+            'progra' => $progra,
+        ], 200);
+    }
 
     /**
      * Show the form for creating a new resource.

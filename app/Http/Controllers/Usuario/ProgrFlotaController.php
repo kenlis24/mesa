@@ -106,6 +106,62 @@ class ProgrFlotaController extends Controller
             'permisosuser' => $permisosuser
         ], 200);
     }
+    public function progflotxesta($fecha, $insti)
+    {
+        $progflot = DB::select("select * FROM instituciones 
+        where id = '$insti' 
+        and inst_tipo = '2'");
+
+        $progflotactiva = DB::select("select instituciones.id,flotas.id as flo_id, pflo_flot_id, inst_nombre, 
+                    pers_cedula, pers_nombres, 
+                    pers_apellidos, mca_nombre, 
+                    mod_nombre, vehi_placa,
+                    pflo_litros_paga,pflo_litros_desp,
+                    conp_lts,pflo_prog_id 
+                from instituciones, 
+                    trabajadores, 
+                    flotas, 
+                    personas,
+                    vehiculos, 
+                    modelo_vehi, 
+                    marca_vehi,
+                    conf_prog,
+                    programaciones,
+                    progr_flotas
+                where 
+                inst_estado = 'A'
+                and   prog_inst_id = instituciones.id
+                and   DATE_FORMAT(prog_fecha, '%Y-%m-%d') = '$fecha'
+                and   trab_inst_id = instituciones.id
+                and   trab_estado = 'A'
+                and   personas.id = trab_pers_id
+                and   pers_estado = 'A'
+                and   flot_trab_id = trabajadores.id
+                and   flot_estado = 'A'
+                and   pflo_condicion ='A'
+                and   pflo_prog_id = programaciones.id
+                and   pflo_flot_id = flotas.id
+                and   vehiculos.id = flot_vehi_id
+                and   vehi_estado = 'A'
+                and   vehi_tipo_vehi = prog_tipo_vehi 
+                and   vehi_mod_id = modelo_vehi.id
+                and   mod_mca_id = marca_vehi.id
+                and   conp_tipo_vehi = vehi_tipo_vehi 
+                order by instituciones.id, pers_cedula, vehi_placa;");
+        $user = User::find(auth()->id());
+        $permisosuser = $user->getPermissionsViaRoles();
+
+        return response()->json([
+            'progflot' => $progflot,
+            'progflotactiva' => $progflotactiva,
+            'permisosuser' => $permisosuser
+        ], 200);
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
 
     public function reporte(Request $request)
     {
@@ -170,7 +226,7 @@ class ProgrFlotaController extends Controller
             'permisosuser' => $permisosuser
         ], 200);
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -256,6 +312,30 @@ class ProgrFlotaController extends Controller
                 $men = "Se actualizo el despacho de litros a la flota";
                 $codigo = "200";
             }
+        }
+        return response()->json([
+            'mensaje' => $men,
+        ], $codigo);
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storexesta(Request $request)
+    {
+        $datos = $request->post('datos');
+        foreach ($datos as $dat) {
+            $prog_flot = progr_flotas::where("pflo_prog_id", "=", $dat['pflo_prog_id'])
+                ->where("pflo_flot_id", "=", $dat['flo_id'])->get();
+            $upd = progr_flotas::find($prog_flot[0]->id);
+            $upd->pflo_litros_paga = $dat['litros_paga'];
+            $upd->pflo_litros_desp = $dat['litros_desp'];
+            $upd->pflo_observacion = $dat['obs'];
+            $upd->save();
+            $men = "Se actualizo el despacho de litros a la flota";
+            $codigo = "200";
         }
         return response()->json([
             'mensaje' => $men,

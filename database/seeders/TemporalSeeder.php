@@ -16,7 +16,7 @@ class TemporalSeeder extends Seeder
      */
     public function run()
     {
-        $permission = Permission::create(['name' => 'perso.user.asigauto', 'description' => 'Permite asignar un vehiculo a una persona'])->syncRoles(['Admin']);
-        $permission = Permission::create(['name' => 'perso.user.asiginti', 'description' => 'Permite asignar una institución a una persona'])->syncRoles(['Admin']);
+        $permission = Permission::create(['name' => 'despaxesta.user.index', 'description' => 'Ver listado programacion por estación de servicio para despacho'])->syncRoles(['Admin']);
+        $permission = Permission::create(['name' => 'despaxesta.user.edit', 'description' => 'Editar el despacho por estación al usuario'])->syncRoles(['Admin']);
     }
 }

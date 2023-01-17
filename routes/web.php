@@ -45,6 +45,7 @@ Route::post('/programaregist', 'App\Http\Controllers\Usuario\ProgramacionControl
 Route::get('/programa/{flo?}/', 'App\Http\Controllers\Usuario\ProgramacionController@index')->middleware(['permission:program.user.edit|proflo.user.index']);
 Route::get('/programa/{id}/edit', 'App\Http\Controllers\Usuario\ProgramacionController@edit')->middleware(['permission:program.user.edit|proflo.user.desactivar']);
 Route::get('/programa/{despa?}/{comb?}/comb', 'App\Http\Controllers\Usuario\ProgramacionController@index')->middleware(['permission:despacho.user.index']);
+Route::get('/programaxesta', 'App\Http\Controllers\Usuario\ProgramacionController@programaxesta')->middleware(['permission:despaxesta.user.index']);
 Route::put('/programa/{progra}/{acti?}', 'App\Http\Controllers\Usuario\ProgramacionController@update')->middleware(['permission:program.user.desactivar']);
 
 Route::get('/persona', 'App\Http\Controllers\Usuario\PersonaController@index')->middleware(['permission:perso.user.index']);
@@ -63,7 +64,9 @@ Route::post('/vehiregist', 'App\Http\Controllers\Usuario\VehiculoController@stor
 Route::get('/persoymodel', 'App\Http\Controllers\Usuario\VehiculoController@persoymodel')->middleware(['permission:vehi.user.index']);
 
 Route::get('/progrflota/{insti}/{prog}/{tipo}', 'App\Http\Controllers\Usuario\ProgrFlotaController@index')->middleware(['permission:proflo.user.index|despacho.user.index']);
+Route::get('/progrflotaxesta/{fecha}/{insti}', 'App\Http\Controllers\Usuario\ProgrFlotaController@progflotxesta')->middleware(['permission:despaxesta.user.edit']);
 Route::post('/progrflotaregist', 'App\Http\Controllers\Usuario\ProgrFlotaController@store')->middleware(['permission:proflo.user.desactivar|despacho.user.edit']);
+Route::post('/progrflotaregistxesta', 'App\Http\Controllers\Usuario\ProgrFlotaController@storexesta')->middleware(['permission:despaxesta.user.edit']);
 //Route::delete('/programa/{id}', 'App\Http\Controllers\Usuario\ProgrFlotaController@destroy')->middleware(['permission:proflo.user.destroy']);
 //Route::get('/progrflota/{flo?}/', 'App\Http\Controllers\Usuario\ProgrFlotaController@index')->middleware(['permission:proflo.user.edit']);
 //Route::get('/progrflota/{id}/edit', 'App\Http\Controllers\Usuario\ProgrFlotaController@edit')->middleware(['permission:proflo.user.edit']);
