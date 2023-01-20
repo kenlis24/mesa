@@ -94,6 +94,28 @@ const routes = [
         props: true
     },
     {
+        name: 'indextrabajador',
+        path: '/indextrabajador',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/indextrabajador' */ './components/usuario/IndexTrabajador'
+        ),
+    },
+    {
+        name: 'trabajadorregist',
+        path: '/trabajadorregist',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/trabajadorregist' */ './components/usuario/TrabajadorRegist'
+        ),
+    },
+    {
+        name: 'trabajadoredit',
+        path: '/trabajadoredit/:id',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/trabajadoredit' */ './components/usuario/TrabajadorEdit'
+        ),
+        props: true
+    },
+    {
         name: 'indexpersona',
         path: '/indexpersona',
         component: () => import(

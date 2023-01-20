@@ -3,73 +3,52 @@
     <v-row align="center" justify="center">
       <v-card class="elevation-12" v-if="$store.state.auth && registrar">
         <v-toolbar color="primary" dark flat>
-          <v-toolbar-title>Registrar Vehículos</v-toolbar-title>
+          <v-toolbar-title>Registrar Trabajador</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-toolbar>
         <v-card-text>
           <v-form ref="form" v-model="valido">
-            <v-text-field
-              v-model="placa"
-              :rules="placaRules"
-              label="Placa"
-              required
-            ></v-text-field>
-            <v-text-field
-              v-model="tag"
-              :rules="tagRules"
-              label="Tag"
-              required
-            ></v-text-field>
             <v-autocomplete
-              v-model="tipove"
-              :items="tipoveitems"
-              :rules="tipoveRules"
+              v-model="tipotrab"
+              :items="tipotrabitems"
+              :rules="tipotrabRules"
               item-text="nombre"
               item-value="id"
               outlined
               dense
               chips
               small-chips
-              label="Tipo de vehículo"
+              label="Tipo de trabajdor"
               return-object
             ></v-autocomplete>
             <v-autocomplete
               align="center"
               justify="center"
-              v-model="modelo"
-              :items="modeloitems"
-              :rules="modeloRules"
+              v-model="insti"
+              :items="instiitems"
+              :rules="instiRules"
               item-text="nombre"
               item-value="id"
               outlined
               dense
               chips
               small-chips
-              label="Modelo"
+              label="Seleccione la institución"
               return-object
             ></v-autocomplete>
             <v-autocomplete
-              v-model="combus"
-              :items="combusitems"
-              :rules="combusRules"
+              v-model="perso"
+              :items="persoitems"
+              :rules="persoRules"
               item-text="nombre"
               item-value="id"
               outlined
               dense
               chips
               small-chips
-              label="Tipo de combustible"
+              label="Seleccione al personal"
               return-object
             ></v-autocomplete>
-            <v-text-field
-              v-model="litros"
-              :counter="4"
-              :rules="litrosRules"
-              max="9999"
-              type="number"
-              label="Litros"
-              required
-            ></v-text-field>
             <v-textarea
               counter
               label="Observación"
@@ -106,7 +85,7 @@
 </template>
 <script>
 export default {
-  name: "vehiregis",
+  name: "trabajadorregist",
   data() {
     return {
       data: "",
@@ -115,49 +94,47 @@ export default {
       snackbar: false,
       color: "",
       mensaje: "",
-      placa: "",
-      placaRules: [(v) => !!v || "Debe colocar una placa"],
-      tag: "",
-      tagRules: [(v) => !!v || "Debe colocar el tag"],
-      tipoveitems: [
-        { id: "1", nombre: "Automóvil" },
-        { id: "2", nombre: "Motocicleta" },
+      tipotrab: "",
+      tipotrabitems: [
+        { id: "1", nombre: "Empleado" },
+        { id: "2", nombre: "Directivo" },
+        { id: "3", nombre: "Enlace" },
       ],
-      tipove: "",
-      tipoveRules: [(v) => !!v || "Seleccione un Tipo de vehíuclo"],
-      modeloitems: [],
-      modelo: "",
-      modeloRules: [(v) => !!v || "Seleccione un modelo"],
-      combusitems: [
-        { id: "1", nombre: "Gasolina" },
-        { id: "2", nombre: "Gasoil" },
-      ],
-      combus: "",
-      combusRules: [(v) => !!v || "Seleccione un Tipo de Combustible"],
-      litros: "",
-      litrosRules: [
-        (v) => !!v || "Seleccione cantidad de litros",
-        (v) => v.length > 0 || "Seleccione cantidad de litros",
-        (v) => v <= 9999 || "cantidad maxima 9999",
-        (v) => v > 0 || "cantidad de litros debe ser mayor a cero",
-      ],
+      tipotrabRules: [(v) => !!v || "Debe el tipo de trabajador"],
+      insti: "",
+      instiRules: [(v) => !!v || "Seleccione una institución"],
+      instiitems: [],
+      perso: "",
+      persoRules: [(v) => !!v || "Seleccione una institución"],
+      persoitems: [],
       observ: "",
       observRules: [(v) => v.length <= 250 || "Maximo 250 caracteres"],
     };
   },
   mounted() {
     axios
-      .get("./persoymodel")
+      .get("./trabajador")
       .then((res) => {
         //this.data = res.data;
         const crear = res.data.permisosuser.find(
-          (el) => el.name === "vehi.user.create"
+          (el) => el.name === "trab.user.create"
         );
         if (crear) this.registrar = true;
-        this.modeloitems = res.data.modelos.map((mode) => {
+        this.instiitems = res.data.instituciones.map((insti) => {
           return {
-            id: mode.id,
-            nombre: mode.mod_nombre,
+            id: insti.id,
+            nombre: insti.inst_nombre,
+          };
+        });
+        this.persoitems = res.data.personas.map((pers) => {
+          return {
+            id: pers.id,
+            nombre:
+              pers.pers_cedula +
+              " " +
+              pers.pers_nombres +
+              " " +
+              pers.pers_apellidos,
           };
         });
       })
@@ -170,31 +147,23 @@ export default {
   methods: {
     guardar() {
       const envio = {
-        vehi_placa: this.placa.toUpperCase(),
-        vehi_tag: this.tag,
-        vehi_tipo_vehi: this.tipove.id,
-        vehi_tipo_comb: this.combus.id,
-        vehi_capacidad_Lts: this.litros,
-        vehi_estado: "A",
-        vehi_observacion: this.observ,
-        vehi_mod_id: this.modelo.id,
-        vehi_pers_id: "1",
+        trab_tipo_trabajador: this.tipotrab.id,
+        trab_estado: "A",
+        trab_observacion: this.observ,
+        trab_inst_id: this.insti.id,
+        trab_pers_id: this.perso.id,
       };
       //alert(JSON.stringify(datos));
       axios
-        .post("./vehiregist", envio)
+        .post("./trabregist", envio)
         .then((res) => {
           this.color = "success";
           this.mensaje = res.data.mensaje;
           this.snackbar = true;
-          this.placa = "";
-          this.tag = "";
-          this.tipove = "";
-          this.modelo = "";
-          this.combus = "";
-          this.litros = "";
+          this.tipotrab = "";
           this.observ = "";
-
+          this.insti = "";
+          this.perso = "";
           this.$refs.form.resetValidation();
           //window.location.reload();
         })

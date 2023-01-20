@@ -208,6 +208,13 @@ export default {
           can: false,
         },
         {
+          title: "Trabajadores",
+          icon: "mdi-account-hard-hat-outline",
+          url: "indextrabajador",
+          permiso: "trab.user.index",
+          can: false,
+        },
+        {
           title: "Personal",
           icon: "mdi-account-multiple-plus",
           url: "indexpersona",

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class trabajadores extends Model
 {
     use HasFactory;
+    protected $fillable = ['trab_tipo_trabajador', 'trab_fecha_act', 'trab_estado', 'trab_observacion', 'trab_inst_id', 'trab_pers_id'];
 
     public function institucion()
     {
