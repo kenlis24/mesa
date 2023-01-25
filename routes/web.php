@@ -56,6 +56,7 @@ Route::put('/persona/{id}/{acti?}', 'App\Http\Controllers\Usuario\PersonaControl
 Route::get('/trabajador', 'App\Http\Controllers\Usuario\TrabajadorController@index')->middleware(['permission:trab.user.index']);
 Route::put('/trabajadordesac/{id}/{acti?}', 'App\Http\Controllers\Usuario\TrabajadorController@update')->middleware(['permission:trab.user.desactivar']);
 Route::post('/trabregist', 'App\Http\Controllers\Usuario\TrabajadorController@store')->middleware(['permission:trab.user.create']);
+Route::post('/trabasinflota', 'App\Http\Controllers\Usuario\TrabajadorController@trabasinflota')->middleware(['permission:trab.user.edit']);
 Route::get('/trabajador/{id}/edit', 'App\Http\Controllers\Usuario\TrabajadorController@edit')->middleware(['permission:trab.user.edit']);
 Route::put('/trabajadorupdate/{id}', 'App\Http\Controllers\Usuario\TrabajadorController@trabupdate')->middleware(['permission:trab.user.edit']);
 

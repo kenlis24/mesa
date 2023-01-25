@@ -27,7 +27,10 @@
           class="elevation-1"
         >
           <template v-slot:item="row">
-            <tr>
+            <tr
+              :class="activo(row.item)"
+              :title="activo(row.item) != '' ? 'No tiene flota' : ''"
+            >
               <td>{{ row.item.id }}</td>
               <td>{{ row.item.trab_tipo_trabajador }}</td>
               <td>{{ row.item.pers_cedula }}</td>
@@ -46,6 +49,18 @@
                     >
                   </template>
                   <span>Editar</span>
+                </v-tooltip>
+                <v-tooltip v-if="row.item.flota" top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="asignar(row.item.id, row.item.pers_id)"
+                      small
+                      >mdi-car-arrow-right</v-icon
+                    >
+                  </template>
+                  <span>Asignar flota</span>
                 </v-tooltip>
                 <v-tooltip v-if="row.item.desact" top>
                   <template v-slot:activator="{ on, attrs }">
@@ -124,6 +139,7 @@ export default {
           const crear = res.data.permisosuser.find(
             (el) => el.name === "trab.user.create"
           );
+          const flota = res.data.transinflota.find((el) => el.id === trab.id);
           if (crear) this.create = true;
           var tipo = "";
           if (trab.trab_tipo_trabajador == 1) tipo = "Empleado";
@@ -137,7 +153,9 @@ export default {
             pers_apellidos: trab.pers_apellidos,
             inst_nombre: trab.inst_nombre,
             trab_estado: trab.trab_estado,
+            pers_id: trab.pers_id,
             editar: edit ? true : false,
+            flota: flota ? true : false,
             desact: desactivar ? true : false,
           };
         });
@@ -152,6 +170,11 @@ export default {
     editar(id) {
       this.$router.push({ name: "trabajadoredit", params: { id: id } });
     },
+    activo(valor) {
+      if (valor.flota == true) {
+        return "warning";
+      } else return "";
+    },
     desactivar(id, acti) {
       axios
         .put(`./trabajadordesac/${id}/${acti}`)
@@ -164,6 +187,25 @@ export default {
         .catch((er) => {
           this.color = "red accent-2";
           this.mensaje = er;
+          this.snackbar = true;
+        });
+    },
+    asignar(id, pers_id) {
+      var datos = {
+        id: id,
+        pers_id: pers_id,
+      };
+      axios
+        .post("./trabasinflota", datos)
+        .then((res) => {
+          this.color = "success";
+          this.mensaje = res.data.mensaje;
+          this.snackbar = true;
+          this.cargar();
+        })
+        .catch((er) => {
+          this.color = "red accent-2";
+          this.mensaje = er.response.data.mensaje;
           this.snackbar = true;
         });
     },
@@ -185,6 +227,7 @@ export default {
             const crear = res.data.permisosuser.find(
               (el) => el.name === "trab.user.create"
             );
+            const flota = res.data.transinflota.find((el) => el.id === trab.id);
             if (crear) this.create = true;
             var tipo = "";
             if (trab.trab_tipo_trabajador == 1) tipo = "Empleado";
@@ -198,7 +241,9 @@ export default {
               pers_apellidos: trab.pers_apellidos,
               inst_nombre: trab.inst_nombre,
               trab_estado: trab.trab_estado,
+              pers_id: trab.pers_id,
               editar: edit ? true : false,
+              flota: flota ? true : false,
               desact: desactivar ? true : false,
             };
           });

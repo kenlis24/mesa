@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class flotas extends Model
 {
     use HasFactory;
+    protected $fillable = ['flot_fecha_act', 'flot_estado', 'flot_trab_id', 'flot_vehi_id'];
 
     public function trabajador()
     {

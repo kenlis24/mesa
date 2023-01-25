@@ -129,6 +129,7 @@ export default {
         this.persoitems = res.data.personas.map((pers) => {
           return {
             id: pers.id,
+            id_car: pers.vehi_id,
             nombre:
               pers.pers_cedula +
               " " +
@@ -152,6 +153,7 @@ export default {
         trab_observacion: this.observ,
         trab_inst_id: this.insti.id,
         trab_pers_id: this.perso.id,
+        id_car: this.perso.id_car,
       };
       //alert(JSON.stringify(datos));
       axios
