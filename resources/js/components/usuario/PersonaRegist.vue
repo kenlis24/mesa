@@ -89,6 +89,22 @@
                 ></v-text-field>
               </v-col>
             </v-row>
+            <v-autocomplete
+              align="center"
+              justify="center"
+              v-model="insti"
+              :items="instiitems"
+              :rules="instiRules"
+              item-text="nombre"
+              item-value="id"
+              outlined
+              dense
+              chips
+              small-chips
+              label="Seleccione la institución"
+              required
+              return-object
+            ></v-autocomplete>
           </v-card-text>
           <v-card-title class="justify-center blue-grey lighten-3"
             >Datos de Contacto</v-card-title
@@ -276,6 +292,9 @@ export default {
         (v) => !!v || "Debe colocar in telefono celular",
         (v) => v > 0 || "Coloque un telefono solo numeros",
       ],
+      insti: "",
+      instiRules: [(v) => !!v || "Seleccione una institución"],
+      instiitems: [],
       municipio: "",
       municipiositems: [],
       municipiocRules: [(v) => !!v || "Seleccione un minicipio"],
@@ -301,6 +320,12 @@ export default {
       .get("./persona")
       .then((res) => {
         this.data = res.data;
+        this.instiitems = res.data.instituciones.map((insti) => {
+          return {
+            id: insti.id,
+            nombre: insti.inst_nombre,
+          };
+        });
         this.cargositems = res.data.cargos.map((car) => {
           return {
             id: car.id,
@@ -364,6 +389,7 @@ export default {
     },
     validar() {
       var datos = {
+        instituto: this.insti.id,
         comunidad: this.comunidad.id,
         pers_cedula: this.cedula.trim(),
         nombres: this.nombres.trim(),

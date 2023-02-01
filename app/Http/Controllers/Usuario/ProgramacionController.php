@@ -34,24 +34,23 @@ class ProgramacionController extends Controller
             if (in_array($valor, $roles))
                 $sql = ' ';
         }
-
+        $DateAndTime = date("Y-m-d h:i:s", strtotime("-20 days"));
         if ($flo && $despa == null) {
             $progra = DB::select("select prog.id as id_prog ,prog.*, insti.id ,insti.id as insti_id ,insti.inst_nombre as institu,insti.inst_estado, esta.inst_nombre as estacion,esta.inst_estado as esta_estado 
             from programaciones as prog,
             ( select * from instituciones where inst_tipo = '1' $sql ) as insti,
-            (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id and prog_condicion in(1,2) ORDER BY prog.prog_fecha DESC");
+            (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id and prog_condicion in(1,2) and date(prog_fecha)>='$DateAndTime' ORDER BY prog.prog_fecha DESC");
         } else {
             if ($flo == null && $despa == null) {
                 $progra = DB::select("select prog.*, insti.inst_nombre as institu,insti.inst_estado, esta.inst_nombre as estacion,esta.inst_estado as esta_estado 
                 from programaciones as prog,
                 ( select * from instituciones where inst_tipo = '1' $sql) as insti,
-                (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id ORDER BY prog.prog_fecha DESC");
+                (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id and date(prog_fecha)>='$DateAndTime' ORDER BY prog.prog_fecha DESC");
             } else {
-                $DateAndTime = date('Y-m-d h:i:s', time());
                 $progra = DB::select("select prog.id as id_prog ,prog.*, insti.id ,insti.id as insti_id ,insti.inst_nombre as institu,insti.inst_estado, esta.inst_nombre as estacion,esta.inst_estado as esta_estado 
                 from programaciones as prog,
                 ( select * from instituciones where inst_tipo = '1' $sql) as insti,
-                (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id and date(prog_fecha)<='$DateAndTime' and prog_condicion in(3) ORDER BY prog.prog_fecha DESC");
+                (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id and date(prog_fecha)>='$DateAndTime' and prog_condicion in(3) ORDER BY prog.prog_fecha DESC");
             }
         }
 
@@ -70,11 +69,11 @@ class ProgramacionController extends Controller
         $permisosuser = $user->getPermissionsViaRoles();
         $roles = $user->getRoleNames()->toArray();
         $roles_insti = conf_rol_inst::where("rins_estado", "=", 'A')->pluck('rins_nombre');
-        $DateAndTime = date('Y-m-d h:i:s', time());
+        $DateAndTime = date("Y-m-d h:i:s", strtotime("-20 days"));
         $progra = DB::select("select esta.id as esta_id, DATE_FORMAT(prog.prog_fecha, '%Y-%m-%d') as prog_fecha, esta.inst_nombre as estacion,esta.inst_estado as esta_estado 
                 from programaciones as prog,
                 ( select * from instituciones where inst_tipo = '1') as insti,
-                (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id and date(prog_fecha)<='$DateAndTime' and prog_condicion in(3)
+                (select * from instituciones where inst_tipo = '2') as esta where prog.prog_inst_id = insti.id and prog.prog_inst_id_es = esta.id and date(prog_fecha)>='$DateAndTime' and prog_condicion in(3)
                 GROUP BY estacion,DATE_FORMAT(prog.prog_fecha, '%Y-%m-%d') ORDER BY prog_fecha DESC");
         $roles = Role::all();
         //$progra = programaciones::all()->institucion;

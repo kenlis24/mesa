@@ -11,13 +11,15 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\User;
 use App\Models\personas;
-use App\Models\vehiculos;
+use App\Models\trabajadores;
+use App\Models\instituciones;
 use App\Models\pers_com;
 use App\Models\comunidades;
 use App\Models\agrupaciones;
 use App\Models\parroquias;
 use App\Models\municipios;
 use App\Models\cargos;
+use App\Models\conf_rol_inst;
 
 class PersonaController extends Controller
 {
@@ -30,6 +32,26 @@ class PersonaController extends Controller
     {
         $user = User::find(auth()->id());
         $permisosuser = $user->getPermissionsViaRoles();
+        $roles = $user->getRoleNames()->toArray();
+        $soloinsti = false;
+        $roles_insti = conf_rol_inst::where("rins_estado", "=", 'A')->pluck('rins_nombre');
+        $sql = " AND inst.id in(select usui_inst_id from usu_insts where usui_estado ='A' and usui_usu_id =" . auth()->id() . ")";
+        foreach ($roles_insti as $valor) {
+            if (in_array($valor, $roles)) {
+                $sql = ' ';
+                $soloinsti = true;
+            }
+        }
+        if ($soloinsti)
+            $instituciones = instituciones::where("inst_estado", "=", 'A')->where("id", "!=", "1")->get();
+        else {
+            $sql4 = "SELECT * FROM instituciones as inst
+                    WHERE 
+                    inst.id != '1' 
+                    $sql
+                    ";
+            $instituciones = DB::select($sql4);
+        }
         $personas = personas::all();
         $comunidades = comunidades::where("com_estado", "=", "A")->get();
         $agrupaciones = agrupaciones::where("agr_estado", "=", "A")->get();
@@ -41,6 +63,7 @@ class PersonaController extends Controller
         return response()->json([
             'personas' => $personas,
             'permisosuser' => $permisosuser,
+            'instituciones' => $instituciones,
             'comunidades' => $comunidades,
             'agrupaciones' => $agrupaciones,
             'parroquias' => $parroquias,
@@ -156,6 +179,15 @@ class PersonaController extends Controller
                 'pcom_car_id' => $request->post("cargo"),
             );
             pers_com::create($pers_coms);
+            $traba = array(
+                'trab_tipo_trabajador' => '1',
+                'trab_fecha_act' => $fecha_act,
+                'trab_estado' => 'A',
+                'trab_observacion' => 'creado desde menu persona',
+                'trab_inst_id' => $request->post("instituto"),
+                'trab_pers_id' => $persoid->id,
+            );
+            $trabaid = trabajadores::create($traba);
             $mensaje = 'Se Registró los datos';
             $codigo = 200;
         }
