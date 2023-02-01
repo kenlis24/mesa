@@ -260,7 +260,7 @@ export default {
     },
     getColor(valor, valor2) {
       if (valor > 0 && valor2 > 0) return "green";
-      else return "red";
+      else return "";
     },
     open() {
       this.snack = true;

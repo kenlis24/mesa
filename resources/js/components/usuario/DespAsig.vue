@@ -43,7 +43,15 @@
               @open="open"
               @close="close"
             >
-              {{ props.item.litros_paga }}
+              <v-chip
+                style="cursor: pointer"
+                :color="
+                  getColor(props.item.litros_paga, props.item.litros_desp)
+                "
+                dark
+              >
+                {{ props.item.litros_paga }}
+              </v-chip>
               <template v-slot:input>
                 <v-text-field
                   type="number"
@@ -66,7 +74,15 @@
               @open="open"
               @close="close"
             >
-              {{ props.item.litros_desp }}
+              <v-chip
+                style="cursor: pointer"
+                :color="
+                  getColor(props.item.litros_paga, props.item.litros_desp)
+                "
+                dark
+              >
+                {{ props.item.litros_desp }}
+              </v-chip>
               <template v-slot:input>
                 <v-text-field
                   type="number"
@@ -250,6 +266,10 @@ export default {
       this.snack = true;
       this.snackColor = "success";
       this.snackText = "Data editada";
+    },
+    getColor(valor, valor2) {
+      if (valor > 0 && valor2 > 0) return "green";
+      else return "";
     },
     cancel() {
       this.snack = true;
