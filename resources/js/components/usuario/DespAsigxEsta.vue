@@ -174,7 +174,7 @@ export default {
       .then((res) => {
         this.datos = res.data;
         if (res.data.progflotactiva.length > 0) {
-          this.institucion = res.data.progflot[0].inst_nombre;
+          this.institucion = res.data.progflotactiva[0].inst_nombre;
         } else {
           this.color = "warning";
           this.mensaje = "La estacion no contiene flota asignada";
