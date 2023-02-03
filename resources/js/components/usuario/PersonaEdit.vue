@@ -293,7 +293,7 @@ export default {
       direccion: "",
       direccionRules: [(v) => !!v || "Debe colocar la dirección"],
       observ: "",
-      observRules: [(v) => v.length <= 250 || "Maximo 250 caracteres"],
+      observRules: [(v) => v <= 250 || "Maximo 250 caracteres"],
     };
   },
   mounted() {
@@ -301,6 +301,25 @@ export default {
       .get(`./personabyid/${this.id}`)
       .then((res) => {
         this.data = res.data;
+        this.cedula = res.data.persona[0].pers_cedula;
+        this.nombres = res.data.persona[0].pers_nombres;
+        this.apellidos = res.data.persona[0].pers_apellidos;
+        this.sexo = this.sexoitems.find((el) => {
+          if (el.id === res.data.persona[0].pers_sexo) {
+            return {
+              id: el.id,
+              name: el.nombre,
+            };
+          }
+        });
+        this.dateFormatted = res.data.persona[0].pers_fec_nac;
+        this.correo = res.data.persona[0].pers_correo;
+        this.telfcasa = res.data.persona[0].pcom_telf_res;
+        this.calle = res.data.persona[0].pcom_calle;
+        this.direccion = res.data.persona[0].pcom_casa;
+        this.id_pers_coms = res.data.persona[0].id_pers_coms;
+        this.telfcel = res.data.persona[0].pers_telf_cel;
+        this.observ = res.data.persona[0].pers_observacion;
         this.municipiositems = res.data.municipios.map((muni) => {
           return {
             id: muni.id,
@@ -379,25 +398,6 @@ export default {
             };
           }
         });
-        this.cedula = res.data.persona[0].pers_cedula;
-        this.nombres = res.data.persona[0].pers_nombres;
-        this.apellidos = res.data.persona[0].pers_apellidos;
-        this.sexo = this.sexoitems.find((el) => {
-          if (el.id === res.data.persona[0].pers_sexo) {
-            return {
-              id: el.id,
-              name: el.nombre,
-            };
-          }
-        });
-        this.dateFormatted = res.data.persona[0].pers_fec_nac;
-        this.correo = res.data.persona[0].pers_correo;
-        this.telfcasa = res.data.persona[0].pcom_telf_res;
-        this.calle = res.data.persona[0].pcom_calle;
-        this.direccion = res.data.persona[0].pcom_casa;
-        this.id_pers_coms = res.data.persona[0].id_pers_coms;
-        this.telfcel = res.data.persona[0].pers_telf_cel;
-        this.observ = res.data.persona[0].pers_observacion;
         this.$refs.form.resetValidation();
       })
       .catch((er) => {

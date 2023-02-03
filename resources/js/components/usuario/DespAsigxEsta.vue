@@ -2,7 +2,7 @@
   <v-container class="fill-height" fluid v-if="$store.state.auth">
     <v-row align="center" justify="center" v-if="datosasig != ''">
       <v-card class="mt-12 mx-auto">
-        <v-card-title>{{ institucion }}</v-card-title>
+        <v-card-title>Estación: {{ institucion }}</v-card-title>
         <v-card-title v-if="datosasig != ''">
           Asignados y despachados por estación</v-card-title
         >
@@ -16,6 +16,9 @@
             label="Observación"
             v-model="observ"
           ></v-textarea>
+          <v-btn color="primary" class="mr-4" @click="regresar">
+            Regresar
+          </v-btn>
         </v-col>
 
         <v-card-title v-if="datosasig != ''">
@@ -159,7 +162,7 @@ export default {
       { text: "Cédula", value: "pers_cedula" },
       { text: "Nombres", value: "pers_nombres" },
       { text: "Apellidos", value: "pers_apellidos" },
-      { text: "Marca", value: "mca_nombre" },
+      { text: "Instituto", value: "inst_nombre" },
       { text: "Modelo", value: "mod_nombre" },
       { text: "Placa", value: "vehi_placa" },
       { text: "Litros", value: "conp_lts" },
@@ -174,12 +177,11 @@ export default {
       .then((res) => {
         this.datos = res.data;
         if (res.data.progflotactiva.length > 0) {
-          this.institucion = res.data.progflotactiva[0].inst_nombre;
+          this.institucion = res.data.progflot[0].inst_nombre;
         } else {
           this.color = "warning";
           this.mensaje = "La estacion no contiene flota asignada";
           this.snackbar = true;
-          this.regresar();
         }
         //para los ya programados de la flota
         this.datosasig = res.data.progflotactiva.map((progact) => {

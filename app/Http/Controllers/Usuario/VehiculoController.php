@@ -12,6 +12,7 @@ use App\Models\modelo_vehi;
 use App\Models\User;
 use App\Models\personas;
 use App\Models\vehiculos;
+use App\Models\flotas;
 
 class VehiculoController extends Controller
 {
@@ -126,18 +127,13 @@ class VehiculoController extends Controller
     public function consulxpers($id)
     {
         //$fech = $request->post('fecha');
-        $sql = "SELECT vehi.id, pers.id as pers_id, pers_cedula, pers_nombres, pers_apellidos,
+        $sql = "SELECT DISTINCT vehi.id, pers.id as pers_id, pers_cedula, pers_nombres, pers_apellidos,
                 vehi_placa, vehi_tag,if (vehi_tipo_vehi=1,'Automovil','Motocicleta') as vehi_tipo_vehi,
                 mca_nombre, mod_nombre,vehi_capacidad_lts,vehi_pers_id 
-                from instituciones inst, trabajadores trab, flotas, personas pers,
+                from trabajadores trab, personas pers,
                 vehiculos vehi, marca_vehi mcav, modelo_vehi modv
                 where
                 pers.id='$id'
-                and   inst_estado = 'A'
-                and   trab_inst_id = inst.id
-                and   trab_estado = 'A'
-                and   flot_trab_id = trab.id
-                and   flot_estado = 'A'
                 and   pers.id = trab_pers_id
                 and   pers_estado = 'A'
                 and   vehi_pers_id = pers.id
@@ -246,10 +242,22 @@ class VehiculoController extends Controller
         $vehi = vehiculos::find($auto[0]['id']);
         $vehi->vehi_pers_id = $id;
         $vehi->save();
+        //si tiene otro carro queda asignado a nadie
         if ($unico != 0 && ($auto[0]['id'] != $busq[0]->id)) {
             $vehi = vehiculos::find($busq[0]->id);
             $vehi->vehi_pers_id = '1';
             $vehi->save();
+        }
+        $sql = "SELECT  trab.id as id from trabajadores as trab,personas as pers
+                WHERE
+                pers.id = '$id'
+                AND trab.trab_pers_id = pers.id 
+                AND trab_estado = 'A'
+                AND pers_estado = 'A';";
+        $trabajador = DB::select($sql);
+        $number = count($trabajador);
+        if ($number > 0) {
+            flotas::where('flot_trab_id', $trabajador[0]->id)->where('flot_vehi_id', $busq[0]->id)->update(['flot_vehi_id' => $auto[0]['id']]);
         }
         return response()->json([
             'mensaje' => 'Se actualizó la asignación del carro',

@@ -105,7 +105,7 @@
         </v-card-actions>
         <v-snackbar
           bottom
-          :timeout="2500"
+          :timeout="2800"
           v-model="snackbar"
           :color="color"
           rounded="pill"
@@ -130,7 +130,7 @@ export default {
     cedula: "",
     nombres: "",
     apellidos: "",
-    unico: 1,
+    unico: 0,
     color: "",
     datos: [],
     datos2: [],
@@ -187,7 +187,7 @@ export default {
       })
       .catch((er) => {
         this.color = "red accent-2";
-        this.mensaje = er;
+        this.mensaje = er.response.data.mensaje;
         this.snackbar = true;
       });
   },
