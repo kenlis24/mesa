@@ -79,6 +79,28 @@ class PersonaController extends Controller
     public function consultar($id)
     {
         //$fech = $request->post('fecha');
+        $user = User::find(auth()->id());
+        $permisosuser = $user->getPermissionsViaRoles();
+        $roles = $user->getRoleNames()->toArray();
+        $soloinsti = false;
+        $roles_insti = conf_rol_inst::where("rins_estado", "=", 'A')->pluck('rins_nombre');
+        $sql = " AND inst.id in(select usui_inst_id from usu_insts where usui_estado ='A' and usui_usu_id =" . auth()->id() . ")";
+        foreach ($roles_insti as $valor) {
+            if (in_array($valor, $roles)) {
+                $sql = ' ';
+                $soloinsti = true;
+            }
+        }
+        if ($soloinsti)
+            $instituciones = instituciones::where("inst_estado", "=", 'A')->where("id", "!=", "1")->get();
+        else {
+            $sql4 = "SELECT * FROM instituciones as inst
+                    WHERE 
+                    inst.id != '1' 
+                    $sql
+                    ";
+            $instituciones = DB::select($sql4);
+        }
         $sql = "SELECT pers.id, pers.pers_cedula, pers.pers_nombres, pers.pers_apellidos,
         pers.pers_fec_nac, pers.pers_sexo,pers.pers_telf_cel, pers.pers_correo,
         pers.pers_observacion, pers_coms.id as id_pers_coms, pers_coms.pcom_telf_res,
@@ -108,6 +130,14 @@ class PersonaController extends Controller
         AND municipios.mun_estado='A'
         AND pers.id='$id'";
         $persona = DB::select($sql);
+        $sql2 = "SELECT trab.trab_inst_id as institu
+        FROM personas pers,
+        trabajadores trab
+        WHERE 
+        pers.pers_estado = 'A'
+        AND trab.trab_pers_id = pers.id
+        AND pers.id='$id'";
+        $posee_insti = DB::select($sql2);
         $comunidades = comunidades::where("com_estado", "=", "A")->get();
         $agrupaciones = agrupaciones::where("agr_estado", "=", "A")->get();
         $parroquias = parroquias::where("par_estado", "=", "A")->get();
@@ -117,6 +147,8 @@ class PersonaController extends Controller
 
         return response()->json([
             'persona' => $persona,
+            'instituciones' => $instituciones,
+            'posee_insti' => $posee_insti,
             'comunidades' => $comunidades,
             'agrupaciones' => $agrupaciones,
             'parroquias' => $parroquias,
@@ -270,6 +302,7 @@ class PersonaController extends Controller
                 $pers_com->pcom_com_id = $request->comunidad;
                 $pers_com->pcom_car_id = $request->cargo;
                 $pers_com->save();
+                trabajadores::where('trab_pers_id', $id)->update(['trab_inst_id' => $request->institucion]);
                 $mensaje = 'Se actualizó la informacion de la persona';
                 $codigo = 200;
             }

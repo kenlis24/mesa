@@ -89,6 +89,22 @@
                 ></v-text-field>
               </v-col>
             </v-row>
+            <v-autocomplete
+              align="center"
+              justify="center"
+              v-model="insti"
+              :items="instiitems"
+              :rules="instiRules"
+              item-text="nombre"
+              item-value="id"
+              outlined
+              dense
+              chips
+              small-chips
+              label="Seleccione la institución"
+              required
+              return-object
+            ></v-autocomplete>
           </v-card-text>
           <v-card-title class="justify-center blue-grey lighten-3"
             >Datos de Contacto</v-card-title
@@ -260,6 +276,9 @@ export default {
           return pattern.test(v) || "correo no valido";
         },
       ],
+      insti: "",
+      instiRules: [(v) => !!v || "Seleccione una institución"],
+      instiitems: [],
       sexo: "",
       sexoitems: [
         { id: "1", nombre: "Masculino" },
@@ -268,7 +287,7 @@ export default {
       sexoRules: [(v) => !!v || "Seleccione un sexo"],
       telfcasa: "",
       telfcasaRules: [
-        (v) => !!v || "Debe colocar in telefono de casa",
+        (v) => !!v || "Debe colocar un telefono de casa",
         (v) => v > 0 || "Coloque un telefono solo numeros",
       ],
       telfcel: "",
@@ -312,8 +331,27 @@ export default {
             };
           }
         });
-        this.dateFormatted = res.data.persona[0].pers_fec_nac;
-        this.correo = res.data.persona[0].pers_correo;
+        if (res.data.persona[0].pers_fec_nac)
+          this.dateFormatted = res.data.persona[0].pers_fec_nac;
+        if (res.data.persona[0].pers_correo)
+          this.correo = res.data.persona[0].pers_correo;
+        this.instiitems = res.data.instituciones.map((insti) => {
+          return {
+            id: insti.id,
+            nombre: insti.inst_nombre,
+          };
+        });
+        if (res.data.posee_insti[0].institu != "") {
+          let posee_insti = res.data.posee_insti[0].institu;
+          this.insti = this.instiitems.find((el) => {
+            if (el.id === posee_insti) {
+              return {
+                id: el.id,
+                nombre: el.inst_nombre,
+              };
+            }
+          });
+        }
         this.telfcasa = res.data.persona[0].pcom_telf_res;
         this.calle = res.data.persona[0].pcom_calle;
         this.direccion = res.data.persona[0].pcom_casa;
@@ -427,23 +465,25 @@ export default {
     },
     validar() {
       var cambio = "no";
-      if (this.data.persona[0].pers_cedula != this.cedula.trim()) cambio = "si";
+      if (this.data.persona[0].pers_cedula != this.cedula?.trim())
+        cambio = "si";
       var actualiza = {
         comunidad: this.comunidad.id,
-        pers_cedula: this.cedula.trim(),
-        nombres: this.nombres.trim(),
-        apellidos: this.apellidos.trim(),
+        institucion: this.insti.id,
+        pers_cedula: this.cedula?.trim(),
+        nombres: this.nombres?.trim(),
+        apellidos: this.apellidos?.trim(),
         cargo: this.cargo.id,
         sexo: this.sexo.id,
-        correo: this.correo.trim(),
+        correo: this.correo?.trim(),
         fecha_nac: this.dateFormatted,
-        telfcasa: this.telfcasa.trim(),
-        calle: this.calle.trim(),
-        direccion: this.direccion.trim(),
+        telfcasa: this.telfcasa?.trim(),
+        calle: this.calle?.trim(),
+        direccion: this.direccion?.trim(),
         id_pers_coms: this.id_pers_coms,
-        telfcel: this.telfcel.trim(),
+        telfcel: this.telfcel?.trim(),
         cambio: cambio,
-        observ: this.observ.trim(),
+        observ: this.observ?.trim(),
       };
       axios
         .put(`./persona/${this.id}`, actualiza)

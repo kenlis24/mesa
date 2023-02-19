@@ -51,7 +51,7 @@ Route::put('/programa/{progra}/{acti?}', 'App\Http\Controllers\Usuario\Programac
 Route::get('/persona', 'App\Http\Controllers\Usuario\PersonaController@index')->middleware(['permission:perso.user.index']);
 Route::post('/personaregist', 'App\Http\Controllers\Usuario\PersonaController@store')->middleware(['permission:perso.user.create']);
 Route::get('/personabyid/{id}', 'App\Http\Controllers\Usuario\PersonaController@consultar')->middleware(['permission:perso.user.edit']);
-Route::put('/persona/{id}/{acti?}', 'App\Http\Controllers\Usuario\PersonaController@update')->middleware(['permission:perso.user.desactivar|permission:perso.user.edit']);
+Route::put('/persona/{id}/{acti?}', 'App\Http\Controllers\Usuario\PersonaController@update')->middleware(['permission:perso.user.desactivar|perso.user.edit']);
 
 Route::get('/trabajador', 'App\Http\Controllers\Usuario\TrabajadorController@index')->middleware(['permission:trab.user.index']);
 Route::put('/trabajadordesac/{id}/{acti?}', 'App\Http\Controllers\Usuario\TrabajadorController@update')->middleware(['permission:trab.user.desactivar']);
