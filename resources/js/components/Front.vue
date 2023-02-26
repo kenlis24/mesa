@@ -194,6 +194,13 @@ export default {
           can: false,
         },
         {
+          title: "Despacho Reporte",
+          icon: "mdi-gas-station",
+          url: "indexdespaxestarep",
+          permiso: "despaxesta.user.index",
+          can: false,
+        },
+        {
           title: "Programación Flota Reporte",
           icon: "mdi-file-document-multiple-outline",
           url: "reporteproflota",

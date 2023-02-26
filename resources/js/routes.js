@@ -242,6 +242,13 @@ const routes = [
         ),
     },
     {
+        name: 'indexdespaxestarep',
+        path: '/indexdespaxestarep',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/indexdespaxestarep' */ './components/usuario/IndexDespaxEstaRep'
+        ),
+    },
+    {
         name: 'despasig',
         path: '/despasig/:prog/:insti/:tipo',
         component: () => import(
@@ -254,6 +261,14 @@ const routes = [
         path: '/despasigxesta/:fecha/:insti',
         component: () => import(
             /* webpackChunkName: 'js/compiled/despasigxesta' */ './components/usuario/DespAsigxEsta'
+        ),
+        props: true,
+    },
+    {
+        name: 'despasigxestarep',
+        path: '/despasigxestarep/:fecha/:insti',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/despasigxestarep' */ './components/usuario/DespAsigxEstaRep'
         ),
         props: true,
     },
