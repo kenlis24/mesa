@@ -59,7 +59,7 @@ class InstitucionController extends Controller
             $insti = DB::select("select * 
             from instituciones
             where instituciones.inst_tipo in ('1','2')
-                $sql");
+                $sql order by inst_nombre");
             //$insti = instituciones::where("inst_tipo", "=", "1")->where("inst_estado", "=", "A")->get();
             $institodas = instituciones::all();
             $user = User::find(auth()->id());

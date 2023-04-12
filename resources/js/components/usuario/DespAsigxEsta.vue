@@ -163,7 +163,6 @@ export default {
       { text: "Nombres", value: "pers_nombres" },
       { text: "Apellidos", value: "pers_apellidos" },
       { text: "Instituto", value: "inst_nombre" },
-      { text: "Modelo", value: "mod_nombre" },
       { text: "Placa", value: "vehi_placa" },
       { text: "Litros", value: "conp_lts" },
       { text: "Litros pagado", value: "litros_paga" },

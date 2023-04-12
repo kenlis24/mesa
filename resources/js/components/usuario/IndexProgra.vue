@@ -134,7 +134,10 @@ export default {
       .get("./programa")
       .then((res) => {
         //this.datos = res.data;
-
+        const crear = res.data.permisosuser.find(
+          (el) => el.name === "program.user.create"
+        );
+        if (crear) this.create = true;
         this.datos = res.data.progra.map((prog) => {
           var condi = "";
           if (prog.prog_condicion == 1) condi = "Creado";
@@ -152,13 +155,11 @@ export default {
           const edit = res.data.permisosuser.find(
             (el) => el.name === "program.user.edit"
           );
-          const crear = res.data.permisosuser.find(
-            (el) => el.name === "program.user.create"
-          );
+
           const desactivar = res.data.permisosuser.find(
             (el) => el.name === "program.user.desactivar"
           );
-          if (crear) this.create = true;
+
           return {
             id: prog.id,
             prog_fecha: prog.prog_fecha.slice(0, 10),
