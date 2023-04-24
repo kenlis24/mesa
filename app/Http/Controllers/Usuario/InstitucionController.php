@@ -39,7 +39,7 @@ class InstitucionController extends Controller
         if ($id) {
             $insti = DB::select("select * 
             from instituciones
-            where instituciones.inst_tipo = '1'
+            where instituciones.inst_tipo in ('1','2')
                 and   inst_estado = 'A'
                 and  (instituciones.id)
                 not in (select usui_inst_id

@@ -249,6 +249,27 @@ const routes = [
         ),
     },
     {
+        name: 'internacional',
+        path: '/internacional',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/internacional' */ './components/usuario/Internacional'
+        ),
+    },
+    {
+        name: 'interregist',
+        path: '/interregist',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/interregist' */ './components/usuario/InterRegist'
+        ),
+    },
+    {
+        name: 'interlistar',
+        path: '/interlistar',
+        component: () => import(
+            /* webpackChunkName: 'js/compiled/interlistar' */ './components/usuario/InterListar'
+        ),
+    },
+    {
         name: 'despasig',
         path: '/despasig/:prog/:insti/:tipo',
         component: () => import(

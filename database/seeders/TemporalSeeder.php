@@ -16,9 +16,9 @@ class TemporalSeeder extends Seeder
      */
     public function run()
     {
-        $permission = Permission::create(['name' => 'trab.user.index', 'description' => 'Ver listado de trabajadores'])->syncRoles(['Admin']);
-        $permission = Permission::create(['name' => 'trab.user.create', 'description' => 'Permite crear un trabajador'])->syncRoles(['Admin']);
-        $permission = Permission::create(['name' => 'trab.user.edit', 'description' => 'Permite editar un trabajador'])->syncRoles(['Admin']);
-        $permission = Permission::create(['name' => 'trab.user.desactivar', 'description' => 'Permite desactivar un trabajador'])->syncRoles(['Admin']);
+        $permission = Permission::create(['name' => 'inter.user.index', 'description' => 'Ver listado de vehiculos estacion internacional'])->syncRoles(['Admin']);
+        $permission = Permission::create(['name' => 'inter.user.create', 'description' => 'Permite registrar vehiculo estacion internacional'])->syncRoles(['Admin']);
+        $permission = Permission::create(['name' => 'inter.user.edit', 'description' => 'Permite editar vehiculo estacion internacional'])->syncRoles(['Admin']);
+        $permission = Permission::create(['name' => 'inter.user.desactivar', 'description' => 'Permite desactivar vehiculo estacion internacional'])->syncRoles(['Admin']);
     }
 }

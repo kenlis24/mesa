@@ -71,5 +71,10 @@ class RoleSeeder extends Seeder
         $permission = Permission::create(['name' => 'trab.user.create', 'description' => 'Permite crear un trabajador'])->syncRoles([$role1]);
         $permission = Permission::create(['name' => 'trab.user.edit', 'description' => 'Permite editar un trabajador'])->syncRoles([$role1]);
         $permission = Permission::create(['name' => 'trab.user.desactivar', 'description' => 'Permite desactivar un trabajador'])->syncRoles([$role1]);
+
+        $permission = Permission::create(['name' => 'inter.user.index', 'description' => 'Ver listado de vehiculos estacion internacional'])->syncRoles([$role1]);
+        $permission = Permission::create(['name' => 'inter.user.create', 'description' => 'Permite registrar vehiculo estacion internacional'])->syncRoles([$role1]);
+        $permission = Permission::create(['name' => 'inter.user.edit', 'description' => 'Permite editar vehiculo estacion internacional'])->syncRoles([$role1]);
+        $permission = Permission::create(['name' => 'inter.user.desactivar', 'description' => 'Permite desactivar vehiculo estacion internacional'])->syncRoles([$role1]);
     }
 }

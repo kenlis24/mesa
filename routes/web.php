@@ -37,6 +37,10 @@ Route::post('/instituregist', 'App\Http\Controllers\Usuario\InstitucionControlle
 Route::get('/institu/{id}/edit', 'App\Http\Controllers\Usuario\InstitucionController@edit')->middleware(['permission:insti.user.edit']);
 Route::put('/institu/{id}/{acti?}', 'App\Http\Controllers\Usuario\InstitucionController@update')->middleware(['permission:insti.user.desactivar']);
 
+Route::get('/internacional', 'App\Http\Controllers\Usuario\AtencionEstIntController@index')->middleware(['permission:inter.user.index']);
+Route::post('/internalista', 'App\Http\Controllers\Usuario\AtencionEstIntController@lista')->middleware(['permission:inter.user.index']);
+Route::post('/internaregist', 'App\Http\Controllers\Usuario\AtencionEstIntController@store')->middleware(['permission:inter.user.create']);
+
 Route::post('/usuinstregist', 'App\Http\Controllers\Admin\UsuInstController@store')->middleware(['permission:asiginsti.admin.desactivar']);
 
 Route::get('/programa', 'App\Http\Controllers\Usuario\ProgramacionController@index')->middleware(['permission:program.user.index|program.user.consul']);
