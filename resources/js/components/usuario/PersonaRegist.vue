@@ -9,15 +9,28 @@
         <v-form ref="form" v-model="valido">
           <v-card-text>
             <v-row>
-              <v-col class="text-left" cols="6">
+              <v-col class="text-left" cols="4">
                 <v-text-field
                   v-model="cedula"
+                  type="number"
                   :rules="cedRules"
                   label="Cédula"
                   required
                 ></v-text-field>
               </v-col>
-              <v-col class="text-center" cols="6">
+              <v-col class="text-left" cols="1" sm="1">
+                <v-btn
+                  :disabled="cedula.length <= 5"
+                  class="align-start ml-0 mt-6"
+                  icon
+                  small
+                  color="primary"
+                  @click="consultarced"
+                >
+                  <v-icon dark> mdi-account-search </v-icon>
+                </v-btn>
+              </v-col>
+              <v-col class="text-center" cols="7">
                 <v-text-field
                   type="date"
                   v-model="dateFormatted"
@@ -174,7 +187,7 @@
               dense
               chips
               small-chips
-              label="Agrupaciones"
+              label="Centro Electoral"
               @change="cambiarcom"
               required
               return-object
@@ -227,6 +240,7 @@
       </v-card>
     </v-row>
     <v-snackbar
+      :top="posicion"
       :timeout="2500"
       v-model="snackbar"
       absolute
@@ -245,6 +259,7 @@ export default {
   data() {
     return {
       data: "",
+      posicion: false,
       registrar: false,
       valido: false,
       snackbar: false,
@@ -253,7 +268,7 @@ export default {
       editar: false,
       id_pers_coms: "",
       cedula: "",
-      cedRules: [(v) => !!v || "Debe colocar un rif"],
+      cedRules: [(v) => !!v || "Debe colocar una cédula"],
       dateFormatted: "",
       fechaRules: [
         (v) => !!v || "Seleccione una fecha",
@@ -303,7 +318,7 @@ export default {
       parroquiaRules: [(v) => !!v || "Seleccione una parroquia"],
       agrupacion: "",
       agrupacionesitems: [],
-      agrupacionRules: [(v) => !!v || "Seleccione una agrupacion"],
+      agrupacionRules: [(v) => !!v || "Seleccione Centro electoral"],
       comunidad: "",
       comunidadesitems: [],
       comunidadRules: [(v) => !!v || "Seleccione una comunidad"],
@@ -364,6 +379,7 @@ export default {
       })
       .catch((er) => {
         this.color = "red accent-2";
+        this.posicion = false;
         this.mensaje = er;
         this.snackbar = true;
       });
@@ -387,6 +403,30 @@ export default {
     regresar() {
       setTimeout(() => this.$router.push({ name: "indexpersona" }), 2800);
     },
+    consultarced() {
+      var datos = {
+        cedula: this.cedula.trim(),
+      };
+      axios
+        .post(`./personaconsul`, datos)
+        .then((res) => {
+          let arrayNombres = res.data.mensaje;
+          let total = arrayNombres.length;
+          if (total <= 3) {
+            this.nombres = arrayNombres[0];
+            this.apellidos = arrayNombres[1] + " " + arrayNombres[2];
+          } else {
+            this.nombres = arrayNombres[0] + " " + arrayNombres[1];
+            this.apellidos = arrayNombres[2] + " " + arrayNombres[3];
+          }
+        })
+        .catch((er) => {
+          this.color = "red accent-2";
+          this.posicion = true;
+          this.mensaje = er.response.data.mensaje;
+          this.snackbar = true;
+        });
+    },
     validar() {
       var datos = {
         instituto: this.insti.id,
@@ -409,12 +449,14 @@ export default {
         .post(`./personaregist`, datos)
         .then((res) => {
           this.color = "success";
+          this.posicion = false;
           this.mensaje = res.data.mensaje;
           this.snackbar = true;
           this.regresar();
         })
         .catch((er) => {
           this.color = "red accent-2";
+          this.posicion = false;
           this.mensaje = er.response.data.mensaje;
           this.snackbar = true;
         });
